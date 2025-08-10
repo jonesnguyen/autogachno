@@ -1,0 +1,87 @@
+1. Thành phần hệ thống
+a) Desktop App (main.py)
+Viết bằng Tkinter (UI) + Selenium (tự động thao tác web Viettel Pay).
+
+Các form tác vụ chính:
+
+Tra cứu FTTH
+
+Gạch điện EVN
+
+Nạp tiền đa mạng
+
+Nạp tiền Viettel
+
+Thanh toán TV – Internet
+
+Tra cứu nợ trả sau
+
+Dữ liệu cho form được lấy qua API (fetch_api_data) từ server (có thể là mock hoặc web admin thật).
+
+Có chức năng xuất Excel kết quả giao dịch.
+
+Quản lý thông tin đăng nhập (mã PIN, username) để hạn chế dùng sai tài khoản.
+
+Dùng config.json + mã hóa Fernet để lưu cấu hình.
+
+Có logic Stop/Start và theo dõi tiến trình thao tác.
+
+b) Mock API Server (mock_api_server.py)
+Viết bằng Flask + Flask-CORS.
+
+Cung cấp dữ liệu mẫu cho 6 dịch vụ:
+
+/api/data/tra_cuu_ftth
+
+/api/data/gach_dien_evn
+
+/api/data/nap_tien_da_mang
+
+/api/data/nap_tien_viettel
+
+/api/data/thanh_toan_tv_internet
+
+/api/data/tra_cuu_no_tra_sau
+
+Có /api/health để Desktop App kiểm tra server hoạt động.
+
+Dữ liệu trả về ngẫu nhiên từ danh sách mẫu (random.sample) để giả lập tình huống thực tế.
+
+Có thể chạy độc lập hoặc được khởi tạo từ Desktop App.
+
+c) CSDL (gachno_db.sql)
+Cấu trúc MariaDB/MySQL gồm nhiều bảng:
+
+admin_config – cấu hình hệ thống (cho phép đăng ký admin, thời hạn trial…)
+
+banner – banner quảng cáo/truyền thông.
+
+collection_data – dữ liệu thu cước viễn thông.
+
+orders, order_details, products – phần thương mại (đặt hàng, chi tiết sản phẩm).
+
+users (chưa trích hết nhưng chắc chắn có) – quản lý tài khoản người dùng.
+
+Dữ liệu hiện tại có cả bản ghi thực tế (nhiều giao dịch từ 2024–2025).
+
+Dùng chung cho Web Admin và Desktop App.
+
+2. Luồng hoạt động điển hình
+Web Admin (Flask-Admin + SQLAlchemy) kết nối DB, cho phép CRUD dữ liệu dịch vụ, tài khoản, cấu hình.
+
+Desktop App khởi động → kiểm tra API /api/health.
+
+Người dùng bấm Get dữ liệu → App gọi /api/data/... → nhận JSON → đổ vào form Tkinter.
+
+Người dùng bấm Bắt đầu → Selenium thao tác trên Viettel Pay theo dữ liệu.
+
+Kết quả được xuất Excel và lưu lại.
+
+3. Vai trò của từng phần
+Desktop App: Công cụ chạy trên máy người dùng, tự động hóa quy trình xử lý dịch vụ.
+
+Mock API: Giả lập backend để test khi chưa có server thật hoặc DB.
+
+MariaDB: Lưu dữ liệu thật, đồng bộ giữa Web Admin và App.
+
+Web Admin: Quản trị dịch vụ, tài khoản, dữ liệu thu cước.
