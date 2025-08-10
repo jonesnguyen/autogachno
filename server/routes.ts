@@ -2,7 +2,33 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
-import { insertOrderSchema, insertServiceTransactionSchema } from "@shared/schema";
+
+// Admin middleware
+const isAdmin = async (req: any, res: any, next: any) => {
+  try {
+    const userId = req.user?.claims?.sub;
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    
+    const user = await storage.getUser(userId);
+    if (!user || (user.role !== 'admin' && user.role !== 'manager')) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    
+    req.adminUser = user;
+    next();
+  } catch (error) {
+    console.error("Admin check error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+import { 
+  insertOrderSchema, 
+  insertServiceTransactionSchema, 
+  insertUserRegistrationSchema,
+  insertAdminLogSchema 
+} from "@shared/schema";
 import { getMockServiceData } from "./mockApiData";
 import { z } from "zod";
 
@@ -320,6 +346,211 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error in bulk operation:", error);
       res.status(500).json({ message: "Failed to perform bulk operation" });
+    }
+  });
+
+  // User Registration (Public route)
+  app.post('/api/register', async (req, res) => {
+    try {
+      const registrationData = insertUserRegistrationSchema.parse(req.body);
+      const registration = await storage.createUserRegistration(registrationData);
+      
+      res.json({ 
+        message: "Đăng ký thành công. Yêu cầu của bạn đang chờ phê duyệt.",
+        id: registration.id 
+      });
+    } catch (error) {
+      console.error("Registration error:", error);
+      res.status(400).json({ message: "Lỗi đăng ký" });
+    }
+  });
+
+  // Admin routes
+  app.get('/api/admin/users', isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 20;
+      const search = req.query.search as string;
+      
+      const result = await storage.getAllUsers(page, limit, search);
+      res.json(result);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      res.status(500).json({ message: "Failed to fetch users" });
+    }
+  });
+
+  app.patch('/api/admin/users/:id/role', isAuthenticated, isAdmin, async (req: any, res) => {
+    try {
+      const { id } = req.params;
+      const { role } = req.body;
+      
+      const oldUser = await storage.getUser(id);
+      const updatedUser = await storage.updateUserRole(id, role);
+      
+      // Log admin action
+      await storage.createAdminLog({
+        adminId: req.adminUser.id,
+        action: 'update_user_role',
+        targetType: 'user',
+        targetId: id,
+        oldData: JSON.stringify({ role: oldUser?.role }),
+        newData: JSON.stringify({ role }),
+        ipAddress: req.ip,
+        userAgent: req.get('User-Agent')
+      });
+      
+      res.json(updatedUser);
+    } catch (error) {
+      console.error("Error updating user role:", error);
+      res.status(500).json({ message: "Failed to update user role" });
+    }
+  });
+
+  app.patch('/api/admin/users/:id/status', isAuthenticated, isAdmin, async (req: any, res) => {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+      
+      const oldUser = await storage.getUser(id);
+      const updatedUser = await storage.updateUserStatus(id, status);
+      
+      // Log admin action
+      await storage.createAdminLog({
+        adminId: req.adminUser.id,
+        action: 'update_user_status',
+        targetType: 'user',
+        targetId: id,
+        oldData: JSON.stringify({ status: oldUser?.status }),
+        newData: JSON.stringify({ status }),
+        ipAddress: req.ip,
+        userAgent: req.get('User-Agent')
+      });
+      
+      res.json(updatedUser);
+    } catch (error) {
+      console.error("Error updating user status:", error);
+      res.status(500).json({ message: "Failed to update user status" });
+    }
+  });
+
+  app.delete('/api/admin/users/:id', isAuthenticated, isAdmin, async (req: any, res) => {
+    try {
+      const { id } = req.params;
+      
+      const oldUser = await storage.getUser(id);
+      await storage.deleteUser(id);
+      
+      // Log admin action
+      await storage.createAdminLog({
+        adminId: req.adminUser.id,
+        action: 'delete_user',
+        targetType: 'user',
+        targetId: id,
+        oldData: JSON.stringify(oldUser),
+        newData: null,
+        ipAddress: req.ip,
+        userAgent: req.get('User-Agent')
+      });
+      
+      res.json({ message: "User deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      res.status(500).json({ message: "Failed to delete user" });
+    }
+  });
+
+  // Registration management
+  app.get('/api/admin/registrations', isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const status = req.query.status as string;
+      const registrations = await storage.getUserRegistrations(status);
+      res.json(registrations);
+    } catch (error) {
+      console.error("Error fetching registrations:", error);
+      res.status(500).json({ message: "Failed to fetch registrations" });
+    }
+  });
+
+  app.patch('/api/admin/registrations/:id/review', isAuthenticated, isAdmin, async (req: any, res) => {
+    try {
+      const { id } = req.params;
+      const { approved, notes } = req.body;
+      
+      const reviewedRegistration = await storage.reviewUserRegistration(
+        id, 
+        approved, 
+        req.adminUser.id, 
+        notes
+      );
+
+      // If approved, create user account
+      if (approved) {
+        await storage.upsertUser({
+          id: `reg_${reviewedRegistration.id}`, // Temporary ID, will be overridden by OAuth
+          email: reviewedRegistration.email,
+          firstName: reviewedRegistration.firstName,
+          lastName: reviewedRegistration.lastName,
+          role: 'user',
+          status: 'active'
+        });
+      }
+      
+      // Log admin action
+      await storage.createAdminLog({
+        adminId: req.adminUser.id,
+        action: approved ? 'approve_registration' : 'reject_registration',
+        targetType: 'registration',
+        targetId: id,
+        oldData: JSON.stringify({ status: 'pending' }),
+        newData: JSON.stringify({ status: approved ? 'approved' : 'rejected', notes }),
+        ipAddress: req.ip,
+        userAgent: req.get('User-Agent')
+      });
+      
+      res.json(reviewedRegistration);
+    } catch (error) {
+      console.error("Error reviewing registration:", error);
+      res.status(500).json({ message: "Failed to review registration" });
+    }
+  });
+
+  // Admin statistics
+  app.get('/api/admin/stats', isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const stats = await storage.getAdminStats();
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching admin stats:", error);
+      res.status(500).json({ message: "Failed to fetch admin stats" });
+    }
+  });
+
+  // Admin logs
+  app.get('/api/admin/logs', isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 50;
+      
+      const result = await storage.getAdminLogs(page, limit);
+      res.json(result);
+    } catch (error) {
+      console.error("Error fetching admin logs:", error);
+      res.status(500).json({ message: "Failed to fetch admin logs" });
+    }
+  });
+
+  // All orders (admin view)
+  app.get('/api/admin/orders', isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 20;
+      
+      const result = await storage.getAllOrders(page, limit);
+      res.json(result);
+    } catch (error) {
+      console.error("Error fetching all orders:", error);
+      res.status(500).json({ message: "Failed to fetch orders" });
     }
   });
 

@@ -7,6 +7,8 @@ import { useAuth } from "@/hooks/useAuth";
 import Dashboard from "@/pages/Dashboard";
 import Landing from "@/pages/Landing";
 import Orders from "@/pages/Orders";
+import Admin from "@/pages/Admin";
+import Register from "@/pages/Register";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -14,12 +16,14 @@ function Router() {
 
   return (
     <Switch>
+      <Route path="/register" component={Register} />
       {isLoading || !isAuthenticated ? (
         <Route path="/" component={Landing} />
       ) : (
         <>
           <Route path="/" component={Dashboard} />
           <Route path="/orders" component={Orders} />
+          <Route path="/admin" component={Admin} />
         </>
       )}
       <Route component={NotFound} />

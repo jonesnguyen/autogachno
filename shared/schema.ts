@@ -24,6 +24,12 @@ export const sessions = pgTable(
   (table) => [index("IDX_session_expire").on(table.expire)],
 );
 
+// User role enum
+export const userRoleEnum = pgEnum('user_role', ['user', 'admin', 'manager']);
+
+// User status enum
+export const userStatusEnum = pgEnum('user_status', ['active', 'suspended', 'pending']);
+
 // User storage table (mandatory for Replit Auth)
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -31,6 +37,9 @@ export const users = pgTable("users", {
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
+  role: userRoleEnum("role").default('user').notNull(),
+  status: userStatusEnum("status").default('active').notNull(),
+  lastLoginAt: timestamp("last_login_at"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -97,6 +106,37 @@ export const systemConfig = pgTable("system_config", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Admin activity logs table
+export const adminLogs = pgTable("admin_logs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  adminId: varchar("admin_id").notNull().references(() => users.id),
+  action: varchar("action").notNull(), // create_user, update_user, delete_user, etc.
+  targetType: varchar("target_type").notNull(), // user, order, system_config
+  targetId: varchar("target_id"),
+  oldData: text("old_data"), // JSON of previous data
+  newData: text("new_data"), // JSON of new data
+  ipAddress: varchar("ip_address"),
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// User registration requests table (for manual approval)
+export const userRegistrations = pgTable("user_registrations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: varchar("email").notNull().unique(),
+  firstName: varchar("first_name").notNull(),
+  lastName: varchar("last_name").notNull(),
+  phone: varchar("phone"),
+  organization: varchar("organization"),
+  requestReason: text("request_reason"),
+  status: varchar("status").default('pending').notNull(), // pending, approved, rejected
+  reviewedBy: varchar("reviewed_by").references(() => users.id),
+  reviewedAt: timestamp("reviewed_at"),
+  reviewNotes: text("review_notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
@@ -109,6 +149,12 @@ export type ServiceTransaction = typeof serviceTransactions.$inferSelect;
 
 export type InsertSystemConfig = typeof systemConfig.$inferInsert;
 export type SystemConfig = typeof systemConfig.$inferSelect;
+
+export type InsertAdminLog = typeof adminLogs.$inferInsert;
+export type AdminLog = typeof adminLogs.$inferSelect;
+
+export type InsertUserRegistration = typeof userRegistrations.$inferInsert;
+export type UserRegistration = typeof userRegistrations.$inferSelect;
 
 // Schemas
 export const insertOrderSchema = createInsertSchema(orders).omit({
@@ -126,4 +172,18 @@ export const insertServiceTransactionSchema = createInsertSchema(serviceTransact
 export const insertSystemConfigSchema = createInsertSchema(systemConfig).omit({
   id: true,
   updatedAt: true,
+});
+
+export const insertUserRegistrationSchema = createInsertSchema(userRegistrations).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  reviewedBy: true,
+  reviewedAt: true,
+  reviewNotes: true,
+});
+
+export const insertAdminLogSchema = createInsertSchema(adminLogs).omit({
+  id: true,
+  createdAt: true,
 });

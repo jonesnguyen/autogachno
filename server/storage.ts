@@ -3,6 +3,8 @@ import {
   orders,
   serviceTransactions,
   systemConfig,
+  adminLogs,
+  userRegistrations,
   type User,
   type UpsertUser,
   type Order,
@@ -11,14 +13,34 @@ import {
   type InsertServiceTransaction,
   type SystemConfig,
   type InsertSystemConfig,
+  type AdminLog,
+  type InsertAdminLog,
+  type UserRegistration,
+  type InsertUserRegistration,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and, count } from "drizzle-orm";
+import { eq, desc, and, count, sql, like, or } from "drizzle-orm";
 
 export interface IStorage {
   // User operations (mandatory for Replit Auth)
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
+  
+  // Admin user management
+  getAllUsers(page?: number, limit?: number, search?: string): Promise<{ users: User[], total: number }>;
+  updateUserRole(id: string, role: string): Promise<User>;
+  updateUserStatus(id: string, status: string): Promise<User>;
+  deleteUser(id: string): Promise<void>;
+  updateLastLogin(id: string): Promise<void>;
+  
+  // User registration operations
+  createUserRegistration(registration: InsertUserRegistration): Promise<UserRegistration>;
+  getUserRegistrations(status?: string): Promise<UserRegistration[]>;
+  reviewUserRegistration(id: string, approved: boolean, reviewerId: string, notes?: string): Promise<UserRegistration>;
+  
+  // Admin logging
+  createAdminLog(log: InsertAdminLog): Promise<AdminLog>;
+  getAdminLogs(page?: number, limit?: number): Promise<{ logs: AdminLog[], total: number }>;
   
   // Order operations
   createOrder(order: InsertOrder): Promise<Order>;
@@ -26,6 +48,7 @@ export interface IStorage {
   getUserOrders(userId: string, limit?: number): Promise<Order[]>;
   updateOrderStatus(id: string, status: string, resultData?: string): Promise<Order>;
   getRecentOrders(limit?: number): Promise<Order[]>;
+  getAllOrders(page?: number, limit?: number): Promise<{ orders: Order[], total: number }>;
   
   // Service transaction operations
   createServiceTransaction(transaction: InsertServiceTransaction): Promise<ServiceTransaction>;
@@ -42,6 +65,15 @@ export interface IStorage {
     totalRevenue: string;
     successRate: number;
     pendingOrders: number;
+  }>;
+  
+  getAdminStats(): Promise<{
+    totalUsers: number;
+    activeUsers: number;
+    totalOrders: number;
+    totalRevenue: string;
+    pendingRegistrations: number;
+    recentActivity: AdminLog[];
   }>;
 }
 
@@ -65,6 +97,141 @@ export class DatabaseStorage implements IStorage {
       })
       .returning();
     return user;
+  }
+
+  // Admin user management
+  async getAllUsers(page = 1, limit = 20, search?: string): Promise<{ users: User[], total: number }> {
+    const offset = (page - 1) * limit;
+    
+    let whereClause;
+    if (search) {
+      whereClause = or(
+        like(users.email, `%${search}%`),
+        like(users.firstName, `%${search}%`),
+        like(users.lastName, `%${search}%`)
+      );
+    }
+
+    const [usersResult, totalResult] = await Promise.all([
+      db.select()
+        .from(users)
+        .where(whereClause)
+        .orderBy(desc(users.createdAt))
+        .limit(limit)
+        .offset(offset),
+      
+      db.select({ count: count() })
+        .from(users)
+        .where(whereClause)
+    ]);
+
+    return {
+      users: usersResult,
+      total: totalResult[0].count
+    };
+  }
+
+  async updateUserRole(id: string, role: string): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ 
+        role: role as any,
+        updatedAt: new Date() 
+      })
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+
+  async updateUserStatus(id: string, status: string): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ 
+        status: status as any,
+        updatedAt: new Date() 
+      })
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+
+  async deleteUser(id: string): Promise<void> {
+    await db.delete(users).where(eq(users.id, id));
+  }
+
+  async updateLastLogin(id: string): Promise<void> {
+    await db
+      .update(users)
+      .set({ lastLoginAt: new Date() })
+      .where(eq(users.id, id));
+  }
+
+  // User registration operations
+  async createUserRegistration(registrationData: InsertUserRegistration): Promise<UserRegistration> {
+    const [registration] = await db
+      .insert(userRegistrations)
+      .values(registrationData)
+      .returning();
+    return registration;
+  }
+
+  async getUserRegistrations(status?: string): Promise<UserRegistration[]> {
+    const whereClause = status ? eq(userRegistrations.status, status) : undefined;
+    
+    return await db
+      .select()
+      .from(userRegistrations)
+      .where(whereClause)
+      .orderBy(desc(userRegistrations.createdAt));
+  }
+
+  async reviewUserRegistration(
+    id: string, 
+    approved: boolean, 
+    reviewerId: string, 
+    notes?: string
+  ): Promise<UserRegistration> {
+    const [registration] = await db
+      .update(userRegistrations)
+      .set({
+        status: approved ? 'approved' : 'rejected',
+        reviewedBy: reviewerId,
+        reviewedAt: new Date(),
+        reviewNotes: notes,
+        updatedAt: new Date()
+      })
+      .where(eq(userRegistrations.id, id))
+      .returning();
+    return registration;
+  }
+
+  // Admin logging
+  async createAdminLog(logData: InsertAdminLog): Promise<AdminLog> {
+    const [log] = await db
+      .insert(adminLogs)
+      .values(logData)
+      .returning();
+    return log;
+  }
+
+  async getAdminLogs(page = 1, limit = 50): Promise<{ logs: AdminLog[], total: number }> {
+    const offset = (page - 1) * limit;
+    
+    const [logsResult, totalResult] = await Promise.all([
+      db.select()
+        .from(adminLogs)
+        .orderBy(desc(adminLogs.createdAt))
+        .limit(limit)
+        .offset(offset),
+      
+      db.select({ count: count() })
+        .from(adminLogs)
+    ]);
+
+    return {
+      logs: logsResult,
+      total: totalResult[0].count
+    };
   }
 
   // Order operations
@@ -110,6 +277,26 @@ export class DatabaseStorage implements IStorage {
       .from(orders)
       .orderBy(desc(orders.createdAt))
       .limit(limit);
+  }
+
+  async getAllOrders(page = 1, limit = 20): Promise<{ orders: Order[], total: number }> {
+    const offset = (page - 1) * limit;
+    
+    const [ordersResult, totalResult] = await Promise.all([
+      db.select()
+        .from(orders)
+        .orderBy(desc(orders.createdAt))
+        .limit(limit)
+        .offset(offset),
+      
+      db.select({ count: count() })
+        .from(orders)
+    ]);
+
+    return {
+      orders: ordersResult,
+      total: totalResult[0].count
+    };
   }
 
   // Service transaction operations
@@ -217,6 +404,48 @@ export class DatabaseStorage implements IStorage {
       totalRevenue: totalRevenue.toLocaleString('vi-VN'),
       successRate: Math.round(successRate * 10) / 10,
       pendingOrders: pendingCount.count,
+    };
+  }
+
+  async getAdminStats(): Promise<{
+    totalUsers: number;
+    activeUsers: number;
+    totalOrders: number;
+    totalRevenue: string;
+    pendingRegistrations: number;
+    recentActivity: AdminLog[];
+  }> {
+    const [
+      totalUsersResult,
+      activeUsersResult,
+      totalOrdersResult,
+      pendingRegistrationsResult,
+      recentActivityResult
+    ] = await Promise.all([
+      db.select({ count: count() }).from(users),
+      db.select({ count: count() }).from(users).where(eq(users.status, 'active')),
+      db.select({ count: count() }).from(orders),
+      db.select({ count: count() }).from(userRegistrations).where(eq(userRegistrations.status, 'pending')),
+      db.select().from(adminLogs).orderBy(desc(adminLogs.createdAt)).limit(10)
+    ]);
+
+    // Calculate total revenue
+    const revenueResult = await db
+      .select()
+      .from(serviceTransactions)
+      .where(eq(serviceTransactions.status, 'success'));
+    
+    const totalRevenue = revenueResult.reduce((sum, t) => 
+      sum + (parseFloat(t.amount || '0')), 0
+    );
+
+    return {
+      totalUsers: totalUsersResult[0].count,
+      activeUsers: activeUsersResult[0].count,
+      totalOrders: totalOrdersResult[0].count,
+      totalRevenue: totalRevenue.toLocaleString('vi-VN'),
+      pendingRegistrations: pendingRegistrationsResult[0].count,
+      recentActivity: recentActivityResult,
     };
   }
 }

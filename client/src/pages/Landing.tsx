@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { UserPlus } from "lucide-react";
+import { Link } from "wouter";
 
 export default function Landing() {
   return (
@@ -17,14 +19,25 @@ export default function Landing() {
           <p className="text-xl text-gray-600 mb-8">
             Nền tảng quản lý hiện đại cho các dịch vụ viễn thông ViettelPay
           </p>
-          <Button 
-            size="lg" 
-            className="bg-primary hover:bg-primary/90"
-            onClick={() => window.location.href = "/api/login"}
-          >
-            <i className="fas fa-sign-in-alt mr-2"></i>
-            Đăng nhập để tiếp tục
-          </Button>
+          <div className="flex justify-center gap-4">
+            <Button 
+              size="lg" 
+              className="bg-primary hover:bg-primary/90"
+              onClick={() => window.location.href = "/api/login"}
+            >
+              <i className="fas fa-sign-in-alt mr-2"></i>
+              Đăng nhập để tiếp tục
+            </Button>
+            <Link href="/register">
+              <Button 
+                size="lg" 
+                variant="outline"
+              >
+                <UserPlus className="h-4 w-4 mr-2" />
+                Đăng ký tài khoản
+              </Button>
+            </Link>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
