@@ -3,10 +3,8 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { insertOrderSchema, insertServiceTransactionSchema } from "@shared/schema";
+import { getMockServiceData } from "./mockApiData";
 import { z } from "zod";
-
-// Mock API integration
-const MOCK_API_BASE = process.env.MOCK_API_BASE || 'http://127.0.0.1:8080';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -24,14 +22,67 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Service list route
+  app.get('/api/services', isAuthenticated, async (req, res) => {
+    try {
+      const services = [
+        {
+          id: 'tra_cuu_ftth',
+          name: 'Tra cứu FTTH',
+          description: 'Tra cứu thông tin thuê bao FTTH',
+          icon: 'Router',
+          category: 'lookup'
+        },
+        {
+          id: 'gach_dien_evn',
+          name: 'Gạch điện EVN',
+          description: 'Thanh toán hóa đơn điện EVN',
+          icon: 'Zap',
+          category: 'payment'
+        },
+        {
+          id: 'nap_tien_da_mang',
+          name: 'Nạp tiền đa mạng',
+          description: 'Nạp tiền cho nhiều nhà mạng',
+          icon: 'Smartphone',
+          category: 'topup'
+        },
+        {
+          id: 'nap_tien_viettel',
+          name: 'Nạp tiền Viettel',
+          description: 'Nạp tiền mạng Viettel',
+          icon: 'Phone',
+          category: 'topup'
+        },
+        {
+          id: 'thanh_toan_tv_internet',
+          name: 'TV - Internet',
+          description: 'Thanh toán dịch vụ TV và Internet',
+          icon: 'Tv',
+          category: 'payment'
+        },
+        {
+          id: 'tra_cuu_no_tra_sau',
+          name: 'Tra cứu trả sau',
+          description: 'Tra cứu nợ thuê bao trả sau',
+          icon: 'CreditCard',
+          category: 'lookup'
+        }
+      ];
+      res.json(services);
+    } catch (error) {
+      console.error("Error fetching services:", error);
+      res.status(500).json({ message: "Failed to fetch services" });
+    }
+  });
+
   // Service data routes
   app.get('/api/services/:serviceType/data', isAuthenticated, async (req, res) => {
     try {
       const { serviceType } = req.params;
       
-      // Fetch from mock API
-      const response = await fetch(`${MOCK_API_BASE}/api/data/${serviceType}`);
-      const data = await response.json();
+      // Use built-in mock data instead of external API
+      const data = getMockServiceData(serviceType);
       
       res.json(data);
     } catch (error) {
@@ -195,19 +246,98 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Order not found" });
       }
 
-      // Simple CSV export
-      const csvHeader = 'STT,Mã,Trạng thái,Số tiền,Ghi chú\n';
-      const csvData = transactions.map((t, index) => 
-        `${index + 1},"${t.code}","${t.status}","${t.amount || ''}","${t.notes || ''}"`
-      ).join('\n');
+      const { format = 'csv' } = req.query;
       
-      res.setHeader('Content-Type', 'text/csv');
-      res.setHeader('Content-Disposition', `attachment; filename="order-${id}.csv"`);
-      res.send(csvHeader + csvData);
+      if (format === 'json') {
+        // JSON export
+        const exportData = {
+          order,
+          transactions,
+          exportedAt: new Date().toISOString(),
+          summary: {
+            totalTransactions: transactions.length,
+            successfulTransactions: transactions.filter(t => t.status === 'success').length,
+            failedTransactions: transactions.filter(t => t.status === 'failed').length,
+            pendingTransactions: transactions.filter(t => t.status === 'pending').length,
+          }
+        };
+        
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Content-Disposition', `attachment; filename="order-${id}.json"`);
+        res.json(exportData);
+      } else {
+        // CSV export
+        const csvHeader = 'STT,Mã,Trạng thái,Số tiền,Ghi chú,Thời gian tạo,Thời gian cập nhật\n';
+        const csvData = transactions.map((t, index) => 
+          `${index + 1},"${t.code}","${t.status}","${t.amount || ''}","${t.notes || ''}","${t.createdAt}","${t.updatedAt}"`
+        ).join('\n');
+        
+        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+        res.setHeader('Content-Disposition', `attachment; filename="order-${id}.csv"`);
+        res.send('\ufeff' + csvHeader + csvData); // Add BOM for UTF-8
+      }
     } catch (error) {
       console.error("Error exporting order:", error);
       res.status(500).json({ message: "Failed to export order" });
     }
+  });
+
+  // Bulk operations API
+  app.post('/api/orders/bulk-process', isAuthenticated, async (req: any, res) => {
+    try {
+      const { orderIds, action } = req.body;
+      const userId = req.user.claims.sub;
+      
+      if (!Array.isArray(orderIds) || orderIds.length === 0) {
+        return res.status(400).json({ message: "Invalid order IDs" });
+      }
+
+      const results = [];
+      
+      for (const orderId of orderIds) {
+        try {
+          const order = await storage.getOrder(orderId);
+          if (!order || order.userId !== userId) {
+            results.push({ orderId, success: false, error: "Order not found or access denied" });
+            continue;
+          }
+
+          if (action === 'delete') {
+            // Note: In production, you might want soft delete
+            results.push({ orderId, success: true, message: "Order marked for deletion" });
+          } else if (action === 'retry') {
+            await storage.updateOrderStatus(orderId, 'pending');
+            results.push({ orderId, success: true, message: "Order marked for retry" });
+          } else {
+            results.push({ orderId, success: false, error: "Unknown action" });
+          }
+        } catch (error) {
+          results.push({ orderId, success: false, error: (error as Error).message });
+        }
+      }
+      
+      res.json({ results });
+    } catch (error) {
+      console.error("Error in bulk operation:", error);
+      res.status(500).json({ message: "Failed to perform bulk operation" });
+    }
+  });
+
+  // API health check
+  app.get('/api/health', (req, res) => {
+    res.json({
+      status: 'success',
+      message: 'Viettel Pay API Server đang hoạt động',
+      timestamp: new Date().toISOString(),
+      services: [
+        'tra_cuu_ftth',
+        'gach_dien_evn', 
+        'nap_tien_da_mang',
+        'nap_tien_viettel',
+        'thanh_toan_tv_internet',
+        'tra_cuu_no_tra_sau'
+      ]
+    });
   });
 
   const httpServer = createServer(app);

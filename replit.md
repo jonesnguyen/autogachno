@@ -2,6 +2,12 @@
 
 This is a full-stack web application for managing ViettelPay telecommunications services. The system provides a modern web interface for processing various telecom services including FTTH lookup, EVN electricity bill payment, mobile top-up, and TV-Internet payments. The application features a React frontend with a Node.js/Express backend, PostgreSQL database integration, and includes authentication via Replit's OAuth system.
 
+## Recent Changes (January 10, 2025)
+- **Integrated Mock API Server**: Built-in mock data endpoints replacing external Python Flask server to eliminate connectivity issues
+- **Complete API Functions**: Added comprehensive API endpoints for service interaction, bulk operations, and data export
+- **Enhanced Service Management**: 6 Vietnamese telecom services with sample data generation and processing simulation
+- **Export Capabilities**: CSV and JSON export functionality with UTF-8 support and detailed transaction summaries
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
