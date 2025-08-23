@@ -148,102 +148,233 @@ export function ServiceContent({ serviceType }: ServiceContentProps) {
     }
   });
 
-  // Create order mutation (save only)
-  const createOrderMutation = useMutation({
-    mutationFn: async () => {
-      const codes = formData.codes.split('\n').filter(code => code.trim());
-      
-      // Validate multi-network data
-      if (isMultiNetwork) {
-        if (formData.paymentType === 'prepaid') {
-          // Nạp trả trước: chỉ cần số điện thoại
-          const invalidCodes = [];
-          
-          for (const code of codes) {
-            if (code.includes('|')) {
-              invalidCodes.push(`${code} - Sai định dạng (nạp trả trước chỉ cần số điện thoại)`);
-            }
-          }
-          
-          if (invalidCodes.length > 0) {
-            throw new Error(`Dữ liệu không hợp lệ:\n${invalidCodes.join('\n')}`);
-          }
-        } else if (formData.paymentType === 'postpaid') {
-          // Gạch nợ trả sau: phải có format sđt|số tiền
-          const validAmounts = [10000, 20000, 30000, 50000, 100000, 200000, 300000, 500000];
-          const invalidCodes = [];
-          
-          for (const code of codes) {
-            const parts = code.split('|');
-            if (parts.length !== 2) {
-              invalidCodes.push(`${code} - Sai định dạng (gạch nợ trả sau cần: sđt|số tiền)`);
-              continue;
-            }
-            
-            const amount = parseInt(parts[1]);
-            if (!validAmounts.includes(amount)) {
-              invalidCodes.push(`${code} - Số tiền ${amount} không hợp lệ (chỉ cho phép: ${validAmounts.join(', ')})`);
-            }
-          }
-          
-          if (invalidCodes.length > 0) {
-            throw new Error(`Dữ liệu không hợp lệ:\n${invalidCodes.join('\n')}`);
-          }
-        } else if (!formData.paymentType) {
-          // Chưa chọn loại dịch vụ
-          throw new Error('Vui lòng chọn loại dịch vụ (Nạp trả trước hoặc Gạch nợ trả sau)');
-        }
-      }
-      
-      const inputData = {
-        codes,
-        phone: serviceType === 'gach_dien_evn' ? '' : formData.phone,
-        pin: '', // Không cần mã PIN cho bất kỳ dịch vụ nào
-        amount: (serviceType === 'gach_dien_evn' || serviceType === 'nap_tien_viettel') ? '' : formData.amount,
-        paymentType: formData.paymentType
-      };
+// Create order mutation (save only) - Updated with API validation
+const createOrderMutation = useMutation({
+  mutationFn: async () => {
+    const inputCodes = formData.codes.split('\n').filter(code => code.trim());
+    
+    if (inputCodes.length === 0) {
+      throw new Error('Vui lòng nhập ít nhất một mã');
+    }
 
-      const response = await apiRequest('POST', '/api/orders', {
-        serviceType,
-        inputData: JSON.stringify(inputData),
-        status: 'pending'
-      });
-      return response.json();
-    },
-    onSuccess: (order) => {
-      toast({
-        title: "Đã lưu danh sách",
-        description: "Đơn hàng đã được lưu vào hệ thống. Bot sẽ tự động xử lý.",
-      });
-      // refresh list
-      queryClient.invalidateQueries({ queryKey: ['/api/transactions', serviceType] });
-    },
-    onError: (error) => {
-      if (isUnauthorizedError(error)) {
-        toast({
-          title: "Unauthorized", 
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
+    // Loại bỏ trùng lặp trong danh sách nhập vào
+    const uniqueInputCodes = [...new Set(inputCodes.map(code => code.trim()))];
+    const removedDuplicates = inputCodes.length - uniqueInputCodes.length;
+    
+    if (removedDuplicates > 0) {
+      console.log(`Đã loại bỏ ${removedDuplicates} mã trùng lặp trong danh sách nhập`);
+    }
+
+    // Kiểm tra với dữ liệu từ API thuhohpk.com
+    let finalCodes = uniqueInputCodes;
+    let invalidCodes: string[] = [];
+    
+    // Lấy dữ liệu từ API để so sánh
+    try {
+      const mapping: Record<string, string> = {
+        tra_cuu_ftth: "check_ftth",
+        gach_dien_evn: "env", 
+        nap_tien_da_mang: "deposit",
+        nap_tien_viettel: "deposit_viettel",
+        thanh_toan_tv_internet: "payment_tv",
+        tra_cuu_no_tra_sau: "check_debt"
+      };
+      
+      const apiServiceType = mapping[serviceType] || serviceType;
+      const url = `http://localhost:3000/api/list-bill-not-completed?service_type=${apiServiceType}`;
+      
+      if (!user?.user || !user?.password) {
+        throw new Error("Không thể lấy thông tin đăng nhập. Vui lòng đăng nhập lại.");
       }
       
-      // Hiển thị lỗi chi tiết nếu có
-      let errorMessage = "Không thể tạo đơn hàng";
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      }
+      const username = user.user;
+      const password = user.password;
       
+      const apiResponse = await fetch(url, {
+        method: 'GET',
+        headers: {
+          "Token": "c0d2e27448f511b41dd1477781025053",
+          "Content-Type": "application/json",
+          "X-Username": username,
+          "X-Password": password
+        }
+      });
+
+      if (apiResponse.ok) {
+        const apiData = await apiResponse.json();
+        
+        // Parse API data giống logic trong loadSampleMutation
+        let validApiCodes: string[] = [];
+        if (apiData?.data) {
+          if (typeof apiData.data === "string") {
+            validApiCodes = apiData.data.split(",").map((c: string) => c.trim()).filter(Boolean);
+          } else if (Array.isArray(apiData.data)) {
+            validApiCodes = apiData.data.map((x: any) => (typeof x === "string" ? x : x.code || x.phone || x.account || x.bill_code)).filter(Boolean);
+          }
+        } else if (Array.isArray(apiData)) {
+          validApiCodes = apiData.map((x: any) => (typeof x === "string" ? x : x.code || x.phone || x.account || x.bill_code)).filter(Boolean);
+        }
+        
+        console.log(`Nhận được ${validApiCodes.length} mã hợp lệ từ API`);
+        
+        // Kiểm tra từng mã nhập vào có trong danh sách API không
+        finalCodes = [];
+        invalidCodes = [];
+        
+        for (const inputCode of uniqueInputCodes) {
+          if (validApiCodes.includes(inputCode)) {
+            finalCodes.push(inputCode);
+          } else {
+            invalidCodes.push(inputCode);
+          }
+        }
+        
+        if (invalidCodes.length > 0) {
+          console.log(`Phát hiện ${invalidCodes.length} mã không hợp lệ:`, invalidCodes);
+          
+          // Hiển thị thông báo về mã không hợp lệ
+          toast({
+            title: "Phát hiện mã không hợp lệ",
+            description: `${invalidCodes.length} mã không có trong danh sách API: ${invalidCodes.slice(0, 3).join(', ')}${invalidCodes.length > 3 ? '...' : ''}`,
+            variant: "destructive",
+          });
+        }
+        
+      } else {
+        throw new Error(`Không thể lấy dữ liệu từ API: HTTP ${apiResponse.status}`);
+      }
+    } catch (error) {
+      console.error('Lỗi khi kiểm tra với API:', error);
+      throw new Error(`Không thể xác thực dữ liệu với API: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+
+    // Nếu không có mã hợp lệ nào
+    if (finalCodes.length === 0) {
+      throw new Error('Không có mã nào hợp lệ trong danh sách. Vui lòng kiểm tra lại dữ liệu từ API.');
+    }
+    
+    // Validate multi-network data cho các mã còn lại
+    if (isMultiNetwork) {
+      if (formData.paymentType === 'prepaid') {
+        // Nạp trả trước: chỉ cần số điện thoại
+        const invalidCodes = [];
+        
+        for (const code of finalCodes) {
+          if (code.includes('|')) {
+            invalidCodes.push(`${code} - Sai định dạng (nạp trả trước chỉ cần số điện thoại)`);
+          }
+        }
+        
+        if (invalidCodes.length > 0) {
+          throw new Error(`Dữ liệu không hợp lệ:\n${invalidCodes.join('\n')}`);
+        }
+      } else if (formData.paymentType === 'postpaid') {
+        // Gạch nợ trả sau: phải có format sđt|số tiền
+        const validAmounts = [10000, 20000, 30000, 50000, 100000, 200000, 300000, 500000];
+        const invalidCodes = [];
+        
+        for (const code of finalCodes) {
+          const parts = code.split('|');
+          if (parts.length !== 2) {
+            invalidCodes.push(`${code} - Sai định dạng (gạch nợ trả sau cần: sđt|số tiền)`);
+            continue;
+          }
+          
+          const amount = parseInt(parts[1]);
+          if (!validAmounts.includes(amount)) {
+            invalidCodes.push(`${code} - Số tiền ${amount} không hợp lệ (chỉ cho phép: ${validAmounts.join(', ')})`);
+          }
+        }
+        
+        if (invalidCodes.length > 0) {
+          throw new Error(`Dữ liệu không hợp lệ:\n${invalidCodes.join('\n')}`);
+        }
+      } else if (!formData.paymentType) {
+        throw new Error('Vui lòng chọn loại dịch vụ (Nạp trả trước hoặc Gạch nợ trả sau)');
+      }
+    }
+    
+    const inputData = {
+      codes: finalCodes, // Sử dụng danh sách đã lọc trùng lặp
+      phone: serviceType === 'gach_dien_evn' ? '' : formData.phone,
+      pin: '',
+      amount: (serviceType === 'gach_dien_evn' || serviceType === 'nap_tien_viettel') ? '' : formData.amount,
+      paymentType: formData.paymentType
+    };
+
+    const response = await apiRequest('POST', '/api/orders', {
+      serviceType,
+      inputData: JSON.stringify(inputData),
+      status: 'pending'
+    });
+    
+    const result = await response.json();
+    
+    // Thêm thông tin về validation checking vào kết quả
+    result.validationInfo = {
+      originalCount: inputCodes.length,
+      uniqueInputCount: uniqueInputCodes.length,
+      removedInputDuplicates: removedDuplicates,
+      invalidCodesCount: invalidCodes.length,
+      finalProcessedCount: finalCodes.length
+    };
+    
+    return result;
+  },
+  onSuccess: (order) => {
+    const info = order.validationInfo || {};
+    
+    let description = `Đã lưu thành công ${info.finalProcessedCount || 'các'} mã vào hệ thống.`;
+    
+    if (info.removedInputDuplicates > 0 || info.invalidCodesCount > 0) {
+      const details = [];
+      if (info.removedInputDuplicates > 0) {
+        details.push(`${info.removedInputDuplicates} mã trùng trong danh sách`);
+      }
+      if (info.invalidCodesCount > 0) {
+        details.push(`${info.invalidCodesCount} mã không có trong API`);
+      }
+      description += ` Đã bỏ qua: ${details.join(', ')}.`;
+    }
+    
+    description += ' Bot sẽ tự động xử lý.';
+    
+    toast({
+      title: "Đã lưu danh sách",
+      description,
+    });
+    
+    // Refresh list
+    queryClient.invalidateQueries({ queryKey: ['/api/transactions', serviceType] });
+    
+    // Clear form nếu thành công
+    setFormData(prev => ({ ...prev, codes: '' }));
+  },
+  onError: (error) => {
+    if (isUnauthorizedError(error)) {
       toast({
-        title: "Lỗi",
-        description: errorMessage,
+        title: "Unauthorized", 
+        description: "You are logged out. Logging in again...",
         variant: "destructive",
       });
-    },
-  });
+      setTimeout(() => {
+        window.location.href = "/api/login";
+      }, 500);
+      return;
+    }
+    
+    let errorMessage = "Không thể tạo đơn hàng";
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    
+    toast({
+      title: "Lỗi",
+      description: errorMessage,
+      variant: "destructive",
+    });
+  },
+});
 
   // Remove manual processing; automation cron will pick up pending orders
 

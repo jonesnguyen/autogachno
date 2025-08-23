@@ -11717,3 +11717,438 @@ Stacktrace:
 2025-08-22 15:50:01,767 - WARNING - Không thể tải icon: bitmap "viettelpay.ico" not defined
 2025-08-22 15:50:11,232 - INFO - 🔄 Khởi tạo Chrome driver lần đầu...
 2025-08-22 15:50:17,478 - INFO - ✅ Chrome driver đã được khởi tạo thành công
+2025-08-23 21:58:17,296 - WARNING - Không thể tải icon: bitmap "viettelpay.ico" not defined
+2025-08-23 21:58:19,622 - INFO - 🔄 Khởi tạo Chrome driver lần đầu...
+2025-08-23 21:58:24,449 - INFO - ✅ Chrome driver đã được khởi tạo thành công
+2025-08-23 22:37:05,463 - WARNING - Không thể tải icon: bitmap "viettelpay.ico" not defined
+2025-08-23 22:37:06,619 - INFO - 🔄 Khởi tạo Chrome driver lần đầu...
+2025-08-23 22:37:09,570 - INFO - ✅ Chrome driver đã được khởi tạo thành công
+2025-08-23 22:37:54,531 - INFO - 🔄 Bắt đầu chu kỳ auto mode mới (lặp lại mỗi 10 giây)
+2025-08-23 22:37:54,531 - INFO - 🚀 Đã bắt đầu Auto Mode (lặp lại mỗi 10 giây)
+2025-08-23 22:37:54,531 - INFO - 🔄 Bắt đầu xử lý dịch vụ 1/7: Tra cứu FTTH
+2025-08-23 22:37:54,531 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu FTTH
+2025-08-23 22:37:54,643 - WARNING - ⚠️ Database rỗng cho Tra cứu FTTH
+2025-08-23 22:37:54,674 - INFO - ✅ Hoàn thành dịch vụ: Tra cứu FTTH
+2025-08-23 22:37:54,674 - INFO - 🔄 Bắt đầu xử lý dịch vụ 2/7: Gạch điện EVN
+2025-08-23 22:37:54,674 - INFO - 🤖 Bắt đầu xử lý tự động: Gạch điện EVN
+2025-08-23 22:37:54,726 - INFO - ✅ Database có dữ liệu: 0 codes, 7 orders
+2025-08-23 22:37:54,732 - INFO - 🔄 Đã reset form dịch vụ
+2025-08-23 22:37:56,756 - INFO - 🎯 Đang chọn dịch vụ: Gạch điện EVN
+2025-08-23 22:37:59,872 - INFO - 📄 Đang lấy dữ liệu...
+2025-08-23 22:37:59,916 - INFO - Order ID từ DB (EVN): 7e842f1a-22e8-48c9-9abd-176d146466a8
+2025-08-23 22:38:04,922 - INFO - ✅ Dữ liệu hợp lệ: 7 dòng
+2025-08-23 22:38:04,925 - INFO - ▶️ Đang bắt đầu xử lý...
+2025-08-23 22:39:17,857 - INFO - 📈 Tiến độ: 7 mục đã xử lý
+2025-08-23 22:39:37,867 - INFO - ✅ Xử lý có thể đã hoàn thành
+2025-08-23 22:39:37,867 - INFO - 🎉 Hoàn thành dịch vụ: Gạch điện EVN
+2025-08-23 22:39:40,868 - INFO - ✅ Hoàn thành dịch vụ: Gạch điện EVN
+2025-08-23 22:39:40,868 - INFO - 🔄 Bắt đầu xử lý dịch vụ 3/7: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:39:40,868 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:39:40,935 - WARNING - ⚠️ Database rỗng cho Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:39:40,935 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:39:40,935 - INFO - 🔄 Bắt đầu xử lý dịch vụ 4/7: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:39:40,935 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:39:40,995 - WARNING - ⚠️ Database rỗng cho Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:39:40,995 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:39:40,995 - INFO - 🔄 Bắt đầu xử lý dịch vụ 5/7: Nạp tiền mạng Viettel
+2025-08-23 22:39:40,995 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền mạng Viettel
+2025-08-23 22:39:41,053 - WARNING - ⚠️ Database trả về None cho Nạp tiền mạng Viettel
+2025-08-23 22:39:41,053 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền mạng Viettel
+2025-08-23 22:39:41,053 - INFO - 🔄 Bắt đầu xử lý dịch vụ 6/7: Thanh toán TV - Internet
+2025-08-23 22:39:41,053 - INFO - 🤖 Bắt đầu xử lý tự động: Thanh toán TV - Internet
+2025-08-23 22:39:41,104 - WARNING - ⚠️ Database rỗng cho Thanh toán TV - Internet
+2025-08-23 22:39:41,104 - INFO - ✅ Hoàn thành dịch vụ: Thanh toán TV - Internet
+2025-08-23 22:39:41,104 - INFO - 🔄 Bắt đầu xử lý dịch vụ 7/7: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:39:41,104 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:39:41,156 - WARNING - ⚠️ Database trả về None cho Tra cứu nợ thuê bao trả sau
+2025-08-23 22:39:41,156 - INFO - ✅ Hoàn thành dịch vụ: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:39:41,158 - INFO - 📊 Thống kê Auto Mode:
+2025-08-23 22:39:41,158 - INFO -    - Tổng dịch vụ: 7
+2025-08-23 22:39:41,158 - INFO -    - Hoàn thành: 7
+2025-08-23 22:39:41,158 - INFO -    - Bỏ qua: 0
+2025-08-23 22:39:41,158 - INFO -    - Lỗi: 0
+2025-08-23 22:39:41,158 - INFO - 🏁 Hoàn thành tất cả dịch vụ trong auto mode
+2025-08-23 22:39:41,200 - INFO - ⏰ Chờ 10 giây trước khi lặp lại...
+2025-08-23 22:39:51,212 - INFO - 🔄 Bắt đầu chu kỳ auto mode tiếp theo...
+2025-08-23 22:39:51,213 - INFO - 🔄 Bắt đầu chu kỳ auto mode mới (lặp lại mỗi 10 giây)
+2025-08-23 22:39:51,213 - INFO - 🔄 Bắt đầu xử lý dịch vụ 1/7: Tra cứu FTTH
+2025-08-23 22:39:51,214 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu FTTH
+2025-08-23 22:39:51,259 - WARNING - ⚠️ Database rỗng cho Tra cứu FTTH
+2025-08-23 22:39:51,259 - INFO - ✅ Hoàn thành dịch vụ: Tra cứu FTTH
+2025-08-23 22:39:51,259 - INFO - 🔄 Bắt đầu xử lý dịch vụ 2/7: Gạch điện EVN
+2025-08-23 22:39:51,259 - INFO - 🤖 Bắt đầu xử lý tự động: Gạch điện EVN
+2025-08-23 22:39:51,312 - INFO - ✅ Database có dữ liệu: 0 codes, 7 orders
+2025-08-23 22:39:51,312 - INFO - 🔄 Đã reset form dịch vụ
+2025-08-23 22:39:53,314 - INFO - 🎯 Đang chọn dịch vụ: Gạch điện EVN
+2025-08-23 22:39:56,327 - INFO - 📄 Đang lấy dữ liệu...
+2025-08-23 22:39:56,381 - INFO - Order ID từ DB (EVN): 7e842f1a-22e8-48c9-9abd-176d146466a8
+2025-08-23 22:40:01,386 - INFO - ✅ Dữ liệu hợp lệ: 7 dòng
+2025-08-23 22:40:01,387 - INFO - ▶️ Đang bắt đầu xử lý...
+2025-08-23 22:41:14,103 - INFO - 📈 Tiến độ: 7 mục đã xử lý
+2025-08-23 22:41:34,112 - INFO - ✅ Xử lý có thể đã hoàn thành
+2025-08-23 22:41:34,112 - INFO - 🎉 Hoàn thành dịch vụ: Gạch điện EVN
+2025-08-23 22:41:37,119 - INFO - ✅ Hoàn thành dịch vụ: Gạch điện EVN
+2025-08-23 22:41:37,119 - INFO - 🔄 Bắt đầu xử lý dịch vụ 3/7: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:41:37,119 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:41:37,163 - WARNING - ⚠️ Database rỗng cho Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:41:37,164 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:41:37,164 - INFO - 🔄 Bắt đầu xử lý dịch vụ 4/7: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:41:37,164 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:41:37,212 - WARNING - ⚠️ Database rỗng cho Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:41:37,212 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:41:37,212 - INFO - 🔄 Bắt đầu xử lý dịch vụ 5/7: Nạp tiền mạng Viettel
+2025-08-23 22:41:37,212 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền mạng Viettel
+2025-08-23 22:41:37,248 - WARNING - ⚠️ Database trả về None cho Nạp tiền mạng Viettel
+2025-08-23 22:41:37,248 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền mạng Viettel
+2025-08-23 22:41:37,248 - INFO - 🔄 Bắt đầu xử lý dịch vụ 6/7: Thanh toán TV - Internet
+2025-08-23 22:41:37,248 - INFO - 🤖 Bắt đầu xử lý tự động: Thanh toán TV - Internet
+2025-08-23 22:41:37,299 - WARNING - ⚠️ Database rỗng cho Thanh toán TV - Internet
+2025-08-23 22:41:37,299 - INFO - ✅ Hoàn thành dịch vụ: Thanh toán TV - Internet
+2025-08-23 22:41:37,299 - INFO - 🔄 Bắt đầu xử lý dịch vụ 7/7: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:41:37,299 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:41:37,349 - WARNING - ⚠️ Database trả về None cho Tra cứu nợ thuê bao trả sau
+2025-08-23 22:41:37,349 - INFO - ✅ Hoàn thành dịch vụ: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:41:37,349 - INFO - 📊 Thống kê Auto Mode:
+2025-08-23 22:41:37,350 - INFO -    - Tổng dịch vụ: 7
+2025-08-23 22:41:37,350 - INFO -    - Hoàn thành: 7
+2025-08-23 22:41:37,350 - INFO -    - Bỏ qua: 0
+2025-08-23 22:41:37,351 - INFO -    - Lỗi: 0
+2025-08-23 22:41:37,351 - INFO - 🏁 Hoàn thành tất cả dịch vụ trong auto mode
+2025-08-23 22:41:37,352 - INFO - ⏰ Chờ 10 giây trước khi lặp lại...
+2025-08-23 22:41:47,358 - INFO - 🔄 Bắt đầu chu kỳ auto mode tiếp theo...
+2025-08-23 22:41:47,358 - INFO - 🔄 Bắt đầu chu kỳ auto mode mới (lặp lại mỗi 10 giây)
+2025-08-23 22:41:47,358 - INFO - 🔄 Bắt đầu xử lý dịch vụ 1/7: Tra cứu FTTH
+2025-08-23 22:41:47,358 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu FTTH
+2025-08-23 22:41:47,409 - WARNING - ⚠️ Database rỗng cho Tra cứu FTTH
+2025-08-23 22:41:47,410 - INFO - ✅ Hoàn thành dịch vụ: Tra cứu FTTH
+2025-08-23 22:41:47,410 - INFO - 🔄 Bắt đầu xử lý dịch vụ 2/7: Gạch điện EVN
+2025-08-23 22:41:47,410 - INFO - 🤖 Bắt đầu xử lý tự động: Gạch điện EVN
+2025-08-23 22:41:47,455 - INFO - ✅ Database có dữ liệu: 0 codes, 7 orders
+2025-08-23 22:41:47,455 - INFO - 🔄 Đã reset form dịch vụ
+2025-08-23 22:41:49,460 - INFO - 🎯 Đang chọn dịch vụ: Gạch điện EVN
+2025-08-23 22:41:52,484 - INFO - 📄 Đang lấy dữ liệu...
+2025-08-23 22:41:52,541 - INFO - Order ID từ DB (EVN): 7e842f1a-22e8-48c9-9abd-176d146466a8
+2025-08-23 22:41:57,548 - INFO - ✅ Dữ liệu hợp lệ: 7 dòng
+2025-08-23 22:41:57,548 - INFO - ▶️ Đang bắt đầu xử lý...
+2025-08-23 22:43:10,211 - INFO - 📈 Tiến độ: 7 mục đã xử lý
+2025-08-23 22:43:30,222 - INFO - ✅ Xử lý có thể đã hoàn thành
+2025-08-23 22:43:30,222 - INFO - 🎉 Hoàn thành dịch vụ: Gạch điện EVN
+2025-08-23 22:43:33,223 - INFO - ✅ Hoàn thành dịch vụ: Gạch điện EVN
+2025-08-23 22:43:33,223 - INFO - 🔄 Bắt đầu xử lý dịch vụ 3/7: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:43:33,224 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:43:33,266 - WARNING - ⚠️ Database rỗng cho Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:43:33,268 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:43:33,268 - INFO - 🔄 Bắt đầu xử lý dịch vụ 4/7: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:43:33,268 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:43:33,311 - WARNING - ⚠️ Database rỗng cho Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:43:33,311 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:43:33,311 - INFO - 🔄 Bắt đầu xử lý dịch vụ 5/7: Nạp tiền mạng Viettel
+2025-08-23 22:43:33,313 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền mạng Viettel
+2025-08-23 22:43:33,352 - WARNING - ⚠️ Database trả về None cho Nạp tiền mạng Viettel
+2025-08-23 22:43:33,354 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền mạng Viettel
+2025-08-23 22:43:33,354 - INFO - 🔄 Bắt đầu xử lý dịch vụ 6/7: Thanh toán TV - Internet
+2025-08-23 22:43:33,354 - INFO - 🤖 Bắt đầu xử lý tự động: Thanh toán TV - Internet
+2025-08-23 22:43:33,397 - WARNING - ⚠️ Database rỗng cho Thanh toán TV - Internet
+2025-08-23 22:43:33,398 - INFO - ✅ Hoàn thành dịch vụ: Thanh toán TV - Internet
+2025-08-23 22:43:33,398 - INFO - 🔄 Bắt đầu xử lý dịch vụ 7/7: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:43:33,398 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:43:33,440 - WARNING - ⚠️ Database trả về None cho Tra cứu nợ thuê bao trả sau
+2025-08-23 22:43:33,442 - INFO - ✅ Hoàn thành dịch vụ: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:43:33,442 - INFO - 📊 Thống kê Auto Mode:
+2025-08-23 22:43:33,442 - INFO -    - Tổng dịch vụ: 7
+2025-08-23 22:43:33,442 - INFO -    - Hoàn thành: 7
+2025-08-23 22:43:33,442 - INFO -    - Bỏ qua: 0
+2025-08-23 22:43:33,443 - INFO -    - Lỗi: 0
+2025-08-23 22:43:33,443 - INFO - 🏁 Hoàn thành tất cả dịch vụ trong auto mode
+2025-08-23 22:43:33,443 - INFO - ⏰ Chờ 10 giây trước khi lặp lại...
+2025-08-23 22:43:43,469 - INFO - 🔄 Bắt đầu chu kỳ auto mode tiếp theo...
+2025-08-23 22:43:43,469 - INFO - 🔄 Bắt đầu chu kỳ auto mode mới (lặp lại mỗi 10 giây)
+2025-08-23 22:43:43,470 - INFO - 🔄 Bắt đầu xử lý dịch vụ 1/7: Tra cứu FTTH
+2025-08-23 22:43:43,470 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu FTTH
+2025-08-23 22:43:43,514 - WARNING - ⚠️ Database rỗng cho Tra cứu FTTH
+2025-08-23 22:43:43,514 - INFO - ✅ Hoàn thành dịch vụ: Tra cứu FTTH
+2025-08-23 22:43:43,514 - INFO - 🔄 Bắt đầu xử lý dịch vụ 2/7: Gạch điện EVN
+2025-08-23 22:43:43,515 - INFO - 🤖 Bắt đầu xử lý tự động: Gạch điện EVN
+2025-08-23 22:43:43,554 - INFO - ✅ Database có dữ liệu: 0 codes, 7 orders
+2025-08-23 22:43:43,556 - INFO - 🔄 Đã reset form dịch vụ
+2025-08-23 22:43:45,556 - INFO - 🎯 Đang chọn dịch vụ: Gạch điện EVN
+2025-08-23 22:43:48,569 - INFO - 📄 Đang lấy dữ liệu...
+2025-08-23 22:43:48,609 - INFO - Order ID từ DB (EVN): 7e842f1a-22e8-48c9-9abd-176d146466a8
+2025-08-23 22:43:53,611 - INFO - ✅ Dữ liệu hợp lệ: 7 dòng
+2025-08-23 22:43:53,611 - INFO - ▶️ Đang bắt đầu xử lý...
+2025-08-23 22:45:06,396 - INFO - 📈 Tiến độ: 7 mục đã xử lý
+2025-08-23 22:45:26,404 - INFO - ✅ Xử lý có thể đã hoàn thành
+2025-08-23 22:45:26,404 - INFO - 🎉 Hoàn thành dịch vụ: Gạch điện EVN
+2025-08-23 22:45:29,406 - INFO - ✅ Hoàn thành dịch vụ: Gạch điện EVN
+2025-08-23 22:45:29,406 - INFO - 🔄 Bắt đầu xử lý dịch vụ 3/7: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:45:29,406 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:45:29,449 - WARNING - ⚠️ Database rỗng cho Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:45:29,449 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:45:29,449 - INFO - 🔄 Bắt đầu xử lý dịch vụ 4/7: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:45:29,451 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:45:29,490 - WARNING - ⚠️ Database rỗng cho Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:45:29,490 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:45:29,490 - INFO - 🔄 Bắt đầu xử lý dịch vụ 5/7: Nạp tiền mạng Viettel
+2025-08-23 22:45:29,490 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền mạng Viettel
+2025-08-23 22:45:29,642 - WARNING - ⚠️ Database trả về None cho Nạp tiền mạng Viettel
+2025-08-23 22:45:29,642 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền mạng Viettel
+2025-08-23 22:45:29,642 - INFO - 🔄 Bắt đầu xử lý dịch vụ 6/7: Thanh toán TV - Internet
+2025-08-23 22:45:29,642 - INFO - 🤖 Bắt đầu xử lý tự động: Thanh toán TV - Internet
+2025-08-23 22:45:29,683 - WARNING - ⚠️ Database rỗng cho Thanh toán TV - Internet
+2025-08-23 22:45:29,683 - INFO - ✅ Hoàn thành dịch vụ: Thanh toán TV - Internet
+2025-08-23 22:45:29,683 - INFO - 🔄 Bắt đầu xử lý dịch vụ 7/7: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:45:29,683 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:45:29,732 - WARNING - ⚠️ Database trả về None cho Tra cứu nợ thuê bao trả sau
+2025-08-23 22:45:29,732 - INFO - ✅ Hoàn thành dịch vụ: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:45:29,732 - INFO - 📊 Thống kê Auto Mode:
+2025-08-23 22:45:29,732 - INFO -    - Tổng dịch vụ: 7
+2025-08-23 22:45:29,732 - INFO -    - Hoàn thành: 7
+2025-08-23 22:45:29,737 - INFO -    - Bỏ qua: 0
+2025-08-23 22:45:29,737 - INFO -    - Lỗi: 0
+2025-08-23 22:45:29,737 - INFO - 🏁 Hoàn thành tất cả dịch vụ trong auto mode
+2025-08-23 22:45:29,737 - INFO - ⏰ Chờ 10 giây trước khi lặp lại...
+2025-08-23 22:45:39,745 - INFO - 🔄 Bắt đầu chu kỳ auto mode tiếp theo...
+2025-08-23 22:45:39,746 - INFO - 🔄 Bắt đầu chu kỳ auto mode mới (lặp lại mỗi 10 giây)
+2025-08-23 22:45:39,746 - INFO - 🔄 Bắt đầu xử lý dịch vụ 1/7: Tra cứu FTTH
+2025-08-23 22:45:39,746 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu FTTH
+2025-08-23 22:45:39,793 - WARNING - ⚠️ Database rỗng cho Tra cứu FTTH
+2025-08-23 22:45:39,793 - INFO - ✅ Hoàn thành dịch vụ: Tra cứu FTTH
+2025-08-23 22:45:39,793 - INFO - 🔄 Bắt đầu xử lý dịch vụ 2/7: Gạch điện EVN
+2025-08-23 22:45:39,793 - INFO - 🤖 Bắt đầu xử lý tự động: Gạch điện EVN
+2025-08-23 22:45:39,840 - INFO - ✅ Database có dữ liệu: 0 codes, 7 orders
+2025-08-23 22:45:39,840 - INFO - 🔄 Đã reset form dịch vụ
+2025-08-23 22:45:41,844 - INFO - 🎯 Đang chọn dịch vụ: Gạch điện EVN
+2025-08-23 22:45:44,866 - INFO - 📄 Đang lấy dữ liệu...
+2025-08-23 22:45:44,906 - INFO - Order ID từ DB (EVN): 7e842f1a-22e8-48c9-9abd-176d146466a8
+2025-08-23 22:45:49,909 - INFO - ✅ Dữ liệu hợp lệ: 7 dòng
+2025-08-23 22:45:49,909 - INFO - ▶️ Đang bắt đầu xử lý...
+2025-08-23 22:47:02,956 - INFO - 📈 Tiến độ: 7 mục đã xử lý
+2025-08-23 22:47:22,973 - INFO - ✅ Xử lý có thể đã hoàn thành
+2025-08-23 22:47:22,973 - INFO - 🎉 Hoàn thành dịch vụ: Gạch điện EVN
+2025-08-23 22:47:25,975 - INFO - ✅ Hoàn thành dịch vụ: Gạch điện EVN
+2025-08-23 22:47:25,976 - INFO - 🔄 Bắt đầu xử lý dịch vụ 3/7: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:47:25,976 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:47:26,007 - WARNING - ⚠️ Database rỗng cho Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:47:26,007 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:47:26,007 - INFO - 🔄 Bắt đầu xử lý dịch vụ 4/7: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:47:26,007 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:47:26,055 - WARNING - ⚠️ Database rỗng cho Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:47:26,055 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:47:26,055 - INFO - 🔄 Bắt đầu xử lý dịch vụ 5/7: Nạp tiền mạng Viettel
+2025-08-23 22:47:26,055 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền mạng Viettel
+2025-08-23 22:47:26,086 - WARNING - ⚠️ Database trả về None cho Nạp tiền mạng Viettel
+2025-08-23 22:47:26,086 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền mạng Viettel
+2025-08-23 22:47:26,086 - INFO - 🔄 Bắt đầu xử lý dịch vụ 6/7: Thanh toán TV - Internet
+2025-08-23 22:47:26,086 - INFO - 🤖 Bắt đầu xử lý tự động: Thanh toán TV - Internet
+2025-08-23 22:47:26,139 - WARNING - ⚠️ Database rỗng cho Thanh toán TV - Internet
+2025-08-23 22:47:26,140 - INFO - ✅ Hoàn thành dịch vụ: Thanh toán TV - Internet
+2025-08-23 22:47:26,140 - INFO - 🔄 Bắt đầu xử lý dịch vụ 7/7: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:47:26,140 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:47:26,170 - WARNING - ⚠️ Database trả về None cho Tra cứu nợ thuê bao trả sau
+2025-08-23 22:47:26,180 - INFO - ✅ Hoàn thành dịch vụ: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:47:26,180 - INFO - 📊 Thống kê Auto Mode:
+2025-08-23 22:47:26,181 - INFO -    - Tổng dịch vụ: 7
+2025-08-23 22:47:26,181 - INFO -    - Hoàn thành: 7
+2025-08-23 22:47:26,181 - INFO -    - Bỏ qua: 0
+2025-08-23 22:47:26,181 - INFO -    - Lỗi: 0
+2025-08-23 22:47:26,181 - INFO - 🏁 Hoàn thành tất cả dịch vụ trong auto mode
+2025-08-23 22:47:26,183 - INFO - ⏰ Chờ 10 giây trước khi lặp lại...
+2025-08-23 22:47:36,191 - INFO - 🔄 Bắt đầu chu kỳ auto mode tiếp theo...
+2025-08-23 22:47:36,191 - INFO - 🔄 Bắt đầu chu kỳ auto mode mới (lặp lại mỗi 10 giây)
+2025-08-23 22:47:36,191 - INFO - 🔄 Bắt đầu xử lý dịch vụ 1/7: Tra cứu FTTH
+2025-08-23 22:47:36,191 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu FTTH
+2025-08-23 22:47:36,229 - WARNING - ⚠️ Database rỗng cho Tra cứu FTTH
+2025-08-23 22:47:36,229 - INFO - ✅ Hoàn thành dịch vụ: Tra cứu FTTH
+2025-08-23 22:47:36,229 - INFO - 🔄 Bắt đầu xử lý dịch vụ 2/7: Gạch điện EVN
+2025-08-23 22:47:36,229 - INFO - 🤖 Bắt đầu xử lý tự động: Gạch điện EVN
+2025-08-23 22:47:36,277 - INFO - ✅ Database có dữ liệu: 0 codes, 7 orders
+2025-08-23 22:47:36,277 - INFO - 🔄 Đã reset form dịch vụ
+2025-08-23 22:47:38,281 - INFO - 🎯 Đang chọn dịch vụ: Gạch điện EVN
+2025-08-23 22:47:41,291 - INFO - 📄 Đang lấy dữ liệu...
+2025-08-23 22:47:41,341 - INFO - Order ID từ DB (EVN): 7e842f1a-22e8-48c9-9abd-176d146466a8
+2025-08-23 22:47:46,343 - INFO - ✅ Dữ liệu hợp lệ: 7 dòng
+2025-08-23 22:47:46,355 - INFO - ▶️ Đang bắt đầu xử lý...
+2025-08-23 22:48:58,895 - INFO - 📈 Tiến độ: 7 mục đã xử lý
+2025-08-23 22:49:18,904 - INFO - ✅ Xử lý có thể đã hoàn thành
+2025-08-23 22:49:18,904 - INFO - 🎉 Hoàn thành dịch vụ: Gạch điện EVN
+2025-08-23 22:49:21,905 - INFO - ✅ Hoàn thành dịch vụ: Gạch điện EVN
+2025-08-23 22:49:21,905 - INFO - 🔄 Bắt đầu xử lý dịch vụ 3/7: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:49:21,905 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:49:21,946 - WARNING - ⚠️ Database rỗng cho Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:49:21,948 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:49:21,948 - INFO - 🔄 Bắt đầu xử lý dịch vụ 4/7: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:49:21,948 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:49:21,987 - WARNING - ⚠️ Database rỗng cho Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:49:21,987 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:49:21,987 - INFO - 🔄 Bắt đầu xử lý dịch vụ 5/7: Nạp tiền mạng Viettel
+2025-08-23 22:49:21,987 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền mạng Viettel
+2025-08-23 22:49:22,036 - WARNING - ⚠️ Database trả về None cho Nạp tiền mạng Viettel
+2025-08-23 22:49:22,037 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền mạng Viettel
+2025-08-23 22:49:22,037 - INFO - 🔄 Bắt đầu xử lý dịch vụ 6/7: Thanh toán TV - Internet
+2025-08-23 22:49:22,039 - INFO - 🤖 Bắt đầu xử lý tự động: Thanh toán TV - Internet
+2025-08-23 22:49:22,083 - WARNING - ⚠️ Database rỗng cho Thanh toán TV - Internet
+2025-08-23 22:49:22,084 - INFO - ✅ Hoàn thành dịch vụ: Thanh toán TV - Internet
+2025-08-23 22:49:22,084 - INFO - 🔄 Bắt đầu xử lý dịch vụ 7/7: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:49:22,084 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:49:22,134 - WARNING - ⚠️ Database trả về None cho Tra cứu nợ thuê bao trả sau
+2025-08-23 22:49:22,135 - INFO - ✅ Hoàn thành dịch vụ: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:49:22,135 - INFO - 📊 Thống kê Auto Mode:
+2025-08-23 22:49:22,135 - INFO -    - Tổng dịch vụ: 7
+2025-08-23 22:49:22,135 - INFO -    - Hoàn thành: 7
+2025-08-23 22:49:22,135 - INFO -    - Bỏ qua: 0
+2025-08-23 22:49:22,136 - INFO -    - Lỗi: 0
+2025-08-23 22:49:22,136 - INFO - 🏁 Hoàn thành tất cả dịch vụ trong auto mode
+2025-08-23 22:49:22,136 - INFO - ⏰ Chờ 10 giây trước khi lặp lại...
+2025-08-23 22:49:32,142 - INFO - 🔄 Bắt đầu chu kỳ auto mode tiếp theo...
+2025-08-23 22:49:32,142 - INFO - 🔄 Bắt đầu chu kỳ auto mode mới (lặp lại mỗi 10 giây)
+2025-08-23 22:49:32,142 - INFO - 🔄 Bắt đầu xử lý dịch vụ 1/7: Tra cứu FTTH
+2025-08-23 22:49:32,142 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu FTTH
+2025-08-23 22:49:32,196 - WARNING - ⚠️ Database rỗng cho Tra cứu FTTH
+2025-08-23 22:49:32,198 - INFO - ✅ Hoàn thành dịch vụ: Tra cứu FTTH
+2025-08-23 22:49:32,198 - INFO - 🔄 Bắt đầu xử lý dịch vụ 2/7: Gạch điện EVN
+2025-08-23 22:49:32,198 - INFO - 🤖 Bắt đầu xử lý tự động: Gạch điện EVN
+2025-08-23 22:49:32,333 - INFO - ✅ Database có dữ liệu: 0 codes, 7 orders
+2025-08-23 22:49:32,349 - INFO - 🔄 Đã reset form dịch vụ
+2025-08-23 22:49:34,350 - INFO - 🎯 Đang chọn dịch vụ: Gạch điện EVN
+2025-08-23 22:49:37,372 - INFO - 📄 Đang lấy dữ liệu...
+2025-08-23 22:49:37,421 - INFO - Order ID từ DB (EVN): 7e842f1a-22e8-48c9-9abd-176d146466a8
+2025-08-23 22:49:42,424 - INFO - ✅ Dữ liệu hợp lệ: 7 dòng
+2025-08-23 22:49:42,425 - INFO - ▶️ Đang bắt đầu xử lý...
+2025-08-23 22:50:55,281 - INFO - 📈 Tiến độ: 7 mục đã xử lý
+2025-08-23 22:51:15,289 - INFO - ✅ Xử lý có thể đã hoàn thành
+2025-08-23 22:51:15,289 - INFO - 🎉 Hoàn thành dịch vụ: Gạch điện EVN
+2025-08-23 22:51:18,292 - INFO - ✅ Hoàn thành dịch vụ: Gạch điện EVN
+2025-08-23 22:51:18,292 - INFO - 🔄 Bắt đầu xử lý dịch vụ 3/7: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:51:18,292 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:51:18,342 - WARNING - ⚠️ Database rỗng cho Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:51:18,342 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:51:18,342 - INFO - 🔄 Bắt đầu xử lý dịch vụ 4/7: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:51:18,342 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:51:18,389 - WARNING - ⚠️ Database rỗng cho Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:51:18,390 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:51:18,390 - INFO - 🔄 Bắt đầu xử lý dịch vụ 5/7: Nạp tiền mạng Viettel
+2025-08-23 22:51:18,390 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền mạng Viettel
+2025-08-23 22:51:18,425 - WARNING - ⚠️ Database trả về None cho Nạp tiền mạng Viettel
+2025-08-23 22:51:18,425 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền mạng Viettel
+2025-08-23 22:51:18,425 - INFO - 🔄 Bắt đầu xử lý dịch vụ 6/7: Thanh toán TV - Internet
+2025-08-23 22:51:18,425 - INFO - 🤖 Bắt đầu xử lý tự động: Thanh toán TV - Internet
+2025-08-23 22:51:18,470 - WARNING - ⚠️ Database rỗng cho Thanh toán TV - Internet
+2025-08-23 22:51:18,470 - INFO - ✅ Hoàn thành dịch vụ: Thanh toán TV - Internet
+2025-08-23 22:51:18,470 - INFO - 🔄 Bắt đầu xử lý dịch vụ 7/7: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:51:18,470 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:51:18,510 - WARNING - ⚠️ Database trả về None cho Tra cứu nợ thuê bao trả sau
+2025-08-23 22:51:18,510 - INFO - ✅ Hoàn thành dịch vụ: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:51:18,510 - INFO - 📊 Thống kê Auto Mode:
+2025-08-23 22:51:18,510 - INFO -    - Tổng dịch vụ: 7
+2025-08-23 22:51:18,510 - INFO -    - Hoàn thành: 7
+2025-08-23 22:51:18,510 - INFO -    - Bỏ qua: 0
+2025-08-23 22:51:18,510 - INFO -    - Lỗi: 0
+2025-08-23 22:51:18,510 - INFO - 🏁 Hoàn thành tất cả dịch vụ trong auto mode
+2025-08-23 22:51:18,510 - INFO - ⏰ Chờ 10 giây trước khi lặp lại...
+2025-08-23 22:51:28,521 - INFO - 🔄 Bắt đầu chu kỳ auto mode tiếp theo...
+2025-08-23 22:51:28,522 - INFO - 🔄 Bắt đầu chu kỳ auto mode mới (lặp lại mỗi 10 giây)
+2025-08-23 22:51:28,522 - INFO - 🔄 Bắt đầu xử lý dịch vụ 1/7: Tra cứu FTTH
+2025-08-23 22:51:28,523 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu FTTH
+2025-08-23 22:51:28,566 - WARNING - ⚠️ Database rỗng cho Tra cứu FTTH
+2025-08-23 22:51:28,566 - INFO - ✅ Hoàn thành dịch vụ: Tra cứu FTTH
+2025-08-23 22:51:28,567 - INFO - 🔄 Bắt đầu xử lý dịch vụ 2/7: Gạch điện EVN
+2025-08-23 22:51:28,567 - INFO - 🤖 Bắt đầu xử lý tự động: Gạch điện EVN
+2025-08-23 22:51:28,610 - INFO - ✅ Database có dữ liệu: 0 codes, 7 orders
+2025-08-23 22:51:28,610 - INFO - 🔄 Đã reset form dịch vụ
+2025-08-23 22:51:30,613 - INFO - 🎯 Đang chọn dịch vụ: Gạch điện EVN
+2025-08-23 22:51:33,625 - INFO - 📄 Đang lấy dữ liệu...
+2025-08-23 22:51:33,688 - INFO - Order ID từ DB (EVN): 7e842f1a-22e8-48c9-9abd-176d146466a8
+2025-08-23 22:51:38,690 - INFO - ✅ Dữ liệu hợp lệ: 7 dòng
+2025-08-23 22:51:38,691 - INFO - ▶️ Đang bắt đầu xử lý...
+2025-08-23 22:52:51,685 - INFO - 📈 Tiến độ: 7 mục đã xử lý
+2025-08-23 22:53:11,701 - INFO - ✅ Xử lý có thể đã hoàn thành
+2025-08-23 22:53:11,701 - INFO - 🎉 Hoàn thành dịch vụ: Gạch điện EVN
+2025-08-23 22:53:14,704 - INFO - ✅ Hoàn thành dịch vụ: Gạch điện EVN
+2025-08-23 22:53:14,704 - INFO - 🔄 Bắt đầu xử lý dịch vụ 3/7: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:53:14,704 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:53:14,742 - WARNING - ⚠️ Database rỗng cho Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:53:14,742 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền đa mạng - Nạp trả trước
+2025-08-23 22:53:14,742 - INFO - 🔄 Bắt đầu xử lý dịch vụ 4/7: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:53:14,742 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:53:14,790 - WARNING - ⚠️ Database rỗng cho Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:53:14,792 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền đa mạng - Gạch nợ trả sau
+2025-08-23 22:53:14,792 - INFO - 🔄 Bắt đầu xử lý dịch vụ 5/7: Nạp tiền mạng Viettel
+2025-08-23 22:53:14,792 - INFO - 🤖 Bắt đầu xử lý tự động: Nạp tiền mạng Viettel
+2025-08-23 22:53:14,822 - WARNING - ⚠️ Database trả về None cho Nạp tiền mạng Viettel
+2025-08-23 22:53:14,822 - INFO - ✅ Hoàn thành dịch vụ: Nạp tiền mạng Viettel
+2025-08-23 22:53:14,822 - INFO - 🔄 Bắt đầu xử lý dịch vụ 6/7: Thanh toán TV - Internet
+2025-08-23 22:53:14,822 - INFO - 🤖 Bắt đầu xử lý tự động: Thanh toán TV - Internet
+2025-08-23 22:53:14,870 - WARNING - ⚠️ Database rỗng cho Thanh toán TV - Internet
+2025-08-23 22:53:14,870 - INFO - ✅ Hoàn thành dịch vụ: Thanh toán TV - Internet
+2025-08-23 22:53:14,870 - INFO - 🔄 Bắt đầu xử lý dịch vụ 7/7: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:53:14,870 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:53:14,901 - WARNING - ⚠️ Database trả về None cho Tra cứu nợ thuê bao trả sau
+2025-08-23 22:53:14,901 - INFO - ✅ Hoàn thành dịch vụ: Tra cứu nợ thuê bao trả sau
+2025-08-23 22:53:14,901 - INFO - 📊 Thống kê Auto Mode:
+2025-08-23 22:53:14,901 - INFO -    - Tổng dịch vụ: 7
+2025-08-23 22:53:14,901 - INFO -    - Hoàn thành: 7
+2025-08-23 22:53:14,901 - INFO -    - Bỏ qua: 0
+2025-08-23 22:53:14,901 - INFO -    - Lỗi: 0
+2025-08-23 22:53:14,901 - INFO - 🏁 Hoàn thành tất cả dịch vụ trong auto mode
+2025-08-23 22:53:14,901 - INFO - ⏰ Chờ 10 giây trước khi lặp lại...
+2025-08-23 22:53:24,923 - INFO - 🔄 Bắt đầu chu kỳ auto mode tiếp theo...
+2025-08-23 22:53:24,923 - INFO - 🔄 Bắt đầu chu kỳ auto mode mới (lặp lại mỗi 10 giây)
+2025-08-23 22:53:24,923 - INFO - 🔄 Bắt đầu xử lý dịch vụ 1/7: Tra cứu FTTH
+2025-08-23 22:53:24,923 - INFO - 🤖 Bắt đầu xử lý tự động: Tra cứu FTTH
+2025-08-23 22:53:24,970 - INFO - ✅ Database có dữ liệu: 1 codes, 1 orders
+2025-08-23 22:53:24,972 - INFO - 🔄 Đã reset form dịch vụ
+2025-08-23 22:53:26,974 - INFO - 🎯 Đang chọn dịch vụ: Tra cứu FTTH
+2025-08-23 22:53:29,983 - INFO - 📄 Đang lấy dữ liệu...
+2025-08-23 22:53:35,025 - INFO - ✅ Dữ liệu hợp lệ: 1 dòng
+2025-08-23 22:53:35,025 - INFO - ▶️ Đang bắt đầu xử lý...
+2025-08-23 22:53:36,038 - INFO - Navigating to: https://kpp.bankplus.vn/pages/newInternetTelevisionViettel.jsf?serviceCode=000003&serviceType=INTERNET
+2025-08-23 22:53:49,932 - WARNING - Không thể điều hướng FTTH hoặc chọn radio: Message: 
+Stacktrace:
+	GetHandleVerifier [0x0x7ff69e1278d5+2802741]
+	GetHandleVerifier [0x0x7ff69de8eb70+79568]
+	(No symbol) [0x0x7ff69dc2c0fa]
+	(No symbol) [0x0x7ff69dc82a96]
+	(No symbol) [0x0x7ff69dc82d4c]
+	(No symbol) [0x0x7ff69dcd6017]
+	(No symbol) [0x0x7ff69dcaaccf]
+	(No symbol) [0x0x7ff69dcd2e24]
+	(No symbol) [0x0x7ff69dcaaa63]
+	(No symbol) [0x0x7ff69dc73c91]
+	(No symbol) [0x0x7ff69dc74a23]
+	GetHandleVerifier [0x0x7ff69e152ced+2979917]
+	GetHandleVerifier [0x0x7ff69e14d0f3+2956371]
+	GetHandleVerifier [0x0x7ff69e16acbd+3078173]
+	GetHandleVerifier [0x0x7ff69dea836e+184014]
+	GetHandleVerifier [0x0x7ff69deb024f+216495]
+	GetHandleVerifier [0x0x7ff69de970c4+113700]
+	GetHandleVerifier [0x0x7ff69de97279+114137]
+	GetHandleVerifier [0x0x7ff69de7df78+10968]
+	BaseThreadInitThunk [0x0x7ffd6653e8d7+23]
+	RtlUserThreadStart [0x0x7ffd67bfc34c+44]
+
+2025-08-23 22:53:49,932 - ERROR - Error processing PB16040034312: Message: 
+Stacktrace:
+	GetHandleVerifier [0x0x7ff69e1278d5+2802741]
+	GetHandleVerifier [0x0x7ff69de8eb70+79568]
+	(No symbol) [0x0x7ff69dc2c0fa]
+	(No symbol) [0x0x7ff69dc82a96]
+	(No symbol) [0x0x7ff69dc82d4c]
+	(No symbol) [0x0x7ff69dcd6017]
+	(No symbol) [0x0x7ff69dcaaccf]
+	(No symbol) [0x0x7ff69dcd2e24]
+	(No symbol) [0x0x7ff69dcaaa63]
+	(No symbol) [0x0x7ff69dc73c91]
+	(No symbol) [0x0x7ff69dc74a23]
+	GetHandleVerifier [0x0x7ff69e152ced+2979917]
+	GetHandleVerifier [0x0x7ff69e14d0f3+2956371]
+	GetHandleVerifier [0x0x7ff69e16acbd+3078173]
+	GetHandleVerifier [0x0x7ff69dea836e+184014]
+	GetHandleVerifier [0x0x7ff69deb024f+216495]
+	GetHandleVerifier [0x0x7ff69de970c4+113700]
+	GetHandleVerifier [0x0x7ff69de97279+114137]
+	GetHandleVerifier [0x0x7ff69de7df78+10968]
+	BaseThreadInitThunk [0x0x7ffd6653e8d7+23]
+	RtlUserThreadStart [0x0x7ffd67bfc34c+44]
+
+2025-08-23 22:53:50,943 - INFO - 📈 Tiến độ: 1 mục đã xử lý
+2025-08-23 22:53:56,948 - WARNING - ⚠️ Timeout xử lý cho Tra cứu FTTH

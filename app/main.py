@@ -138,439 +138,376 @@ def reset_service_form():
 		logger.error(f"Lỗi reset service form: {e}")
 
 def auto_process_service(service_name, service_type=None):
-	"""Tự động xử lý một dịch vụ cụ thể với retry và timeout"""
-	global auto_mode_stop_flag
-	try:
-		# Hiển thị tên dịch vụ với loại cụ thể
-		service_display_name = service_name
-		if service_type:
-			if service_type == "prepaid":
-				service_display_name = f"{service_name} - Nạp trả trước"
-			elif service_type == "postpaid":
-				service_display_name = f"{service_name} - Gạch nợ trả sau"
+    """Tự động xử lý một dịch vụ cụ thể với retry và timeout - Phiên bản tối ưu"""
+    global auto_mode_stop_flag
+    
+    # Hiển thị tên dịch vụ với loại cụ thể
+    service_display_name = service_name
+    if service_type:
+        type_suffix = " - Nạp trả trước" if service_type == "prepaid" else " - Gạch nợ trả sau"
+        service_display_name = f"{service_name}{type_suffix}"
+    
+    logger.info(f"🤖 Bắt đầu xử lý tự động: {service_display_name}")
+    update_auto_mode_status(f"Đang xử lý: {service_display_name}")
+    
+    try:
+        # *** KIỂM TRA DATABASE TRƯỚC TIÊN ***
+        if not _check_database_has_data(service_name, service_type, service_display_name):
+            return True  # Skip và chuyển sang dịch vụ tiếp theo
+        
+        if auto_mode_stop_flag:
+            return False
+        
+        # Reset form và chọn dịch vụ
+        if not _setup_service_form(service_name, service_display_name):
+            return False
+            
+        if auto_mode_stop_flag:
+            return False
+        
+        # Cấu hình đặc biệt cho "Nạp tiền đa mạng"
+        if service_name == "Nạp tiền đa mạng" and service_type:
+            if not _configure_payment_type(service_type):
+                logger.warning(f"⚠️ Không thể cấu hình loại thanh toán cho {service_display_name}")
+        
+        # Lấy dữ liệu
+        if not _fetch_service_data(service_display_name):
+            return True  # Skip nếu không lấy được dữ liệu
+            
+        if auto_mode_stop_flag:
+            return False
+        
+        # Kiểm tra dữ liệu đã load
+        if not _validate_loaded_data(service_display_name):
+            return True  # Skip nếu dữ liệu không hợp lệ
+            
+        if auto_mode_stop_flag:
+            return False
+        
+        # Bắt đầu xử lý
+        if not _start_processing(service_display_name):
+            return False
+            
+        # Theo dõi tiến độ
+        success = _monitor_processing_progress(service_display_name)
+        
+        if success:
+            logger.info(f"🎉 Hoàn thành dịch vụ: {service_display_name}")
+            update_auto_mode_status(f"Hoàn thành: {service_display_name}")
+        else:
+            logger.warning(f"⚠️ Timeout xử lý cho {service_display_name}")
+            
+        time.sleep(3)  # Đợi một chút trước khi sang dịch vụ tiếp theo
+        return success
+        
+    except Exception as e:
+        logger.error(f"❌ Lỗi dịch vụ {service_display_name}: {e}")
+        update_auto_mode_status(f"❌ Lỗi: {service_display_name}")
+        return False
+
+def _check_database_has_data(service_name, service_type, service_display_name):
+    """Kiểm tra database có dữ liệu không trước khi xử lý"""
+    try:
+        from db import db_fetch_service_data
+        
+        service_map = {
+            "Tra cứu FTTH": "tra_cuu_ftth",
+            "Gạch điện EVN": "gach_dien_evn", 
+            "Nạp tiền đa mạng": "nap_tien_da_mang",
+            "Nạp tiền mạng Viettel": "nap_tien_mang_viettel",
+            "Thanh toán TV - Internet": "thanh_toan_tv_internet",
+            "Tra cứu nợ thuê bao trả sau": "tra_cuu_no_thue_bao_tra_sau"
+        }
+        
+        db_service_key = service_map.get(service_name)
+        if not db_service_key:
+            logger.warning(f"⚠️ Không tìm thấy service key cho {service_name}")
+            return False
+        
+        # Gọi database với hoặc không có service_type
+        if service_name == "Nạp tiền đa mạng" and service_type:
+            db_data = db_fetch_service_data(db_service_key, service_type)
+        else:
+            db_data = db_fetch_service_data(db_service_key)
+            
+        if not db_data:
+            logger.warning(f"⚠️ Database trả về None cho {service_display_name}")
+            update_auto_mode_status(f"⚠️ Bỏ qua: {service_display_name} (DB None)")
+            return False
+        
+        subscriber_codes = db_data.get("subscriber_codes", [])
+        code_order_map = db_data.get("code_order_map", [])
+        
+        # Kiểm tra dữ liệu có rỗng không
+        if not subscriber_codes and not code_order_map:
+            logger.warning(f"⚠️ Database rỗng cho {service_display_name}")
+            update_auto_mode_status(f"⚠️ Bỏ qua: {service_display_name} (DB rỗng)")
+            return False
+        
+        logger.info(f"✅ Database có dữ liệu: {len(subscriber_codes)} codes, {len(code_order_map)} orders")
+        return True
+        
+    except Exception as e:
+        logger.warning(f"Không thể kiểm tra database: {e}")
+        # Nếu không kiểm tra được DB, tiếp tục với flow bình thường
+        return True
+
+def _setup_service_form(service_name, service_display_name):
+    """Reset form và chọn dịch vụ"""
+    try:
+        reset_service_form()
+        time.sleep(2)
+        
+        r = get_root()
+        service_combobox = wait_for_widget(r, find_combobox_by_values, (service_name,))
+        
+        if not service_combobox:
+            logger.error(f"Không tìm thấy combobox dịch vụ cho: {service_display_name}")
+            return False
+            
+        logger.info(f"🎯 Đang chọn dịch vụ: {service_display_name}")
+        service_combobox.set(service_name)
+        service_combobox.event_generate('<<ComboboxSelected>>')
+        maybe_update_ui()
+        time.sleep(3)
+        
+        return True
+        
+    except Exception as e:
+        logger.error(f"Lỗi setup service form: {e}")
+        return False
+
+def _configure_payment_type(service_type):
+    """Cấu hình loại thanh toán cho Nạp tiền đa mạng"""
+    try:
+        r = get_root()
+        
+        # Tìm combobox "Hình thức" với tìm kiếm sâu
+        def find_form_combobox_deep(parent, depth=0):
+            if depth > 15:
+                return None
+            try:
+                for widget in parent.winfo_children():
+                    if isinstance(widget, tk.ttk.Combobox):
+                        values = widget.cget('values')
+                        if values and "Nạp trả trước" in values and "Gạch nợ trả sau" in values:
+                            return widget
+                    result = find_form_combobox_deep(widget, depth + 1)
+                    if result:
+                        return result
+            except Exception:
+                pass
+            return None
+        
+        form_combobox = find_form_combobox_deep(r)
+        if not form_combobox:
+            logger.warning("⚠️ Không tìm thấy combobox hình thức")
+            return False
+        
+        current_value = form_combobox.get()
+        target_value = "Nạp trả trước" if service_type == "prepaid" else "Gạch nợ trả sau"
+        
+        if current_value != target_value:
+            logger.info(f"🔄 Thay đổi từ '{current_value}' sang '{target_value}'")
+            form_combobox.set(target_value)
+            form_combobox.event_generate('<<ComboboxSelected>>')
+            maybe_update_ui()
+            time.sleep(2)
+        
+        return True
+        
+    except Exception as e:
+        logger.error(f"Lỗi cấu hình payment type: {e}")
+        return False
+
+def _fetch_service_data(service_display_name):
+    """Lấy dữ liệu từ server"""
+    try:
+        r = get_root()
+        get_data_button = wait_for_widget(r, find_widget_by_text, (tk.ttk.Button, "Get dữ liệu"))
+        
+        if not get_data_button:
+            logger.error("Không tìm thấy nút 'Get dữ liệu'")
+            return False
+            
+        logger.info("📄 Đang lấy dữ liệu...")
+        update_auto_mode_status(f"Lấy dữ liệu: {service_display_name}")
+        get_data_button.invoke()
+        maybe_update_ui()
+        time.sleep(5)
+        
+        return True
+        
+    except Exception as e:
+        logger.error(f"Lỗi fetch data: {e}")
+        return False
+
+def _validate_loaded_data(service_display_name):
+    """Kiểm tra dữ liệu đã được load có hợp lệ không"""
+    try:
+        r = get_root()
+        
+        # Tìm text widget chứa dữ liệu
+        text_widget = None
+        for frame in r.winfo_children():
+            if isinstance(frame, tk.Frame):
+                for child in frame.winfo_children():
+                    if isinstance(child, tk.Frame):
+                        for subchild in child.winfo_children():
+                            if isinstance(subchild, tk.Text) and subchild.cget('bg') != "#ccc":
+                                text_widget = subchild
+                                break
+                        if text_widget:
+                            break
+                if text_widget:
+                    break
+        
+        if not text_widget:
+            logger.error("Không tìm thấy text widget để kiểm tra dữ liệu")
+            return False
+        
+        # Kiểm tra dữ liệu với retry
+        max_retries = 3
+        for retry in range(max_retries):
+            try:
+                data_content = text_widget.get("1.0", "end-1c").strip()
+                if data_content:
+                    lines = data_content.splitlines()
+                    valid_lines = [line.strip() for line in lines 
+                                 if line.strip() and not any(keyword.lower() in line.lower() 
+                                 for keyword in ["Không có", "Error", "Lỗi", "không tìm thấy", "empty", "null"])]
+                    
+                    if valid_lines:
+                        logger.info(f"✅ Dữ liệu hợp lệ: {len(valid_lines)} dòng")
+                        return True
+                
+                if retry < max_retries - 1:
+                    logger.info(f"⏳ Đợi dữ liệu load... (lần {retry + 1}/{max_retries})")
+                    time.sleep(1)
+                    maybe_update_ui()
+                    
+            except Exception as e:
+                logger.warning(f"Lỗi kiểm tra dữ liệu lần {retry + 1}: {e}")
+                time.sleep(1)
+        
+        logger.warning(f"⚠️ Không có dữ liệu hợp lệ cho {service_display_name}")
+        update_auto_mode_status(f"⚠️ Bỏ qua: {service_display_name} (Không có dữ liệu)")
+        return False
+        
+    except Exception as e:
+        logger.error(f"Lỗi validate data: {e}")
+        return False
+
+def _start_processing(service_display_name):
+    """Bắt đầu xử lý dữ liệu"""
+    try:
+        r = get_root()
+        
+        # Tìm tất cả nút "Bắt đầu"
+        all_start_buttons = []
+        def find_all_start_buttons(parent, depth=0):
+            if depth > 10:
+                return
+            try:
+                for widget in parent.winfo_children():
+                    if isinstance(widget, tk.ttk.Button):
+                        if hasattr(widget, 'cget') and widget.cget('text') == "Bắt đầu":
+                            style = widget.cget('style') or ""
+                            all_start_buttons.append((widget, style))
+                    find_all_start_buttons(widget, depth + 1)
+            except Exception:
+                pass
+        
+        find_all_start_buttons(r)
+        
+        if not all_start_buttons:
+            logger.error("❌ Không tìm thấy nút 'Bắt đầu'")
+            return False
+        
+        # Tìm nút có style "Blue.TButton" hoặc lấy nút đầu tiên
+        start_button = None
+        for btn, style in all_start_buttons:
+            if style == "Blue.TButton":
+                start_button = btn
+                break
+        
+        if not start_button:
+            start_button = all_start_buttons[0][0]
+            logger.warning("⚠️ Không tìm thấy Blue.TButton, sử dụng nút đầu tiên")
+        
+        logger.info("▶️ Đang bắt đầu xử lý...")
+        update_auto_mode_status(f"Đang xử lý dữ liệu: {service_display_name}")
+        start_button.invoke()
+        maybe_update_ui()
+        
+        return True
+        
+    except Exception as e:
+        logger.error(f"Lỗi start processing: {e}")
+        return False
+
+def _monitor_processing_progress(service_display_name):
+    """Theo dõi tiến độ xử lý"""
+    try:
+        r = get_root()
+        
+        # Tìm processed widget
+        processed_widget = None
+        for frame in r.winfo_children():
+            if isinstance(frame, tk.Frame):
+                for child in frame.winfo_children():
+                    if isinstance(child, tk.Frame):
+                        for subchild in child.winfo_children():
+                            if isinstance(subchild, tk.Text) and subchild.cget('bg') == "#ccc":
+                                processed_widget = subchild
+                                break
+                        if processed_widget:
+                            break
+                if processed_widget:
+                    break
+        
+        # Chờ xử lý xong với timeout
+        processing_timeout = 300  # 5 phút
+        start_time = time.time()
+        last_line_count = 0
+        stuck_counter = 0
+        max_stuck = 10
+        
+        while time.time() - start_time < processing_timeout:
+            if auto_mode_stop_flag:
+                return False
+                
+            if processed_widget:
+                try:
+                    processed_content = processed_widget.get("1.0", "end-1c").strip()
+                    line_count = len(processed_content.splitlines()) if processed_content else 0
+                    
+                    if line_count > last_line_count:
+                        logger.info(f"📈 Tiến độ: {line_count} mục đã xử lý")
+                        last_line_count = line_count
+                        stuck_counter = 0
+                    else:
+                        stuck_counter += 1
+                        if stuck_counter >= max_stuck:
+                            logger.info("✅ Xử lý có thể đã hoàn thành")
+                            break
+                            
+                except Exception as e:
+                    logger.warning(f"Lỗi theo dõi tiến độ: {e}")
+            else:
+                # Không có processed widget, đợi thời gian cố định
+                time.sleep(10)
+                break
+            
+            maybe_update_ui()
+            time.sleep(2)
+        
+        return time.time() - start_time < processing_timeout
+        
+    except Exception as e:
+        logger.error(f"Lỗi monitor progress: {e}")
+        return False
 		
-		logger.info(f"🤖 Bắt đầu xử lý tự động: {service_display_name}")
-		
-		# Cập nhật status label
-		update_auto_mode_status(f"Đang xử lý: {service_display_name}")
-		
-		# Reset form trước khi chọn dịch vụ mới
-		reset_service_form()
-		time.sleep(2)
-		
-		# Tìm và chọn dịch vụ trong combobox với chờ
-		r = get_root()
-		service_combobox = wait_for_widget(
-			r, 
-			find_combobox_by_values, 
-			(service_name,)
-		)
-		
-		if not service_combobox:
-			logger.error(f"Không tìm thấy combobox dịch vụ cho: {service_display_name}")
-			return False
-			
-		# Chọn dịch vụ
-		logger.info(f"🎯 Đang chọn dịch vụ: {service_display_name}")
-		service_combobox.set(service_name)
-		service_combobox.event_generate('<<ComboboxSelected>>')
-		maybe_update_ui()
-		time.sleep(3)  # Đợi UI cập nhật và form dịch vụ được load
-		
-		if auto_mode_stop_flag:
-			return False
-		
-		# *** XỬ LÝ ĐẶC BIỆT CHO "NẠP TIỀN ĐA MẠNG" ***
-		if service_name == "Nạp tiền đa mạng" and service_type:
-			logger.info(f"🔄 Đang cấu hình loại dịch vụ: {service_type}")
-			
-			# Tìm combobox "Hình thức" và chọn loại tương ứng
-			form_combobox = None
-			logger.info("🔍 Tìm kiếm combobox hình thức...")
-			
-			for widget in r.winfo_children():
-				if isinstance(widget, tk.Frame):
-					logger.info(f"   - Kiểm tra Frame: {type(widget).__name__}")
-					for child in widget.winfo_children():
-						if isinstance(child, tk.Frame):
-							logger.info(f"     - Kiểm tra Frame con: {type(child).__name__}")
-							for subchild in child.winfo_children():
-								if isinstance(subchild, tk.ttk.Combobox):
-									values = subchild.cget('values')
-									logger.info(f"       - Tìm thấy Combobox với values: {values}")
-									if values and "Nạp trả trước" in values and "Gạch nợ trả sau" in values:
-										form_combobox = subchild
-										logger.info(f"✅ Tìm thấy combobox hình thức với values: {values}")
-										break
-							if form_combobox:
-								break
-					if form_combobox:
-						break
-			
-			if form_combobox:
-				# Lấy giá trị hiện tại để so sánh
-				current_value = form_combobox.get()
-				logger.info(f"📋 Giá trị hiện tại của combobox: '{current_value}'")
-				
-				if service_type == "prepaid":
-					target_value = "Nạp trả trước"
-					logger.info(f"🎯 Đang chọn: {target_value}")
-				elif service_type == "postpaid":
-					target_value = "Gạch nợ trả sau"
-					logger.info(f"🎯 Đang chọn: {target_value}")
-				else:
-					target_value = "Nạp trả trước"  # Default
-					logger.warning(f"⚠️ Service type không xác định: {service_type}, sử dụng default: {target_value}")
-				
-				# Chỉ thay đổi nếu giá trị hiện tại khác với giá trị mục tiêu
-				if current_value != target_value:
-					logger.info(f"🔄 Thay đổi từ '{current_value}' sang '{target_value}'")
-					form_combobox.set(target_value)
-					# Trigger event để cập nhật UI
-					form_combobox.event_generate('<<ComboboxSelected>>')
-					maybe_update_ui()
-					time.sleep(2)  # Đợi UI cập nhật
-					
-					# Kiểm tra lại giá trị sau khi thay đổi
-					new_value = form_combobox.get()
-					logger.info(f"✅ Giá trị mới của combobox: '{new_value}'")
-				else:
-					logger.info(f"✅ Combobox đã có giá trị đúng: '{current_value}'")
-			else:
-				logger.warning("⚠️ Không tìm thấy combobox hình thức cho Nạp tiền đa mạng")
-				logger.info("🔍 Tiếp tục tìm kiếm trong toàn bộ widget tree...")
-				
-				# Tìm kiếm sâu hơn trong toàn bộ widget tree
-				def find_form_combobox_deep(parent, depth=0):
-					if depth > 15:  # Giới hạn độ sâu
-						return None
-					try:
-						for widget in parent.winfo_children():
-							if isinstance(widget, tk.ttk.Combobox):
-								values = widget.cget('values')
-								if values and "Nạp trả trước" in values and "Gạch nợ trả sau" in values:
-									logger.info(f"✅ Tìm thấy combobox hình thức ở độ sâu {depth}: {values}")
-									return widget
-							# Tìm đệ quy
-							result = find_form_combobox_deep(widget, depth + 1)
-							if result:
-								return result
-					except Exception as e:
-						pass
-					return None
-				
-				form_combobox = find_form_combobox_deep(r)
-				if form_combobox:
-					logger.info("✅ Tìm thấy combobox hình thức bằng tìm kiếm sâu")
-					# Xử lý tương tự như trên
-					current_value = form_combobox.get()
-					logger.info(f"📋 Giá trị hiện tại của combobox: '{current_value}'")
-					
-					if service_type == "prepaid":
-						target_value = "Nạp trả trước"
-					elif service_type == "postpaid":
-						target_value = "Gạch nợ trả sau"
-					else:
-						target_value = "Nạp trả trước"
-					
-					if current_value != target_value:
-						logger.info(f"🔄 Thay đổi từ '{current_value}' sang '{target_value}'")
-						form_combobox.set(target_value)
-						form_combobox.event_generate('<<ComboboxSelected>>')
-						maybe_update_ui()
-						time.sleep(2)
-					else:
-						logger.info(f"✅ Combobox đã có giá trị đúng: '{current_value}'")
-				else:
-					logger.error("❌ Không thể tìm thấy combobox hình thức sau khi tìm kiếm sâu")
-			
-		# Chờ nút "Get dữ liệu" xuất hiện
-		get_data_button = wait_for_widget(
-			r,
-			find_widget_by_text,
-			(tk.ttk.Button, "Get dữ liệu")
-		)
-		if not get_data_button:
-			logger.error("Không tìm thấy nút 'Get dữ liệu' sau khi load form")
-			return False
-			
-		# Bấm nút Get dữ liệu
-		logger.info("🔄 Đang lấy dữ liệu...")
-		update_auto_mode_status(f"Lấy dữ liệu: {service_display_name}")
-		get_data_button.invoke()
-		maybe_update_ui()
-		time.sleep(5)  # Đợi dữ liệu load lâu hơn
-		
-		if auto_mode_stop_flag:
-			return False
-		
-		# *** KIỂM TRA DATABASE TRƯỚC KHI KIỂM TRA TEXT WIDGET ***
-		# Kiểm tra xem dữ liệu từ database có rỗng không
-		try:
-			# Sử dụng import tuyệt đối thay vì relative import
-			import sys
-			import os
-			
-			# Thêm đường dẫn để import db module
-			current_dir = os.path.dirname(os.path.abspath(__file__))
-			if current_dir not in sys.path:
-				sys.path.insert(0, current_dir)
-			
-			from db import db_fetch_service_data
-			
-			service_map = {
-				"Tra cứu FTTH": "tra_cuu_ftth",
-				"Gạch điện EVN": "gach_dien_evn", 
-				"Nạp tiền đa mạng": "nap_tien_da_mang",
-				"Nạp tiền mạng Viettel": "nap_tien_mang_viettel",
-				"Thanh toán TV - Internet": "thanh_toan_tv_internet",
-				"Tra cứu nợ thuê bao trả sau": "tra_cuu_no_thue_bao_tra_sau"
-			}
-			
-			db_service_key = service_map.get(service_name)
-			if db_service_key:
-				# Với Nạp tiền đa mạng, truyền thêm service_type
-				if service_name == "Nạp tiền đa mạng" and service_type:
-					logger.info(f"🔍 Gọi database với service_key: {db_service_key}, service_type: {service_type}")
-					db_data = db_fetch_service_data(db_service_key, service_type)
-				else:
-					logger.info(f"🔍 Gọi database với service_key: {db_service_key}")
-					db_data = db_fetch_service_data(db_service_key)
-					
-				if db_data:
-					subscriber_codes = db_data.get("subscriber_codes", [])
-					code_order_map = db_data.get("code_order_map", [])
-					
-					logger.info(f"📊 Dữ liệu database cho {service_display_name}:")
-					logger.info(f"   - subscriber_codes: {len(subscriber_codes)} items")
-					logger.info(f"   - code_order_map: {len(code_order_map)} items")
-					
-					# Kiểm tra nếu cả subscriber_codes và code_order_map đều rỗng
-					if not subscriber_codes and not code_order_map:
-						logger.warning(f"⚠️ Database trả về dữ liệu rỗng cho {service_display_name}")
-						logger.info(f"   - subscriber_codes: {subscriber_codes}")
-						logger.info(f"   - code_order_map: {code_order_map}")
-						update_auto_mode_status(f"⚠️ Bỏ qua: {service_display_name} (DB rỗng)")
-						return True  # Bỏ qua và chuyển sang dịch vụ tiếp theo
-					else:
-						logger.info(f"✅ Database có dữ liệu cho {service_display_name}")
-				else:
-					logger.warning(f"⚠️ Database trả về None cho {service_display_name}")
-					update_auto_mode_status(f"⚠️ Bỏ qua: {service_display_name} (DB None)")
-					return True
-		except Exception as e:
-			logger.warning(f"Không thể kiểm tra dữ liệu database: {e}")
-			logger.info("Tiếp tục kiểm tra text widget như bình thường")
-			# Tiếp tục kiểm tra text widget như bình thường
-			
-		# Tìm text widget chứa dữ liệu để kiểm tra
-		text_widget = None
-		for frame in r.winfo_children():
-			if isinstance(frame, tk.Frame):
-				for child in frame.winfo_children():
-					if isinstance(child, tk.Frame):
-						for subchild in child.winfo_children():
-							if isinstance(subchild, tk.Text) and subchild.cget('bg') != "#ccc":
-								text_widget = subchild
-								break
-						if text_widget:
-							break
-				if text_widget:
-					break
-		
-		if not text_widget:
-			logger.error("Không tìm thấy text widget để kiểm tra dữ liệu")
-			return False
-		
-		# Kiểm tra dữ liệu đã được load chưa với retry
-		data_loaded = False
-		data_content = ""
-		max_retries = 3  # Tăng retry
-		for retry in range(max_retries):
-			try:
-				data_content = text_widget.get("1.0", "end-1c").strip()
-				if data_content and len(data_content.splitlines()) > 0:
-					# Kiểm tra xem có phải dữ liệu thật không (không phải thông báo lỗi)
-					lines = data_content.splitlines()
-					valid_lines = [line.strip() for line in lines if line.strip() and not line.strip().startswith("Không có") and not line.strip().startswith("Error")]
-					
-					if valid_lines:
-						data_loaded = True
-						logger.info(f"✅ Dữ liệu đã được load: {len(valid_lines)} dòng hợp lệ")
-						break
-					else:
-						logger.warning(f"⚠️ Dữ liệu load nhưng không hợp lệ hoặc rỗng: {data_content[:100]}...")
-						if retry >= max_retries - 3:  # Trong 3 lần cuối, kiểm tra kỹ hơn
-							break
-				else:
-					logger.info(f"⏳ Đợi dữ liệu load... (lần {retry + 1}/{max_retries})")
-				time.sleep(1)
-				maybe_update_ui()
-			except Exception as e:
-				logger.warning(f"Lỗi kiểm tra dữ liệu lần {retry + 1}: {e}")
-				time.sleep(1)
-		
-		# Kiểm tra cuối cùng xem có dữ liệu không
-		if not data_loaded:
-			logger.warning(f"⚠️ Không có dữ liệu cho dịch vụ {service_display_name} - Bỏ qua và chuyển sang dịch vụ tiếp theo")
-			update_auto_mode_status(f"⚠️ Bỏ qua: {service_display_name} (Không có dữ liệu)")
-			return True  # Return True để tiếp tục với dịch vụ tiếp theo, không dừng toàn bộ auto mode
-		
-		# Kiểm tra lại nội dung dữ liệu một lần nữa để đảm bảo
-		final_data_content = text_widget.get("1.0", "end-1c").strip()
-		if not final_data_content:
-			logger.warning(f"⚠️ Dữ liệu rỗng cho dịch vụ {service_display_name} - Bỏ qua")
-			update_auto_mode_status(f"⚠️ Bỏ qua: {service_display_name} (Dữ liệu rỗng)")
-			return True
-			
-		# Kiểm tra xem có phải thông báo lỗi không
-		error_keywords = ["Không có", "Error", "Lỗi", "không tìm thấy", "empty", "null"]
-		if any(keyword.lower() in final_data_content.lower() for keyword in error_keywords):
-			logger.warning(f"⚠️ Dữ liệu chứa thông báo lỗi cho dịch vụ {service_display_name}: {final_data_content[:100]}...")
-			update_auto_mode_status(f"⚠️ Bỏ qua: {service_display_name} (Dữ liệu lỗi)")
-			return True
-			
-		# Cập nhật data_content để sử dụng ở phần sau
-		data_content = final_data_content
-		
-		# Hiển thị thông tin dữ liệu đã load
-		try:
-			if data_content:
-				lines = data_content.split('\n')
-				valid_lines = [line.strip() for line in lines if line.strip()]
-				logger.info(f"📊 Số lượng mã cần xử lý: {len(valid_lines)}")
-				for i, line in enumerate(valid_lines[:3], 1):  # Hiển thị 3 mã đầu tiên
-					if '|' in line:
-						code, order_id = line.split('|', 1)
-						logger.info(f"   - Mã {i}: {code.strip()} (Order: {order_id.strip()})")
-					else:
-						logger.info(f"   - Mã {i}: {line.strip()}")
-		except Exception as e:
-			logger.warning(f"Lỗi hiển thị dữ liệu sample: {e}")
-		
-		if auto_mode_stop_flag:
-			return False
-		
-		# *** IMPROVED: Tìm tất cả nút "Bắt đầu" và debug chúng ***
-		logger.info("🔍 Tìm kiếm các nút 'Bắt đầu'...")
-		all_start_buttons = []
-		
-		def find_all_start_buttons(parent, depth=0):
-			if depth > 10:  # Giới hạn độ sâu
-				return
-			try:
-				for widget in parent.winfo_children():
-					if isinstance(widget, tk.ttk.Button):
-						if hasattr(widget, 'cget') and widget.cget('text') == "Bắt đầu":
-							style = widget.cget('style') or ""
-							logger.info(f"   - Tìm thấy nút 'Bắt đầu': style='{style}', state='{widget.cget('state')}'")
-							all_start_buttons.append((widget, style))
-					# Tìm đệ quy trong widget con
-					find_all_start_buttons(widget, depth + 1)
-			except Exception as e:
-				pass
-		
-		find_all_start_buttons(r)
-		
-		if not all_start_buttons:
-			logger.error("❌ Không tìm thấy nút 'Bắt đầu' nào sau khi load dữ liệu")
-			return False
-		
-		# Tìm nút có style "Blue.TButton" hoặc lấy nút đầu tiên
-		start_button = None
-		for btn, style in all_start_buttons:
-			if style == "Blue.TButton":
-				start_button = btn
-				logger.info(f"✅ Tìm thấy nút 'Bắt đầu' có style 'Blue.TButton'")
-				break
-		
-		if not start_button and all_start_buttons:
-			# Nếu không tìm thấy Blue.TButton, lấy nút đầu tiên và log warning
-			start_button = all_start_buttons[0][0]
-			logger.warning(f"⚠️ Không tìm thấy nút 'Blue.TButton', sử dụng nút đầu tiên: style='{all_start_buttons[0][1]}'")
-		
-		if not start_button:
-			logger.error("❌ Không có nút 'Bắt đầu' khả dụng")
-			return False
-		
-		# Bấm nút Bắt đầu
-		logger.info("▶️ Đang bắt đầu xử lý...")
-		update_auto_mode_status(f"Đang xử lý dữ liệu: {service_display_name}")
-		start_button.invoke()
-		maybe_update_ui()
-		
-		# Theo dõi tiến độ xử lý bằng cách kiểm tra text widget "Đã xử lý"
-		processed_widget = None
-		for frame in r.winfo_children():
-			if isinstance(frame, tk.Frame):
-				for child in frame.winfo_children():
-					if isinstance(child, tk.Frame):
-						for subchild in child.winfo_children():
-							if isinstance(subchild, tk.Text) and subchild.cget('bg') == "#ccc":
-								processed_widget = subchild
-								break
-						if processed_widget:
-							break
-				if processed_widget:
-					break
-		
-		if not processed_widget:
-			logger.warning("Không tìm thấy processed text widget để theo dõi tiến độ")
-		
-		# Chờ xử lý xong với timeout 300 giây (5 phút mỗi dịch vụ)
-		processing_timeout = 300
-		start_time = time.time()
-		last_line_count = 0
-		stuck_counter = 0
-		max_stuck = 10  # Nếu không thay đổi trong 10 lần check, coi như xong hoặc lỗi
-		
-		while time.time() - start_time < processing_timeout:
-			if auto_mode_stop_flag:
-				return False
-				
-			try:
-				if processed_widget:
-					processed_content = processed_widget.get("1.0", "end-1c").strip()
-					line_count = len(processed_content.splitlines()) if processed_content else 0
-					total_lines = len(data_content.splitlines())
-					
-					if line_count > last_line_count:
-						logger.info(f"📈 Tiến độ: {line_count} / {total_lines} (~{int(line_count / total_lines * 100) if total_lines > 0 else 0}%)")
-						last_line_count = line_count
-						stuck_counter = 0
-					else:
-						stuck_counter += 1
-						if stuck_counter >= max_stuck:
-							logger.info(f"✅ Xử lý có thể đã hoàn thành (không thay đổi trong {max_stuck * 2} giây)")
-							break
-					
-					if line_count >= total_lines:
-						logger.info(f"✅ Đã xử lý xong tất cả: {line_count} mục")
-						break
-				else:
-					# Không có processed widget, chỉ đợi một thời gian cố định
-					time.sleep(10)
-					break
-			except Exception as e:
-				logger.warning(f"Lỗi theo dõi tiến độ: {e}")
-			
-			maybe_update_ui()
-			time.sleep(2)  # Check mỗi 2 giây
-		
-		if time.time() - start_time >= processing_timeout:
-			logger.warning(f"⚠️ Timeout xử lý cho {service_display_name}")
-			return False
-		
-		logger.info(f"🎉 Hoàn thành dịch vụ: {service_display_name}")
-		update_auto_mode_status(f"Hoàn thành: {service_display_name}")
-		time.sleep(3)  # Đợi một chút trước khi sang dịch vụ tiếp theo
-		return True
-		
-	except Exception as e:
-		logger.error(f"❌ Lỗi dịch vụ {service_display_name}: {e}")
-		update_auto_mode_status(f"❌ Lỗi: {service_display_name}")
-		return False
-	
 def auto_cron_worker():
 	"""Worker thread cho auto mode - xử lý tuần tự 6 dịch vụ với 2 loại cho Nạp tiền đa mạng"""
 	global auto_mode_stop_flag, auto_mode_loop_enabled, auto_mode_loop_interval
@@ -683,6 +620,7 @@ def auto_cron_worker():
 		global auto_mode_enabled
 		auto_mode_enabled = False
 		update_auto_mode_ui()
+
 
 def start_auto_mode():
 	"""Bắt đầu chế độ tự động"""
