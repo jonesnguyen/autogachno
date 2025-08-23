@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks/useAuth";
 import Dashboard from "@/pages/Dashboard";
 import Landing from "@/pages/Landing";
+import Login from "@/pages/Login";
 import Orders from "@/pages/Orders";
 import Admin from "@/pages/Admin";
 import Register from "@/pages/Register";
@@ -17,6 +18,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/register" component={Register} />
+      <Route path="/login" component={Login} />
       {isLoading || !isAuthenticated ? (
         <>
           <Route path="/" component={Landing} />
@@ -24,7 +26,13 @@ function Router() {
         </>
       ) : (
         <>
-          <Route path="/" component={Dashboard} />
+          <Route path="/" component={() => <Dashboard />} />
+          <Route path="/tra-cuu-ftth" component={() => <Dashboard initialService="tra_cuu_ftth" />} />
+          <Route path="/gach-dien-evn" component={() => <Dashboard initialService="gach_dien_evn" />} />
+          <Route path="/nap-tien-da-mang" component={() => <Dashboard initialService="nap_tien_da_mang" />} />
+          <Route path="/nap-tien-viettel" component={() => <Dashboard initialService="nap_tien_viettel" />} />
+          <Route path="/thanh-toan-tv-internet" component={() => <Dashboard initialService="thanh_toan_tv_internet" />} />
+          <Route path="/tra-cuu-no-tra-sau" component={() => <Dashboard initialService="tra_cuu_no_tra_sau" />} />
           <Route path="/orders" component={Orders} />
           <Route path="/admin" component={Admin} />
           <Route component={NotFound} />

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API thuhohpk.com</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test API thuhohpk.com từ Browser</h1>
+    
+    <div class="test-section">
+        <h3>1️⃣ Test Basic Connectivity</h3>
+        <button onclick="testBasicConnectivity()">Test Basic Connect</button>
+        <div id="basic-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>2️⃣ Test API với Basic Auth</h3>
+        <button onclick="testAPIWithAuth()">Test API + Auth</button>
+        <div id="api-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>3️⃣ Test CORS</h3>
+        <button onclick="testCORS()">Test CORS</button>
+        <div id="cors-result"></div>
+    </div>
+
+    <script>
+        function showResult(elementId, content, isSuccess = true) {
+            const element = document.getElementById(elementId);
+            element.className = isSuccess ? 'success' : 'error';
+            element.innerHTML = `<pre>${content}</pre>`;
+        }
+
+        async function testBasicConnectivity() {
+            try {
+                const response = await fetch('https://thuhohpk.com');
+                showResult('basic-result', `✅ Status: ${response.status}\nHeaders: ${JSON.stringify(Object.fromEntries(response.headers), null, 2)}`);
+            } catch (error) {
+                showResult('basic-result', `❌ Error: ${error.message}`, false);
+            }
+        }
+
+        async function testAPIWithAuth() {
+            try {
+                // Basic Authentication
+                const username = 'Demodiemthu';
+                const password = '123456';
+                const credentials = btoa(`${username}:${password}`);
+                
+                const response = await fetch('https://thuhohpk.com/api/list-bill-not-completed?service_type=deposit', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Basic ${credentials}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                showResult('api-result', `✅ Status: ${response.status}\nResponse: ${JSON.stringify(data, null, 2)}`);
+            } catch (error) {
+                showResult('api-result', `❌ Error: ${error.message}`, false);
+            }
+        }
+
+        async function testCORS() {
+            try {
+                const response = await fetch('https://thuhohpk.com/api/list-bill-not-completed', {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Access-Control-Request-Method': 'GET',
+                        'Access-Control-Request-Headers': 'Authorization,Content-Type'
+                    }
+                });
+                
+                showResult('cors-result', `✅ OPTIONS Status: ${response.status}\nCORS Headers: ${JSON.stringify(Object.fromEntries(response.headers), null, 2)}`);
+            } catch (error) {
+                showResult('cors-result', `❌ CORS Error: ${error.message}`, false);
+            }
+        }
+    </script>
+</body>
+</html>

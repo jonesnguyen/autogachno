@@ -1,0 +1,91 @@
+{
+  "services": {
+    "ftth": {
+      "enabled": true,
+      "interval_minutes": 30,
+      "max_codes_per_batch": 50,
+      "priority": 1,
+      "start_time": "00:00",
+      "description": "Tra cứu FTTH - chạy mỗi 30 phút, ưu tiên cao nhất"
+    },
+    "topup_multi": {
+      "enabled": true,
+      "interval_minutes": 20,
+      "max_codes_per_batch": 30,
+      "priority": 2,
+      "start_time": "02:00",
+      "description": "Nạp tiền đa mạng - chạy mỗi 15 phút, ưu tiên cao"
+    },
+    "topup_viettel": {
+      "enabled": true,
+      "interval_minutes": 15,
+      "max_codes_per_batch": 30,
+      "priority": 3,
+      "start_time": "04:00",
+      "description": "Nạp tiền Viettel - chạy mỗi 15 phút, ưu tiên cao"
+    },
+    "tv_internet": {
+      "enabled": true,
+      "interval_minutes": 45,
+      "max_codes_per_batch": 40,
+      "priority": 4,
+      "start_time": "06:00",
+      "description": "Thanh toán TV-Internet - chạy mỗi 45 phút, ưu tiên trung bình"
+    },
+    "evn": {
+      "enabled": false,
+      "interval_minutes": 60,
+      "max_codes_per_batch": 100,
+      "priority": 5,
+      "start_time": "08:00",
+      "description": "Gạch điện EVN - chạy mỗi giờ, ưu tiên thấp"
+    },
+    "postpaid": {
+      "enabled": true,
+      "interval_minutes": 60,
+      "max_codes_per_batch": 80,
+      "priority": 6,
+      "start_time": "10:00",
+      "description": "Tra cứu nợ trả sau - chạy mỗi giờ, ưu tiên thấp nhất"
+    }
+  },
+  "global_settings": {
+    "max_concurrent_services": 2,
+    "sequential_execution": true,
+    "retry_failed_codes": true,
+    "max_retries": 3,
+    "notification_email": "admin@company.com",
+    "log_level": "INFO",
+    "auto_restart_failed_services": true,
+    "health_check_interval": 300
+  },
+  "execution_order": [
+    "ftth",
+    "topup_multi",
+    "topup_viettel",
+    "tv_internet",
+    "evn",
+    "postpaid"
+  ],
+  "schedule_notes": {
+    "ftth": "Chạy đầu tiên vì cần tra cứu nhanh, ưu tiên cao nhất",
+    "topup_services": "Chạy thứ 2-3 vì cần xử lý nhanh, ưu tiên cao",
+    "tv_internet": "Chạy thứ 4, cân bằng giữa tốc độ và tài nguyên",
+    "evn": "Chạy thứ 5, ít thay đổi nên ưu tiên thấp",
+    "postpaid": "Chạy cuối cùng, ít thay đổi nên ưu tiên thấp nhất"
+  },
+  "time_windows": {
+    "business_hours": {
+      "start": "08:00",
+      "end": "18:00",
+      "enabled": true
+    },
+    "peak_hours": {
+      "start": "09:00",
+      "end": "11:00",
+      "enabled": true,
+      "reduced_interval": true
+    }
+  },
+  "last_updated": "2025-01-16T10:00:00"
+}

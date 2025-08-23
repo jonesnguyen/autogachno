@@ -1,0 +1,13 @@
+{
+    "DRIVER_LINK": "https://kpp.bankplus.vn",
+    "FOLDER_RESULT": "ket_qua",
+    "TITLE": "Thông báo",
+    "ICON_FILE": "viettelpay.ico",
+    "COPYRIGHT_KEY": "h_ThisAAutoToolVjppro-CopyRight-ByCAOAC7690=",
+    "STATUS_COMPLETE": "Đã xử lý",
+    "STATUS_INCOMPLETE": "Chưa xử lý",
+    "API_BASE_URL": "http://127.0.0.1:8080",
+    "NODE_SERVER_URL": "http://127.0.0.1:5000",
+    "API_TIMEOUT": 10,
+    "DEFAULT_PIN": "686886"
+}

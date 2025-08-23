@@ -1,12 +1,34 @@
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { LoadingSkeleton } from "@/components/ui/loading";
 import { Badge } from "@/components/ui/badge";
 
+function useServiceTypeFromPath() {
+  const [pathname] = useLocation();
+  const map: Record<string, string> = {
+    '/tra-cuu-ftth': 'tra_cuu_ftth',
+    '/gach-dien-evn': 'gach_dien_evn',
+    '/nap-tien-da-mang': 'nap_tien_da_mang',
+    '/nap-tien-viettel': 'nap_tien_viettel',
+    '/thanh-toan-tv-internet': 'thanh_toan_tv_internet',
+    '/tra-cuu-no-tra-sau': 'tra_cuu_no_tra_sau',
+  };
+  return map[pathname] || undefined;
+}
+
 export function RecentOrders() {
-  const { data: orders, isLoading } = useQuery({
-    queryKey: ['/api/orders/recent'],
+  const serviceType = useServiceTypeFromPath();
+  const { data, isLoading } = useQuery<{ orders: any[]; total: number }>({
+    queryKey: serviceType ? ['/api/orders', serviceType] : ['/api/orders'],
+    queryFn: async () => {
+      const url = serviceType ? `/api/orders?serviceType=${serviceType}&limit=10` : '/api/orders?limit=10';
+      const res = await fetch(url, { credentials: 'include' });
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    },
     refetchInterval: 30000,
   });
+  const orders = data?.orders || [];
 
   if (isLoading) {
     return (

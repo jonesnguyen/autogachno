@@ -8,7 +8,9 @@ import memoize from "memoizee";
 import connectPg from "connect-pg-simple";
 import { storage } from "./storage";
 
-if (!process.env.REPLIT_DOMAINS) {
+const skipAuth = process.env.SKIP_AUTH === "1";
+
+if (!skipAuth && !process.env.REPLIT_DOMAINS) {
   throw new Error("Environment variable REPLIT_DOMAINS not provided");
 }
 
@@ -57,7 +59,7 @@ function updateUserSession(
 async function upsertUser(
   claims: any,
 ) {
-  await storage.upsertUser({
+  return await storage.upsertUser({
     id: claims["sub"],
     email: claims["email"],
     firstName: claims["first_name"],
@@ -67,6 +69,27 @@ async function upsertUser(
 }
 
 export async function setupAuth(app: Express) {
+  if (skipAuth) {
+    // Minimal session to keep Express happy when skipping auth
+    app.use(session({
+      secret: process.env.SESSION_SECRET || "dev-secret",
+      resave: false,
+      saveUninitialized: true,
+      cookie: { httpOnly: true, secure: false },
+    }));
+
+    // Provide logout endpoints in skip mode
+    const handleLogout = (req: any, res: any) => {
+      const sidName = (session as any).cookieName || 'connect.sid';
+      req.session?.destroy(() => {
+        res.clearCookie(sidName);
+        res.redirect('/');
+      });
+    };
+    app.get("/api/logout", handleLogout);
+    app.get("/logout", handleLogout);
+    return;
+  }
   app.set("trust proxy", 1);
   app.use(getSession());
   app.use(passport.initialize());
@@ -80,7 +103,14 @@ export async function setupAuth(app: Express) {
   ) => {
     const user = {};
     updateUserSession(user, tokens);
-    await upsertUser(tokens.claims());
+    const userData = await upsertUser(tokens.claims());
+    
+    // Kiểm tra status của user sau khi upsert
+    if (userData && userData.status === 'pending') {
+      // User đang chờ xét duyệt, không cho phép đăng nhập
+      return verified(new Error('Account pending approval'), null);
+    }
+    
     verified(null, user);
   };
 
@@ -125,9 +155,42 @@ export async function setupAuth(app: Express) {
       );
     });
   });
+
+  // Simple logout redirect to home (without calling OIDC end-session)
+  app.get("/logout", (req, res) => {
+    req.logout(() => {
+      res.redirect('/');
+    });
+  });
 }
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
+  if (skipAuth) {
+    const sessionUser = (req as any).session?.user;
+    if (!sessionUser) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    
+    // Kiểm tra status của user trong dev mode
+    try {
+      const { storage } = await import('./storage');
+      const user = await storage.getUser(sessionUser.id);
+      if (user && user.status === 'pending') {
+        return res.status(403).json({ 
+          message: "Tài khoản của bạn đang chờ xét duyệt từ quản trị viên. Vui lòng liên hệ admin để được hỗ trợ.",
+          status: 'pending'
+        });
+      }
+    } catch (error) {
+      console.error('Error checking user status in dev mode:', error);
+    }
+    
+    (req as any).user = {
+      claims: { sub: sessionUser.id, email: sessionUser.email },
+      expires_at: Math.floor(Date.now() / 1000) + 3600,
+    } as any;
+    return next();
+  }
   const user = req.user as any;
 
   if (!req.isAuthenticated() || !user.expires_at) {

@@ -1,0 +1,384 @@
+2025-08-17 09:40:14,176 - __main__ - INFO - 🚀 Khởi động Cron Runner...
+2025-08-17 09:40:14,176 - __main__ - INFO - 📅 Thời gian hiện tại: 2025-08-17 09:40:14
+2025-08-17 09:40:14,177 - __main__ - INFO - ✅ Thư viện schedule đã sẵn sàng
+2025-08-17 09:40:15,124 - __main__ - INFO - ✅ CronManager đã sẵn sàng
+2025-08-17 09:40:15,124 - __main__ - INFO - 🔧 Khởi tạo CronManager...
+2025-08-17 09:40:15,124 - __main__ - INFO - 📊 Trạng thái ban đầu: 0/2 dịch vụ
+2025-08-17 09:40:15,124 - __main__ - INFO - ⚙️ Cấu hình dịch vụ:
+2025-08-17 09:40:15,124 - __main__ - INFO -    • ftth: mỗi 25 phút (ưu tiên 1) - Tra cứu FTTH - chạy mỗi 30 phút, ưu tiên cao nhất
+2025-08-17 09:40:15,124 - __main__ - INFO -    • topup_multi: mỗi 15 phút (ưu tiên 2) - Nạp tiền đa mạng - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:40:15,124 - __main__ - INFO -    • topup_viettel: mỗi 15 phút (ưu tiên 3) - Nạp tiền Viettel - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:40:15,124 - __main__ - INFO -    • tv_internet: mỗi 45 phút (ưu tiên 4) - Thanh toán TV-Internet - chạy mỗi 45 phút, ưu tiên trung bình
+2025-08-17 09:40:15,124 - __main__ - INFO -    • evn: mỗi 60 phút (ưu tiên 5) - Gạch điện EVN - chạy mỗi giờ, ưu tiên thấp
+2025-08-17 09:40:15,124 - __main__ - INFO -    • postpaid: mỗi 60 phút (ưu tiên 6) - Tra cứu nợ trả sau - chạy mỗi giờ, ưu tiên thấp nhất
+2025-08-17 09:40:15,124 - __main__ - INFO - 🎯 Bắt đầu chạy cron manager...
+2025-08-17 09:40:15,124 - __main__ - INFO - 💡 Nhấn Ctrl+C để dừng
+2025-08-17 09:40:15,124 - app.cron_manager - INFO - 🚀 Khởi động Cron Manager...
+2025-08-17 09:40:15,132 - app.cron_manager - INFO - 📊 Cấu hình: Tối đa 2 dịch vụ đồng thời
+2025-08-17 09:40:15,132 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ ftth: mỗi 25 phút - Tra cứu FTTH - chạy mỗi 30 phút, ưu tiên cao nhất
+2025-08-17 09:40:15,132 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ topup_multi: mỗi 15 phút - Nạp tiền đa mạng - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:40:15,132 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ topup_viettel: mỗi 15 phút - Nạp tiền Viettel - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:40:15,132 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ tv_internet: mỗi 45 phút - Thanh toán TV-Internet - chạy mỗi 45 phút, ưu tiên trung bình
+2025-08-17 09:40:15,132 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ evn: mỗi 60 phút - Gạch điện EVN - chạy mỗi giờ, ưu tiên thấp
+2025-08-17 09:40:15,132 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ postpaid: mỗi 60 phút - Tra cứu nợ trả sau - chạy mỗi giờ, ưu tiên thấp nhất
+2025-08-17 09:40:15,132 - app.cron_manager - INFO - 🚀 Lên lịch chạy ngay dịch vụ ưu tiên: ftth
+2025-08-17 09:40:15,132 - app.cron_manager - INFO - 🚀 Lên lịch chạy ngay dịch vụ ưu tiên: topup_multi
+2025-08-17 09:40:15,132 - app.cron_manager - INFO - 🚀 Lên lịch chạy ngay dịch vụ ưu tiên: topup_viettel
+2025-08-17 09:41:00,160 - app.cron_manager - INFO - Dịch vụ ftth: Đã bắt đầu
+2025-08-17 09:41:00,160 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:41:00,160 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: ftth
+2025-08-17 09:41:00,160 - app.cron_manager - WARNING - Không tìm thấy function main_ftth trong ftth service
+2025-08-17 09:41:00,160 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: ftth
+2025-08-17 09:41:00,160 - app.cron_manager - INFO - Dịch vụ ftth: Đã kết thúc
+2025-08-17 09:41:00,160 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:41:00,160 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã bắt đầu
+2025-08-17 09:41:00,160 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:41:00,168 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_multi
+2025-08-17 09:41:00,168 - app.cron_manager - WARNING - Không tìm thấy function main_topup_multi trong topup_multi service
+2025-08-17 09:41:00,168 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_multi
+2025-08-17 09:41:00,168 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã kết thúc
+2025-08-17 09:41:00,168 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:41:00,168 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã bắt đầu
+2025-08-17 09:41:00,168 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:41:00,168 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_viettel
+2025-08-17 09:41:00,168 - app.cron_manager - WARNING - Không tìm thấy function main_topup_viettel trong topup_viettel service
+2025-08-17 09:41:00,168 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_viettel
+2025-08-17 09:41:00,176 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã kết thúc
+2025-08-17 09:41:00,176 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:42:00,208 - app.cron_manager - INFO - Dịch vụ ftth: Đã bắt đầu
+2025-08-17 09:42:00,208 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:42:00,208 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: ftth
+2025-08-17 09:42:00,208 - app.cron_manager - WARNING - Không tìm thấy function main_ftth trong ftth service
+2025-08-17 09:42:00,208 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: ftth
+2025-08-17 09:42:00,208 - app.cron_manager - INFO - Dịch vụ ftth: Đã kết thúc
+2025-08-17 09:42:00,208 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:42:00,210 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã bắt đầu
+2025-08-17 09:42:00,210 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:42:00,210 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_multi
+2025-08-17 09:42:00,210 - app.cron_manager - WARNING - Không tìm thấy function main_topup_multi trong topup_multi service
+2025-08-17 09:42:00,210 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_multi
+2025-08-17 09:42:00,212 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã kết thúc
+2025-08-17 09:42:00,212 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:42:00,212 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã bắt đầu
+2025-08-17 09:42:00,212 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:42:00,212 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_viettel
+2025-08-17 09:42:00,212 - app.cron_manager - WARNING - Không tìm thấy function main_topup_viettel trong topup_viettel service
+2025-08-17 09:42:00,212 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_viettel
+2025-08-17 09:42:00,214 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã kết thúc
+2025-08-17 09:42:00,214 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:43:00,245 - app.cron_manager - INFO - Dịch vụ ftth: Đã bắt đầu
+2025-08-17 09:43:00,245 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:43:00,245 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: ftth
+2025-08-17 09:43:00,245 - app.cron_manager - WARNING - Không tìm thấy function main_ftth trong ftth service
+2025-08-17 09:43:00,245 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: ftth
+2025-08-17 09:43:00,245 - app.cron_manager - INFO - Dịch vụ ftth: Đã kết thúc
+2025-08-17 09:43:00,245 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:43:00,245 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã bắt đầu
+2025-08-17 09:43:00,245 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:43:00,245 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_multi
+2025-08-17 09:43:00,245 - app.cron_manager - WARNING - Không tìm thấy function main_topup_multi trong topup_multi service
+2025-08-17 09:43:00,248 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_multi
+2025-08-17 09:43:00,248 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã kết thúc
+2025-08-17 09:43:00,248 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:43:00,248 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã bắt đầu
+2025-08-17 09:43:00,248 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:43:00,248 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_viettel
+2025-08-17 09:43:00,248 - app.cron_manager - WARNING - Không tìm thấy function main_topup_viettel trong topup_viettel service
+2025-08-17 09:43:00,248 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_viettel
+2025-08-17 09:43:00,248 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã kết thúc
+2025-08-17 09:43:00,248 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:43:14,616 - __main__ - INFO - 📡 Nhận signal 2, đang dừng...
+2025-08-17 09:43:18,209 - __main__ - INFO - 🚀 Khởi động Cron Runner...
+2025-08-17 09:43:18,209 - __main__ - INFO - 📅 Thời gian hiện tại: 2025-08-17 09:43:18
+2025-08-17 09:43:18,218 - __main__ - INFO - ✅ Thư viện schedule đã sẵn sàng
+2025-08-17 09:43:19,338 - __main__ - INFO - ✅ CronManager đã sẵn sàng
+2025-08-17 09:43:19,338 - __main__ - INFO - 🔧 Khởi tạo CronManager...
+2025-08-17 09:43:19,338 - __main__ - INFO - 📊 Trạng thái ban đầu: 0/2 dịch vụ
+2025-08-17 09:43:19,338 - __main__ - INFO - ⚙️ Cấu hình dịch vụ:
+2025-08-17 09:43:19,338 - __main__ - INFO -    • ftth: mỗi 25 phút (ưu tiên 1) - Tra cứu FTTH - chạy mỗi 30 phút, ưu tiên cao nhất
+2025-08-17 09:43:19,338 - __main__ - INFO -    • topup_multi: mỗi 15 phút (ưu tiên 2) - Nạp tiền đa mạng - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:43:19,338 - __main__ - INFO -    • topup_viettel: mỗi 15 phút (ưu tiên 3) - Nạp tiền Viettel - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:43:19,338 - __main__ - INFO -    • tv_internet: mỗi 45 phút (ưu tiên 4) - Thanh toán TV-Internet - chạy mỗi 45 phút, ưu tiên trung bình
+2025-08-17 09:43:19,338 - __main__ - INFO -    • evn: mỗi 60 phút (ưu tiên 5) - Gạch điện EVN - chạy mỗi giờ, ưu tiên thấp
+2025-08-17 09:43:19,338 - __main__ - INFO -    • postpaid: mỗi 60 phút (ưu tiên 6) - Tra cứu nợ trả sau - chạy mỗi giờ, ưu tiên thấp nhất
+2025-08-17 09:43:19,338 - __main__ - INFO - 🎯 Bắt đầu chạy cron manager...
+2025-08-17 09:43:19,338 - __main__ - INFO - 💡 Nhấn Ctrl+C để dừng
+2025-08-17 09:43:19,338 - app.cron_manager - INFO - 🚀 Khởi động Cron Manager...
+2025-08-17 09:43:19,342 - app.cron_manager - INFO - 📊 Cấu hình: Tối đa 2 dịch vụ đồng thời
+2025-08-17 09:43:19,342 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ ftth: mỗi 25 phút - Tra cứu FTTH - chạy mỗi 30 phút, ưu tiên cao nhất
+2025-08-17 09:43:19,342 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ topup_multi: mỗi 15 phút - Nạp tiền đa mạng - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:43:19,342 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ topup_viettel: mỗi 15 phút - Nạp tiền Viettel - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:43:19,342 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ tv_internet: mỗi 45 phút - Thanh toán TV-Internet - chạy mỗi 45 phút, ưu tiên trung bình
+2025-08-17 09:43:19,343 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ evn: mỗi 60 phút - Gạch điện EVN - chạy mỗi giờ, ưu tiên thấp
+2025-08-17 09:43:19,343 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ postpaid: mỗi 60 phút - Tra cứu nợ trả sau - chạy mỗi giờ, ưu tiên thấp nhất
+2025-08-17 09:43:19,343 - app.cron_manager - INFO - 🚀 Lên lịch chạy ngay dịch vụ ưu tiên: ftth
+2025-08-17 09:43:19,343 - app.cron_manager - INFO - 🚀 Lên lịch chạy ngay dịch vụ ưu tiên: topup_multi
+2025-08-17 09:43:19,343 - app.cron_manager - INFO - 🚀 Lên lịch chạy ngay dịch vụ ưu tiên: topup_viettel
+2025-08-17 09:43:21,117 - __main__ - INFO - 🚀 Khởi động Cron Runner...
+2025-08-17 09:43:21,118 - __main__ - INFO - 📅 Thời gian hiện tại: 2025-08-17 09:43:21
+2025-08-17 09:43:21,140 - __main__ - INFO - ✅ Thư viện schedule đã sẵn sàng
+2025-08-17 09:43:22,478 - __main__ - INFO - ✅ CronManager đã sẵn sàng
+2025-08-17 09:43:22,478 - __main__ - INFO - 🔧 Khởi tạo CronManager...
+2025-08-17 09:43:22,478 - __main__ - INFO - 📊 Trạng thái ban đầu: 0/2 dịch vụ
+2025-08-17 09:43:22,478 - __main__ - INFO - ⚙️ Cấu hình dịch vụ:
+2025-08-17 09:43:22,478 - __main__ - INFO -    • ftth: mỗi 25 phút (ưu tiên 1) - Tra cứu FTTH - chạy mỗi 30 phút, ưu tiên cao nhất
+2025-08-17 09:43:22,488 - __main__ - INFO -    • topup_multi: mỗi 15 phút (ưu tiên 2) - Nạp tiền đa mạng - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:43:22,488 - __main__ - INFO -    • topup_viettel: mỗi 15 phút (ưu tiên 3) - Nạp tiền Viettel - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:43:22,488 - __main__ - INFO -    • tv_internet: mỗi 45 phút (ưu tiên 4) - Thanh toán TV-Internet - chạy mỗi 45 phút, ưu tiên trung bình
+2025-08-17 09:43:22,489 - __main__ - INFO -    • evn: mỗi 60 phút (ưu tiên 5) - Gạch điện EVN - chạy mỗi giờ, ưu tiên thấp
+2025-08-17 09:43:22,489 - __main__ - INFO -    • postpaid: mỗi 60 phút (ưu tiên 6) - Tra cứu nợ trả sau - chạy mỗi giờ, ưu tiên thấp nhất
+2025-08-17 09:43:22,489 - __main__ - INFO - 🎯 Bắt đầu chạy cron manager...
+2025-08-17 09:43:22,489 - __main__ - INFO - 💡 Nhấn Ctrl+C để dừng
+2025-08-17 09:43:22,489 - app.cron_manager - INFO - 🚀 Khởi động Cron Manager...
+2025-08-17 09:43:22,489 - app.cron_manager - INFO - 📊 Cấu hình: Tối đa 2 dịch vụ đồng thời
+2025-08-17 09:43:22,489 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ ftth: mỗi 25 phút - Tra cứu FTTH - chạy mỗi 30 phút, ưu tiên cao nhất
+2025-08-17 09:43:22,489 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ topup_multi: mỗi 15 phút - Nạp tiền đa mạng - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:43:22,491 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ topup_viettel: mỗi 15 phút - Nạp tiền Viettel - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:43:22,491 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ tv_internet: mỗi 45 phút - Thanh toán TV-Internet - chạy mỗi 45 phút, ưu tiên trung bình
+2025-08-17 09:43:22,491 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ evn: mỗi 60 phút - Gạch điện EVN - chạy mỗi giờ, ưu tiên thấp
+2025-08-17 09:43:22,491 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ postpaid: mỗi 60 phút - Tra cứu nợ trả sau - chạy mỗi giờ, ưu tiên thấp nhất
+2025-08-17 09:43:22,491 - app.cron_manager - INFO - 🚀 Lên lịch chạy ngay dịch vụ ưu tiên: ftth
+2025-08-17 09:43:22,491 - app.cron_manager - INFO - 🚀 Lên lịch chạy ngay dịch vụ ưu tiên: topup_multi
+2025-08-17 09:43:22,491 - app.cron_manager - INFO - 🚀 Lên lịch chạy ngay dịch vụ ưu tiên: topup_viettel
+2025-08-17 09:44:00,369 - app.cron_manager - INFO - Dịch vụ ftth: Đã bắt đầu
+2025-08-17 09:44:00,369 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:44:00,369 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: ftth
+2025-08-17 09:44:00,518 - app.cron_manager - INFO - Dịch vụ ftth: Đã bắt đầu
+2025-08-17 09:44:00,518 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:44:00,518 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: ftth
+2025-08-17 09:44:09,228 - app.cron_manager - INFO - ✅ Đã chạy FTTH service thành công
+2025-08-17 09:44:09,228 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: ftth
+2025-08-17 09:44:09,228 - app.cron_manager - INFO - Dịch vụ ftth: Đã kết thúc
+2025-08-17 09:44:09,228 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:44:09,228 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã bắt đầu
+2025-08-17 09:44:09,228 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:44:09,228 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_multi
+2025-08-17 09:44:10,506 - app.cron_manager - INFO - ✅ Đã chạy topup_multi service thành công
+2025-08-17 09:44:10,506 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_multi
+2025-08-17 09:44:10,506 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã kết thúc
+2025-08-17 09:44:10,506 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:44:10,506 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã bắt đầu
+2025-08-17 09:44:10,509 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:44:10,509 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_viettel
+2025-08-17 09:44:10,509 - app.cron_manager - WARNING - Không tìm thấy function payment_phone trong topup_viettel service
+2025-08-17 09:44:10,509 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_viettel
+2025-08-17 09:44:10,509 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã kết thúc
+2025-08-17 09:44:10,509 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:44:12,388 - app.cron_manager - INFO - ✅ Đã chạy FTTH service thành công
+2025-08-17 09:44:12,394 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: ftth
+2025-08-17 09:44:12,394 - app.cron_manager - INFO - Dịch vụ ftth: Đã kết thúc
+2025-08-17 09:44:12,394 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:44:12,394 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã bắt đầu
+2025-08-17 09:44:12,394 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:44:12,394 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_multi
+2025-08-17 09:44:14,696 - app.cron_manager - INFO - ✅ Đã chạy topup_multi service thành công
+2025-08-17 09:44:14,696 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_multi
+2025-08-17 09:44:14,696 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã kết thúc
+2025-08-17 09:44:14,696 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:44:14,699 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã bắt đầu
+2025-08-17 09:44:14,699 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:44:14,699 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_viettel
+2025-08-17 09:44:14,699 - app.cron_manager - WARNING - Không tìm thấy function payment_phone trong topup_viettel service
+2025-08-17 09:44:14,699 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_viettel
+2025-08-17 09:44:14,699 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã kết thúc
+2025-08-17 09:44:14,699 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:45:00,540 - app.cron_manager - INFO - Dịch vụ ftth: Đã bắt đầu
+2025-08-17 09:45:00,540 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:45:00,540 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: ftth
+2025-08-17 09:45:00,726 - app.cron_manager - INFO - Dịch vụ ftth: Đã bắt đầu
+2025-08-17 09:45:00,727 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:45:00,728 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: ftth
+2025-08-17 09:45:11,558 - app.cron_manager - INFO - ✅ Đã chạy FTTH service thành công
+2025-08-17 09:45:11,560 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: ftth
+2025-08-17 09:45:11,560 - app.cron_manager - INFO - Dịch vụ ftth: Đã kết thúc
+2025-08-17 09:45:11,560 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:45:11,560 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã bắt đầu
+2025-08-17 09:45:11,560 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:45:11,560 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_multi
+2025-08-17 09:45:12,585 - app.cron_manager - INFO - ✅ Đã chạy topup_multi service thành công
+2025-08-17 09:45:12,586 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_multi
+2025-08-17 09:45:12,586 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã kết thúc
+2025-08-17 09:45:12,587 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:45:12,587 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã bắt đầu
+2025-08-17 09:45:12,587 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:45:12,587 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_viettel
+2025-08-17 09:45:12,588 - app.cron_manager - WARNING - Không tìm thấy function payment_phone trong topup_viettel service
+2025-08-17 09:45:12,588 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_viettel
+2025-08-17 09:45:12,588 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã kết thúc
+2025-08-17 09:45:12,588 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:45:17,694 - app.cron_manager - INFO - ✅ Đã chạy FTTH service thành công
+2025-08-17 09:45:17,694 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: ftth
+2025-08-17 09:45:17,694 - app.cron_manager - INFO - Dịch vụ ftth: Đã kết thúc
+2025-08-17 09:45:17,694 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:45:17,694 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã bắt đầu
+2025-08-17 09:45:17,694 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:45:17,694 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_multi
+2025-08-17 09:45:18,898 - app.cron_manager - INFO - ✅ Đã chạy topup_multi service thành công
+2025-08-17 09:45:18,898 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_multi
+2025-08-17 09:45:18,899 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã kết thúc
+2025-08-17 09:45:18,899 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:45:18,899 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã bắt đầu
+2025-08-17 09:45:18,899 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:45:18,899 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_viettel
+2025-08-17 09:45:18,899 - app.cron_manager - WARNING - Không tìm thấy function payment_phone trong topup_viettel service
+2025-08-17 09:45:18,899 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_viettel
+2025-08-17 09:45:18,899 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã kết thúc
+2025-08-17 09:45:18,899 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:46:08,140 - __main__ - INFO - 🚀 Khởi động Cron Runner...
+2025-08-17 09:46:08,140 - __main__ - INFO - 📅 Thời gian hiện tại: 2025-08-17 09:46:08
+2025-08-17 09:46:08,151 - __main__ - INFO - ✅ Thư viện schedule đã sẵn sàng
+2025-08-17 09:46:09,064 - __main__ - INFO - ✅ CronManager đã sẵn sàng
+2025-08-17 09:46:09,064 - __main__ - INFO - 🔧 Khởi tạo CronManager...
+2025-08-17 09:46:09,064 - __main__ - INFO - 📊 Trạng thái ban đầu: 0/2 dịch vụ
+2025-08-17 09:46:09,069 - __main__ - INFO - ⚙️ Cấu hình dịch vụ:
+2025-08-17 09:46:09,069 - __main__ - INFO -    • ftth: mỗi 25 phút (ưu tiên 1) - Tra cứu FTTH - chạy mỗi 30 phút, ưu tiên cao nhất
+2025-08-17 09:46:09,070 - __main__ - INFO -    • topup_multi: mỗi 15 phút (ưu tiên 2) - Nạp tiền đa mạng - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:46:09,070 - __main__ - INFO -    • topup_viettel: mỗi 15 phút (ưu tiên 3) - Nạp tiền Viettel - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:46:09,070 - __main__ - INFO -    • tv_internet: mỗi 45 phút (ưu tiên 4) - Thanh toán TV-Internet - chạy mỗi 45 phút, ưu tiên trung bình
+2025-08-17 09:46:09,071 - __main__ - INFO -    • evn: mỗi 60 phút (ưu tiên 5) - Gạch điện EVN - chạy mỗi giờ, ưu tiên thấp
+2025-08-17 09:46:09,071 - __main__ - INFO -    • postpaid: mỗi 60 phút (ưu tiên 6) - Tra cứu nợ trả sau - chạy mỗi giờ, ưu tiên thấp nhất
+2025-08-17 09:46:09,071 - __main__ - INFO - 🎯 Bắt đầu chạy cron manager...
+2025-08-17 09:46:09,071 - __main__ - INFO - 💡 Nhấn Ctrl+C để dừng
+2025-08-17 09:46:09,071 - app.cron_manager - INFO - 🚀 Khởi động Cron Manager...
+2025-08-17 09:46:09,072 - app.cron_manager - INFO - 📊 Cấu hình: Tối đa 2 dịch vụ đồng thời
+2025-08-17 09:46:09,072 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ ftth: mỗi 25 phút - Tra cứu FTTH - chạy mỗi 30 phút, ưu tiên cao nhất
+2025-08-17 09:46:09,072 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ topup_multi: mỗi 15 phút - Nạp tiền đa mạng - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:46:09,072 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ topup_viettel: mỗi 15 phút - Nạp tiền Viettel - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:46:09,072 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ tv_internet: mỗi 45 phút - Thanh toán TV-Internet - chạy mỗi 45 phút, ưu tiên trung bình
+2025-08-17 09:46:09,072 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ evn: mỗi 60 phút - Gạch điện EVN - chạy mỗi giờ, ưu tiên thấp
+2025-08-17 09:46:09,072 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ postpaid: mỗi 60 phút - Tra cứu nợ trả sau - chạy mỗi giờ, ưu tiên thấp nhất
+2025-08-17 09:46:09,072 - app.cron_manager - INFO - 🚀 Lên lịch chạy ngay dịch vụ ưu tiên: ftth
+2025-08-17 09:46:09,072 - app.cron_manager - INFO - 🚀 Lên lịch chạy ngay dịch vụ ưu tiên: topup_multi
+2025-08-17 09:46:09,072 - app.cron_manager - INFO - 🚀 Lên lịch chạy ngay dịch vụ ưu tiên: topup_viettel
+2025-08-17 09:47:00,101 - app.cron_manager - INFO - Dịch vụ ftth: Đã bắt đầu
+2025-08-17 09:47:00,101 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:47:00,101 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: ftth
+2025-08-17 09:47:07,201 - app.cron_manager - INFO - 📭 Không có dữ liệu FTTH để xử lý
+2025-08-17 09:47:07,209 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: ftth
+2025-08-17 09:47:07,209 - app.cron_manager - INFO - Dịch vụ ftth: Đã kết thúc
+2025-08-17 09:47:07,209 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:47:07,209 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã bắt đầu
+2025-08-17 09:47:07,209 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:47:07,209 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_multi
+2025-08-17 09:47:08,230 - app.cron_manager - INFO - 📭 Không có dữ liệu topup_multi để xử lý
+2025-08-17 09:47:08,230 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_multi
+2025-08-17 09:47:08,230 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã kết thúc
+2025-08-17 09:47:08,230 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:47:08,232 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã bắt đầu
+2025-08-17 09:47:08,232 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:47:08,232 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_viettel
+2025-08-17 09:47:09,178 - app.cron_manager - INFO - 📭 Không có dữ liệu topup_viettel để xử lý
+2025-08-17 09:47:09,180 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_viettel
+2025-08-17 09:47:09,180 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã kết thúc
+2025-08-17 09:47:09,180 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:53:59,721 - __main__ - INFO - 🚀 Khởi động Cron Runner...
+2025-08-17 09:53:59,725 - __main__ - INFO - 📅 Thời gian hiện tại: 2025-08-17 09:53:59
+2025-08-17 09:53:59,729 - __main__ - INFO - ✅ Thư viện schedule đã sẵn sàng
+2025-08-17 09:54:00,653 - __main__ - INFO - ✅ CronManager đã sẵn sàng
+2025-08-17 09:54:00,653 - __main__ - INFO - 🔧 Khởi tạo CronManager...
+2025-08-17 09:54:00,653 - __main__ - INFO - 📊 Trạng thái ban đầu: 0/2 dịch vụ
+2025-08-17 09:54:00,653 - __main__ - INFO - ⚙️ Cấu hình dịch vụ:
+2025-08-17 09:54:00,653 - __main__ - INFO -    • ftth: mỗi 25 phút (ưu tiên 1) - Tra cứu FTTH - chạy mỗi 30 phút, ưu tiên cao nhất
+2025-08-17 09:54:00,653 - __main__ - INFO -    • topup_multi: mỗi 15 phút (ưu tiên 2) - Nạp tiền đa mạng - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:54:00,653 - __main__ - INFO -    • topup_viettel: mỗi 15 phút (ưu tiên 3) - Nạp tiền Viettel - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:54:00,653 - __main__ - INFO -    • tv_internet: mỗi 45 phút (ưu tiên 4) - Thanh toán TV-Internet - chạy mỗi 45 phút, ưu tiên trung bình
+2025-08-17 09:54:00,653 - __main__ - INFO -    • evn: mỗi 60 phút (ưu tiên 5) - Gạch điện EVN - chạy mỗi giờ, ưu tiên thấp
+2025-08-17 09:54:00,653 - __main__ - INFO -    • postpaid: mỗi 60 phút (ưu tiên 6) - Tra cứu nợ trả sau - chạy mỗi giờ, ưu tiên thấp nhất
+2025-08-17 09:54:00,658 - __main__ - INFO - 🎯 Bắt đầu chạy cron manager...
+2025-08-17 09:54:00,658 - __main__ - INFO - 💡 Nhấn Ctrl+C để dừng
+2025-08-17 09:54:00,658 - app.cron_manager - INFO - 🚀 Khởi động Cron Manager...
+2025-08-17 09:54:00,658 - app.cron_manager - INFO - 📊 Cấu hình: Tối đa 2 dịch vụ đồng thời
+2025-08-17 09:54:00,658 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ ftth: mỗi 25 phút - Tra cứu FTTH - chạy mỗi 30 phút, ưu tiên cao nhất
+2025-08-17 09:54:00,658 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ topup_multi: mỗi 15 phút - Nạp tiền đa mạng - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:54:00,660 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ topup_viettel: mỗi 15 phút - Nạp tiền Viettel - chạy mỗi 15 phút, ưu tiên cao
+2025-08-17 09:54:00,660 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ tv_internet: mỗi 45 phút - Thanh toán TV-Internet - chạy mỗi 45 phút, ưu tiên trung bình
+2025-08-17 09:54:00,660 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ evn: mỗi 60 phút - Gạch điện EVN - chạy mỗi giờ, ưu tiên thấp
+2025-08-17 09:54:00,660 - app.cron_manager - INFO - 📅 Lên lịch dịch vụ postpaid: mỗi 60 phút - Tra cứu nợ trả sau - chạy mỗi giờ, ưu tiên thấp nhất
+2025-08-17 09:54:00,660 - app.cron_manager - INFO - 🚀 Lên lịch chạy ngay dịch vụ ưu tiên: ftth
+2025-08-17 09:54:00,661 - app.cron_manager - INFO - 🚀 Lên lịch chạy ngay dịch vụ ưu tiên: topup_multi
+2025-08-17 09:54:00,662 - app.cron_manager - INFO - 🚀 Lên lịch chạy ngay dịch vụ ưu tiên: topup_viettel
+2025-08-17 09:55:00,697 - app.cron_manager - INFO - Dịch vụ ftth: Đã bắt đầu
+2025-08-17 09:55:00,698 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:55:00,698 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: ftth
+2025-08-17 09:55:00,700 - app.cron_manager - WARNING - ❌ Browser driver chưa sẵn sàng, bỏ qua FTTH service
+2025-08-17 09:55:00,700 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: ftth
+2025-08-17 09:55:00,700 - app.cron_manager - INFO - Dịch vụ ftth: Đã kết thúc
+2025-08-17 09:55:00,700 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:55:00,700 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã bắt đầu
+2025-08-17 09:55:00,700 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:55:00,700 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_multi
+2025-08-17 09:55:00,700 - app.cron_manager - WARNING - ❌ Browser driver chưa sẵn sàng, bỏ qua topup_multi service
+2025-08-17 09:55:00,700 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_multi
+2025-08-17 09:55:00,700 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã kết thúc
+2025-08-17 09:55:00,700 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:55:00,700 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã bắt đầu
+2025-08-17 09:55:00,700 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:55:00,712 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_viettel
+2025-08-17 09:55:00,712 - app.cron_manager - WARNING - ❌ Browser driver chưa sẵn sàng, bỏ qua topup_viettel service
+2025-08-17 09:55:00,712 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_viettel
+2025-08-17 09:55:00,712 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã kết thúc
+2025-08-17 09:55:00,716 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:56:00,750 - app.cron_manager - INFO - Dịch vụ ftth: Đã bắt đầu
+2025-08-17 09:56:00,750 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:56:00,750 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: ftth
+2025-08-17 09:56:00,750 - app.cron_manager - WARNING - ❌ Browser driver chưa sẵn sàng, bỏ qua FTTH service
+2025-08-17 09:56:00,750 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: ftth
+2025-08-17 09:56:00,750 - app.cron_manager - INFO - Dịch vụ ftth: Đã kết thúc
+2025-08-17 09:56:00,751 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:56:00,751 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã bắt đầu
+2025-08-17 09:56:00,751 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:56:00,751 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_multi
+2025-08-17 09:56:00,751 - app.cron_manager - WARNING - ❌ Browser driver chưa sẵn sàng, bỏ qua topup_multi service
+2025-08-17 09:56:00,751 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_multi
+2025-08-17 09:56:00,751 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã kết thúc
+2025-08-17 09:56:00,751 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:56:00,751 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã bắt đầu
+2025-08-17 09:56:00,754 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:56:00,754 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_viettel
+2025-08-17 09:56:00,754 - app.cron_manager - WARNING - ❌ Browser driver chưa sẵn sàng, bỏ qua topup_viettel service
+2025-08-17 09:56:00,755 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_viettel
+2025-08-17 09:56:00,755 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã kết thúc
+2025-08-17 09:56:00,755 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:57:00,778 - app.cron_manager - INFO - Dịch vụ ftth: Đã bắt đầu
+2025-08-17 09:57:00,781 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:57:00,781 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: ftth
+2025-08-17 09:57:00,781 - app.cron_manager - WARNING - ❌ Browser driver chưa sẵn sàng, bỏ qua FTTH service
+2025-08-17 09:57:00,781 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: ftth
+2025-08-17 09:57:00,781 - app.cron_manager - INFO - Dịch vụ ftth: Đã kết thúc
+2025-08-17 09:57:00,781 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:57:00,784 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã bắt đầu
+2025-08-17 09:57:00,784 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:57:00,784 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_multi
+2025-08-17 09:57:00,784 - app.cron_manager - WARNING - ❌ Browser driver chưa sẵn sàng, bỏ qua topup_multi service
+2025-08-17 09:57:00,784 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_multi
+2025-08-17 09:57:00,784 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã kết thúc
+2025-08-17 09:57:00,784 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:57:00,784 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã bắt đầu
+2025-08-17 09:57:00,786 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:57:00,786 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_viettel
+2025-08-17 09:57:00,786 - app.cron_manager - WARNING - ❌ Browser driver chưa sẵn sàng, bỏ qua topup_viettel service
+2025-08-17 09:57:00,786 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_viettel
+2025-08-17 09:57:00,786 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã kết thúc
+2025-08-17 09:57:00,786 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:58:00,819 - app.cron_manager - INFO - Dịch vụ ftth: Đã bắt đầu
+2025-08-17 09:58:00,819 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:58:00,819 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: ftth
+2025-08-17 09:58:00,819 - app.cron_manager - WARNING - ❌ Browser driver chưa sẵn sàng, bỏ qua FTTH service
+2025-08-17 09:58:00,819 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: ftth
+2025-08-17 09:58:00,819 - app.cron_manager - INFO - Dịch vụ ftth: Đã kết thúc
+2025-08-17 09:58:00,819 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:58:00,819 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã bắt đầu
+2025-08-17 09:58:00,819 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:58:00,819 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_multi
+2025-08-17 09:58:00,819 - app.cron_manager - WARNING - ❌ Browser driver chưa sẵn sàng, bỏ qua topup_multi service
+2025-08-17 09:58:00,819 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_multi
+2025-08-17 09:58:00,826 - app.cron_manager - INFO - Dịch vụ topup_multi: Đã kết thúc
+2025-08-17 09:58:00,826 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:58:00,826 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã bắt đầu
+2025-08-17 09:58:00,828 - app.cron_manager - INFO - Số dịch vụ đang chạy: 1/2
+2025-08-17 09:58:00,828 - app.cron_manager - INFO - 🚀 Bắt đầu chạy dịch vụ: topup_viettel
+2025-08-17 09:58:00,828 - app.cron_manager - WARNING - ❌ Browser driver chưa sẵn sàng, bỏ qua topup_viettel service
+2025-08-17 09:58:00,828 - app.cron_manager - INFO - ✅ Hoàn thành dịch vụ: topup_viettel
+2025-08-17 09:58:00,828 - app.cron_manager - INFO - Dịch vụ topup_viettel: Đã kết thúc
+2025-08-17 09:58:00,828 - app.cron_manager - INFO - Số dịch vụ đang chạy: 0/2
+2025-08-17 09:58:02,526 - __main__ - INFO - 📡 Nhận signal 2, đang dừng...

@@ -3,7 +3,7 @@ import re
 import time
 import json 
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, #messagebox
 from datetime import datetime
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill
@@ -109,7 +109,7 @@ def fetch_api_data(service_type: str) -> Optional[Dict]:
         return None
     except Exception as e:
         logger.error(f"Lỗi gọi API {service_type}: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi kết nối API: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi kết nối API: {e}")
         return None
 
 def populate_text_widget(text_widget, data_list):
@@ -146,12 +146,12 @@ def get_data_ftth(text_widget):
         data = fetch_api_data("tra_cuu_ftth")
         if data and "subscriber_codes" in data:
             populate_text_widget(text_widget, data["subscriber_codes"])
-            messagebox.showinfo(Config.TITLE, f"Đã tải {len(data['subscriber_codes'])} mã thuê bao FTTH")
+            #messagebox.showinfo(Config.TITLE, f"Đã tải {len(data['subscriber_codes'])} mã thuê bao FTTH")
         else:
-            messagebox.showwarning(Config.TITLE, "Không có dữ liệu từ API")
+            #messagebox.showwarning(Config.TITLE, "Không có dữ liệu từ API")
     except Exception as e:
         logger.error(f"Lỗi lấy dữ liệu FTTH: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi lấy dữ liệu FTTH: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi lấy dữ liệu FTTH: {e}")
 
 def get_data_evn(text_widget, phone_widget, pin_widget):
     """Lấy dữ liệu API cho Gạch điện EVN"""
@@ -166,12 +166,12 @@ def get_data_evn(text_widget, phone_widget, pin_widget):
                 populate_entry_widget(pin_widget, data["pin"])
             
             count = len(data.get("bill_codes", []))
-            messagebox.showinfo(Config.TITLE, f"Đã tải {count} mã hóa đơn điện EVN")
+            #messagebox.showinfo(Config.TITLE, f"Đã tải {count} mã hóa đơn điện EVN")
         else:
-            messagebox.showwarning(Config.TITLE, "Không có dữ liệu từ API")
+            #messagebox.showwarning(Config.TITLE, "Không có dữ liệu từ API")
     except Exception as e:
         logger.error(f"Lỗi lấy dữ liệu EVN: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi lấy dữ liệu EVN: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi lấy dữ liệu EVN: {e}")
 
 def get_data_multi_network(text_widget, pin_widget, form_widget, amount_widget):
     """Lấy dữ liệu API cho Nạp tiền đa mạng"""
@@ -188,12 +188,12 @@ def get_data_multi_network(text_widget, pin_widget, form_widget, amount_widget):
                 populate_combobox_widget(amount_widget, data["amount"])
             
             count = len(data.get("phone_numbers", []))
-            messagebox.showinfo(Config.TITLE, f"Đã tải {count} số điện thoại đa mạng")
+            #messagebox.showinfo(Config.TITLE, f"Đã tải {count} số điện thoại đa mạng")
         else:
-            messagebox.showwarning(Config.TITLE, "Không có dữ liệu từ API")
+            #messagebox.showwarning(Config.TITLE, "Không có dữ liệu từ API")
     except Exception as e:
         logger.error(f"Lỗi lấy dữ liệu đa mạng: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi lấy dữ liệu đa mạng: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi lấy dữ liệu đa mạng: {e}")
 
 def get_data_viettel(text_widget, pin_widget, amount_widget):
     """Lấy dữ liệu API cho Nạp tiền mạng Viettel"""
@@ -208,12 +208,12 @@ def get_data_viettel(text_widget, pin_widget, amount_widget):
                 populate_entry_widget(amount_widget, data["amount"])
             
             count = len(data.get("phone_numbers", []))
-            messagebox.showinfo(Config.TITLE, f"Đã tải {count} số điện thoại Viettel")
+            #messagebox.showinfo(Config.TITLE, f"Đã tải {count} số điện thoại Viettel")
         else:
-            messagebox.showwarning(Config.TITLE, "Không có dữ liệu từ API")
+            #messagebox.showwarning(Config.TITLE, "Không có dữ liệu từ API")
     except Exception as e:
         logger.error(f"Lỗi lấy dữ liệu Viettel: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi lấy dữ liệu Viettel: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi lấy dữ liệu Viettel: {e}")
 
 def get_data_tv_internet(text_widget, pin_widget):
     """Lấy dữ liệu API cho Thanh toán TV - Internet"""
@@ -226,12 +226,12 @@ def get_data_tv_internet(text_widget, pin_widget):
                 populate_entry_widget(pin_widget, data["pin"])
             
             count = len(data.get("subscriber_codes", []))
-            messagebox.showinfo(Config.TITLE, f"Đã tải {count} mã thuê bao TV-Internet")
+            #messagebox.showinfo(Config.TITLE, f"Đã tải {count} mã thuê bao TV-Internet")
         else:
-            messagebox.showwarning(Config.TITLE, "Không có dữ liệu từ API")
+            #messagebox.showwarning(Config.TITLE, "Không có dữ liệu từ API")
     except Exception as e:
         logger.error(f"Lỗi lấy dữ liệu TV-Internet: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi lấy dữ liệu TV-Internet: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi lấy dữ liệu TV-Internet: {e}")
 
 def get_data_postpaid(text_widget):
     """Lấy dữ liệu API cho Tra cứu nợ thuê bao trả sau"""
@@ -239,12 +239,12 @@ def get_data_postpaid(text_widget):
         data = fetch_api_data("tra_cuu_no_tra_sau")
         if data and "phone_numbers" in data:
             populate_text_widget(text_widget, data["phone_numbers"])
-            messagebox.showinfo(Config.TITLE, f"Đã tải {len(data['phone_numbers'])} số điện thoại trả sau")
+            #messagebox.showinfo(Config.TITLE, f"Đã tải {len(data['phone_numbers'])} số điện thoại trả sau")
         else:
-            messagebox.showwarning(Config.TITLE, "Không có dữ liệu từ API")
+            #messagebox.showwarning(Config.TITLE, "Không có dữ liệu từ API")
     except Exception as e:
         logger.error(f"Lỗi lấy dữ liệu trả sau: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi lấy dữ liệu trả sau: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi lấy dữ liệu trả sau: {e}")
 
 def export_excel(data: List[Tuple[str, Any, str]], name_dir: str) -> bool:
     """Xuất dữ liệu ra file Excel"""
@@ -286,7 +286,7 @@ def export_excel(data: List[Tuple[str, Any, str]], name_dir: str) -> bool:
         
     except Exception as e:
         logger.error(f"Lỗi xuất Excel: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi xuất Excel: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi xuất Excel: {e}")
         return False
 
 def encode_json() -> Optional[Dict[str, Any]]:
@@ -310,7 +310,7 @@ def encode_json() -> Optional[Dict[str, Any]]:
         return dbfiles
     except Exception as e:
         logger.error(f"Lỗi đọc file cấu hình: {e}")
-        messagebox.showerror(Config.TITLE, f"Không thể đọc file cấu hình: {e}")
+        #messagebox.showerror(Config.TITLE, f"Không thể đọc file cấu hình: {e}")
         return None
 
 def valid_data(data: List[str]) -> bool:
@@ -320,12 +320,12 @@ def valid_data(data: List[str]) -> bool:
             return False
         for item in data:
             if not item or not item.strip():
-                messagebox.showwarning(Config.TITLE, "Vui lòng nhập đầy đủ thông tin")
+                #messagebox.showwarning(Config.TITLE, "Vui lòng nhập đầy đủ thông tin")
                 return False
         return True
     except Exception as e:
         logger.error(f"Lỗi kiểm tra dữ liệu: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi kiểm tra dữ liệu: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi kiểm tra dữ liệu: {e}")
         return False
 
 def delete_ctmed(cmted: tk.Text):
@@ -344,7 +344,7 @@ def stop_tool():
     """Dừng chương trình"""
     global stop_flag
     stop_flag = True
-    messagebox.showinfo(Config.TITLE, "Đã dừng chương trình")
+    #messagebox.showinfo(Config.TITLE, "Đã dừng chương trình")
 
 def update_stop_flag():
     """Reset stop flag"""
@@ -371,7 +371,7 @@ def handle_choose_select(choose: str) -> int:
             return 2
     except Exception as e:
         logger.error(f"Lỗi xử lý loại thanh toán: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi xử lý loại thanh toán: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi xử lý loại thanh toán: {e}")
         return 1
 
 def get_chrome_driver(username: str = "default") -> Optional[webdriver.Chrome]:
@@ -405,13 +405,13 @@ def check_username() -> bool:
         span_ele = first_div.find_element(By.XPATH, ".//span")
         username = span_ele.text
         if dbfiles.get("username").strip() != username:
-            messagebox.showerror(Config.TITLE, "Vui lòng sử dụng đúng tài khoản đã đăng ký")
+            #messagebox.showerror(Config.TITLE, "Vui lòng sử dụng đúng tài khoản đã đăng ký")
             return False
         else:
             return True
     except Exception as e:
         logger.error(f"Lỗi kiểm tra username: {e}")
-        messagebox.showerror(Config.TITLE, "Không tìm thấy tên tài khoản trên Viettel Pay Pro")
+        #messagebox.showerror(Config.TITLE, "Không tìm thấy tên tài khoản trên Viettel Pay Pro")
         return False
 
 def get_number_uses() -> Tuple[int, Dict[str, int]]:
@@ -427,7 +427,7 @@ def get_number_uses() -> Tuple[int, Dict[str, int]]:
         return 0, services
     except Exception as e:
         logger.error(f"Lỗi lấy số lần sử dụng: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi lấy số lần sử dụng: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi lấy số lần sử dụng: {e}")
         return 0, {}
 
 def handle_choose_amount(am: str) -> str:
@@ -440,7 +440,7 @@ def handle_choose_amount(am: str) -> str:
         return amount_map.get(am, "0")
     except Exception as e:
         logger.error(f"Lỗi xử lý số tiền: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi xử lý số tiền: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi xử lý số tiền: {e}")
         return "0"
 
 def amount_by_cbil(cbil: str, element, lookup: bool = False) -> Tuple[bool, Any, Optional[str]]:
@@ -536,7 +536,7 @@ def payment_internet(tkinp_ctm, tkinp_ctmed, tkinp_pin):
             export_excel(data, name_dir)
     except Exception as e:
         logger.error(f"Lỗi thanh toán internet: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi thanh toán internet: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi thanh toán internet: {e}")
 
 def form_payment_internet():
     cus_frm = tk.Frame(root)
@@ -613,7 +613,7 @@ def lookup_ftth(tkinp_ctm, tkinp_ctmed):
             export_excel(data, name_dir)
     except Exception as e:
         logger.error(f"Lỗi tra cứu FTTH: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi tra cứu FTTH: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi tra cứu FTTH: {e}")
 
 def form_lookup_ftth():
     cus_frm = tk.Frame(root)
@@ -781,7 +781,7 @@ def payment_phone(tkinp_ctm, tkinp_ctmed, tkinp_pin, tkcbb_form, tkcbb_amount):
             export_excel(data, name_dir)
     except Exception as e:
         logger.error(f"Lỗi thanh toán điện thoại: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi thanh toán điện thoại: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi thanh toán điện thoại: {e}")
 
 def form_payment_phone():
     cus_frm = tk.Frame(root)
@@ -901,7 +901,7 @@ def lookup_card(tkinp_ctm, tkinp_ctmed):
             export_excel(data, name_dir)
     except Exception as e:
         logger.error(f"Lỗi tra cứu nợ trả sau: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi tra cứu nợ trả sau: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi tra cứu nợ trả sau: {e}")
 
 def form_lookup_card():
     cus_frm = tk.Frame(root)
@@ -1010,7 +1010,7 @@ def payment_viettel(tkinp_ctm, tkinp_ctmed, tkinp_pin, tkinp_amount):
             export_excel(data, name_dir)
     except Exception as e:
         logger.error(f"Lỗi thanh toán Viettel: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi thanh toán Viettel: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi thanh toán Viettel: {e}")
 
 def form_payment_viettel():
     cus_frm = tk.Frame(root)
@@ -1116,7 +1116,7 @@ def debt_electric(tkinp_ctm, tkinp_ctmed, tkinp_phone, tkinp_pin):
             export_excel(data, name_dir)
     except Exception as e:
         logger.error(f"Lỗi thanh toán điện EVN: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi thanh toán điện EVN: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi thanh toán điện EVN: {e}")
 
 def form_debt_electric():
     cus_frm = tk.Frame(root)
@@ -1189,7 +1189,7 @@ def read_config():
         return files
     except Exception as e:
         logger.error(f"Lỗi đọc cấu hình: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi đọc cấu hình: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi đọc cấu hình: {e}")
         return ""
 
 def connect_database():
@@ -1200,7 +1200,7 @@ def connect_database():
         return collection
     except Exception as e:
         logger.error(f"Lỗi kết nối database: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi kết nối database: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi kết nối database: {e}")
         return None
 
 def set_file_config(files):
@@ -1212,7 +1212,7 @@ def set_file_config(files):
             json.dump(data, file, indent=4, ensure_ascii=False)
     except Exception as e:
         logger.error(f"Lỗi lưu cấu hình: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi lưu cấu hình: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi lưu cấu hình: {e}")
 
 def handle_key_active(key):
     try:
@@ -1221,17 +1221,17 @@ def handle_key_active(key):
         if data and not data.get("active"):
             collection.find_one_and_update({"key": key}, {"$set": {"active": True}})
             set_file_config(data.get("files"))
-            messagebox.showinfo(Config.TITLE, "Đã kích hoạt thành công")
+            #messagebox.showinfo(Config.TITLE, "Đã kích hoạt thành công")
             root.destroy()
             root.quit()
             main()
         elif data and data.get("active"):
-            messagebox.showwarning(Config.TITLE, "Mã kích hoạt đã được sử dụng")
+            #messagebox.showwarning(Config.TITLE, "Mã kích hoạt đã được sử dụng")
         else:
-            messagebox.showerror(Config.TITLE, "Mã kích hoạt không tồn tại")
+            #messagebox.showerror(Config.TITLE, "Mã kích hoạt không tồn tại")
     except Exception as e:
         logger.error(f"Lỗi kích hoạt key: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi kích hoạt: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi kích hoạt: {e}")
 
 def check_exits_key(key):
     if not key:
@@ -1327,7 +1327,7 @@ def show_services_form():
         handle_choose_services(None, tkcbb_choose, main_frm)
     except Exception as e:
         logger.error(f"Lỗi hiển thị form dịch vụ: {e}")
-        messagebox.showerror(Config.TITLE, f"Lỗi hiển thị form dịch vụ: {e}")
+        #messagebox.showerror(Config.TITLE, f"Lỗi hiển thị form dịch vụ: {e}")
 
 def main():
     global dbfiles, times_exits
@@ -1348,13 +1348,13 @@ def main():
         try:
             dbfiles = encode_json()
             if not dbfiles:
-                messagebox.showerror(Config.TITLE, "Không thể giải mã file cấu hình")
+                #messagebox.showerror(Config.TITLE, "Không thể giải mã file cấu hình")
                 show_activate_form()
             else:
                 username = dbfiles.get("username", "default")
                 driver = initialize_browser(username)
                 if not driver:
-                    messagebox.showerror(Config.TITLE, "Không thể khởi tạo trình duyệt, vui lòng thao tác thủ công")
+                    #messagebox.showerror(Config.TITLE, "Không thể khởi tạo trình duyệt, vui lòng thao tác thủ công")
                     show_services_form()
                 else:
                     login_process(dbfiles)
@@ -1364,11 +1364,11 @@ def main():
                         show_services_form()
                     except Exception as e:
                         logger.error(f"Lỗi lấy thông tin sử dụng: {e}")
-                        messagebox.showerror(Config.TITLE, f"Lỗi lấy thông tin sử dụng: {e}")
+                        #messagebox.showerror(Config.TITLE, f"Lỗi lấy thông tin sử dụng: {e}")
                         show_services_form()
         except Exception as e:
             logger.error(f"Lỗi khởi tạo: {e}")
-            messagebox.showerror(Config.TITLE, f"Lỗi khởi tạo: {e}")
+            #messagebox.showerror(Config.TITLE, f"Lỗi khởi tạo: {e}")
             show_services_form()
     else:
         global collection
@@ -1382,6 +1382,6 @@ if __name__ == "__main__":
         root.mainloop()
     except Exception as e:
         logger.error(f"Lỗi chính: {e}")
-        messagebox.showerror("Lỗi", f"Lỗi khởi động ứng dụng: {e}")
+        #messagebox.showerror("Lỗi", f"Lỗi khởi động ứng dụng: {e}")
     finally:
         cleanup()

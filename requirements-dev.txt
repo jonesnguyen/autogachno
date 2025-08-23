@@ -1,0 +1,16 @@
+# Development dependencies
+-r requirements.txt
+
+# Auto-reload và monitoring
+watchdog>=2.1.0
+python-dotenv>=0.19.0
+
+# Debug và testing
+pytest>=6.0.0
+pytest-cov>=2.10.0
+black>=21.0.0
+flake8>=3.8.0
+
+# IDE support
+ipython>=7.0.0
+jupyter>=1.0.0

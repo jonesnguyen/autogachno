@@ -23,7 +23,7 @@ export default function Landing() {
             <Button 
               size="lg" 
               className="bg-primary hover:bg-primary/90"
-              onClick={() => window.location.href = "/api/login"}
+              onClick={() => window.location.href = "/login"}
             >
               <i className="fas fa-sign-in-alt mr-2"></i>
               Đăng nhập để tiếp tục

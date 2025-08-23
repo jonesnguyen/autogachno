@@ -1,0 +1,8 @@
+{
+  "default_pin": "686886",
+  "login_username": "1000460100_VTP_00073_DB",
+  "login_password": "686886",
+  "database_url": "postgres://postgres:123456@localhost:5432/autogachno",
+  "api_base_url": "http://127.0.0.1:8080",
+  "node_server_url": "http://127.0.0.1:5000"
+}

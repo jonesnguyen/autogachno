@@ -1,13 +1,54 @@
 import { useQuery } from "@tanstack/react-query";
-import { LoadingSkeleton } from "@/components/ui/loading";
+import { useLocation } from "wouter";
+import { LoadingSkeleton } from "./ui/loading";
+import { useAuth } from "../hooks/useAuth";
+
+function useServiceTypeFromPath() {
+  const [pathname] = useLocation();
+  const map: Record<string, string> = {
+    '/tra-cuu-ftth': 'tra_cuu_ftth',
+    '/gach-dien-evn': 'gach_dien_evn',
+    '/nap-tien-da-mang': 'nap_tien_da_mang',
+    '/nap-tien-viettel': 'nap_tien_viettel',
+    '/thanh-toan-tv-internet': 'thanh_toan_tv_internet',
+    '/tra-cuu-no-tra-sau': 'tra_cuu_no_tra_sau',
+  };
+  return map[pathname] || undefined;
+}
+
+type Stats = {
+  todayTransactions: number;
+  totalRevenue: string;
+  successRate: number;
+  pendingOrders: number;
+};
 
 export function StatsCards() {
-  const { data: stats, isLoading } = useQuery({
-    queryKey: ['/api/stats'],
-    refetchInterval: 30000, // Refresh every 30 seconds
+  const { user } = useAuth();
+  const serviceType = useServiceTypeFromPath();
+  
+  const { data: stats, isLoading } = useQuery<Stats>({
+    queryKey: ['/api/stats', user?.id, serviceType],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      if (user?.id) {
+        params.append('userId', user.id);
+      }
+      if (serviceType) {
+        params.append('serviceType', serviceType);
+      }
+      
+      const url = `/api/stats?${params.toString()}`;
+      const res = await fetch(url, { credentials: 'include' });
+      if (!res.ok) throw new Error(await res.text());
+      return (await res.json()) as Stats;
+    },
+    refetchInterval: 30000,
+    enabled: !!user?.id, // Only fetch when user is authenticated
   });
 
-  if (isLoading) {
+  // Show loading if user is not authenticated or data is loading
+  if (!user || isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {Array.from({ length: 4 }).map((_, i) => (

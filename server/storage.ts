@@ -24,12 +24,15 @@ import { eq, desc, and, count, sql, like, or } from "drizzle-orm";
 export interface IStorage {
   // User operations (mandatory for Replit Auth)
   getUser(id: string): Promise<User | undefined>;
+  getUserByUser(user: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
+  createUser(userData: Omit<UpsertUser, 'id'>): Promise<User>;
   
   // Admin user management
-  getAllUsers(page?: number, limit?: number, search?: string): Promise<{ users: User[], total: number }>;
+  getAllUsers(page?: number, limit?: number, search?: string, status?: string): Promise<{ users: User[], total: number }>;
   updateUserRole(id: string, role: string): Promise<User>;
   updateUserStatus(id: string, status: string): Promise<User>;
+  updateUserExpiration(id: string, expiresAt: string | null): Promise<User>;
   deleteUser(id: string): Promise<void>;
   updateLastLogin(id: string): Promise<void>;
   
@@ -53,7 +56,7 @@ export interface IStorage {
   // Service transaction operations
   createServiceTransaction(transaction: InsertServiceTransaction): Promise<ServiceTransaction>;
   getOrderTransactions(orderId: string): Promise<ServiceTransaction[]>;
-  updateTransactionStatus(id: string, status: string, amount?: string, notes?: string): Promise<ServiceTransaction>;
+  updateTransactionStatus(id: string, status: string, amount?: string, notes?: string, processingData?: string): Promise<ServiceTransaction>;
   
   // System config operations
   getSystemConfig(key: string): Promise<SystemConfig | undefined>;
@@ -84,6 +87,11 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
+  async getUserByUser(user: string): Promise<User | undefined> {
+    const [userRecord] = await db.select().from(users).where(eq(users.user, user));
+    return userRecord;
+  }
+
   async upsertUser(userData: UpsertUser): Promise<User> {
     const [user] = await db
       .insert(users)
@@ -99,17 +107,37 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
+  async createUser(userData: Omit<UpsertUser, 'id'>): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(userData)
+      .returning();
+    return user;
+  }
+
   // Admin user management
-  async getAllUsers(page = 1, limit = 20, search?: string): Promise<{ users: User[], total: number }> {
+  async getAllUsers(page = 1, limit = 20, search?: string, status?: string): Promise<{ users: User[], total: number }> {
     const offset = (page - 1) * limit;
     
     let whereClause;
+    const conditions = [];
+    
     if (search) {
-      whereClause = or(
-        like(users.email, `%${search}%`),
-        like(users.firstName, `%${search}%`),
-        like(users.lastName, `%${search}%`)
+      conditions.push(
+        or(
+          like(users.user, `%${search}%`),
+          like(users.firstName, `%${search}%`),
+          like(users.lastName, `%${search}%`)
+        )
       );
+    }
+    
+    if (status) {
+      conditions.push(eq(users.status, status as any));
+    }
+    
+    if (conditions.length > 0) {
+      whereClause = and(...conditions);
     }
 
     const [usersResult, totalResult] = await Promise.all([
@@ -132,12 +160,34 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateUserRole(id: string, role: string): Promise<User> {
+    try {
+      console.log(`Updating user ${id} role to: ${role}`);
+      
+      const [user] = await db
+        .update(users)
+        .set({ 
+          role: role as any,
+          updatedAt: new Date() 
+        })
+        .where(eq(users.id, id))
+        .returning();
+      
+      if (!user) {
+        throw new Error(`User with id ${id} not found`);
+      }
+      
+      console.log(`Successfully updated user ${id} role to: ${role}`);
+      return user;
+    } catch (error) {
+      console.error('Error in updateUserRole:', error);
+      throw error;
+    }
+  }
+
+  async setUserPassword(id: string, password: string): Promise<User> {
     const [user] = await db
       .update(users)
-      .set({ 
-        role: role as any,
-        updatedAt: new Date() 
-      })
+      .set({ password, updatedAt: new Date() })
       .where(eq(users.id, id))
       .returning();
     return user;
@@ -153,6 +203,80 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, id))
       .returning();
     return user;
+  }
+
+  async updateUserExpiration(id: string, expiresAt: string | null): Promise<User> {
+    try {
+      console.log('🗄️ Storage: updateUserExpiration called');
+      console.log('   User ID:', id);
+      console.log('   New expiresAt:', expiresAt);
+      console.log('   expiresAt type:', typeof expiresAt);
+      
+      // Kiểm tra user tồn tại trước khi update
+      const existingUser = await this.getUser(id);
+      if (!existingUser) {
+        console.log('❌ Storage: User not found before update');
+        throw new Error(`User with id ${id} not found`);
+      }
+      
+      console.log('👤 Storage: Existing user found:', {
+        id: existingUser.id,
+        user: existingUser.user,
+        currentExpiresAt: existingUser.expiresAt,
+        currentUpdatedAt: existingUser.updatedAt
+      });
+      
+      // Chuẩn bị dữ liệu update
+      const updateData = {
+        expiresAt: expiresAt ? new Date(expiresAt) : null,
+        updatedAt: new Date()
+      };
+      
+      console.log('📝 Storage: Update data prepared:', updateData);
+      console.log('   expiresAt value:', updateData.expiresAt);
+      console.log('   expiresAt type:', typeof updateData.expiresAt);
+      console.log('   updatedAt value:', updateData.updatedAt);
+      
+      // Thực hiện update
+      console.log('🔄 Storage: Executing Drizzle update...');
+      const [user] = await db
+        .update(users)
+        .set(updateData)
+        .where(eq(users.id, id))
+        .returning();
+      
+      if (!user) {
+        console.log('❌ Storage: No user returned after update');
+        throw new Error(`User with id ${id} not found after update`);
+      }
+      
+      console.log('✅ Storage: Update successful!');
+      console.log('   Updated user:', {
+        id: user.id,
+        user: user.user,
+        newExpiresAt: user.expiresAt,
+        newUpdatedAt: user.updatedAt
+      });
+      
+      // Kiểm tra xem dữ liệu có thực sự thay đổi không
+      if (user.expiresAt === existingUser.expiresAt) {
+        console.log('⚠️ Storage: WARNING - expiresAt value did not change!');
+        console.log('   Old value:', existingUser.expiresAt);
+        console.log('   New value:', user.expiresAt);
+      } else {
+        console.log('✅ Storage: expiresAt value successfully changed');
+        console.log('   Old value:', existingUser.expiresAt);
+        console.log('   New value:', user.expiresAt);
+      }
+      
+      return user;
+    } catch (error) {
+      console.error('❌ Storage: Error in updateUserExpiration:', error);
+      console.error('   Error stack:', error.stack);
+      console.error('   Error name:', error.name);
+      console.error('   Error message:', error.message);
+      throw error;
+    }
   }
 
   async deleteUser(id: string): Promise<void> {
@@ -320,7 +444,8 @@ export class DatabaseStorage implements IStorage {
     id: string, 
     status: string, 
     amount?: string, 
-    notes?: string
+    notes?: string,
+    processingData?: string
   ): Promise<ServiceTransaction> {
     const updateData: any = { 
       status: status as any,
@@ -328,6 +453,7 @@ export class DatabaseStorage implements IStorage {
     };
     if (amount) updateData.amount = amount;
     if (notes) updateData.notes = notes;
+    if (processingData) updateData.processingData = processingData;
     
     const [transaction] = await db
       .update(serviceTransactions)

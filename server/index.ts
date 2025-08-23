@@ -1,6 +1,9 @@
+import 'dotenv/config';
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { storage } from "./storage";
+import crypto from "crypto";
 
 const app = express();
 app.use(express.json());
@@ -37,6 +40,19 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Seed admin user in dev with SKIP_AUTH or when env SEED_ADMIN=1
+  if (process.env.SKIP_AUTH === '1' || process.env.SEED_ADMIN === '1') {
+    try {
+      const adminId = 'admin-local';
+      const email = 'Demodiemthu';
+      await storage.upsertUser({ id: adminId, email, firstName: 'Admin', lastName: 'Local', role: 'admin', status: 'active' } as any);
+      // Set admin password
+      await storage.setUserPassword(adminId, "123456");
+      log('seeded admin account Demodiemthu / 123456', 'seed');
+    } catch (e) {
+      log(`admin seed error: ${(e as Error).message}`, 'seed');
+    }
+  }
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

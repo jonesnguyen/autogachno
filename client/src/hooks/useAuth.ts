@@ -7,9 +7,17 @@ export function useAuth() {
     retry: false,
   });
 
+  // Kiểm tra user có hết hạn không
+  const isExpired = user?.expiresAt ? new Date(user.expiresAt) < new Date() : false;
+  
+  // User chỉ được xem là authenticated nếu không hết hạn
+  const isAuthenticated = !!user && !isExpired;
+
   return {
     user,
     isLoading,
-    isAuthenticated: !!user,
+    isAuthenticated,
+    isExpired,
+    expiresAt: user?.expiresAt,
   };
 }

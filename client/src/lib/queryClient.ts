@@ -7,11 +7,29 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
+// Backward/forward-compatible API: accepts either
+// - apiRequest(method, url, data) [legacy]
+// - apiRequest(url, method?, data?) [preferred]
 export async function apiRequest(
-  method: string,
-  url: string,
-  data?: unknown | undefined,
+  arg1: string,
+  arg2?: string | unknown,
+  arg3?: unknown,
 ): Promise<Response> {
+  let method = "GET";
+  let url = "";
+  let data: unknown | undefined;
+
+  const isUrlFirst = arg1.startsWith("/") || arg1.startsWith("http");
+  if (isUrlFirst) {
+    url = arg1;
+    method = (typeof arg2 === "string" ? arg2 : "GET") as string;
+    data = typeof arg2 === "string" ? arg3 : arg2;
+  } else {
+    method = arg1;
+    url = arg2 as string;
+    data = arg3;
+  }
+
   const res = await fetch(url, {
     method,
     headers: data ? { "Content-Type": "application/json" } : {},

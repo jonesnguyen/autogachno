@@ -1,0 +1,7 @@
+cryptography
+psycopg2
+requests
+selenium
+tk
+beautifulsoup4
+openpyxl

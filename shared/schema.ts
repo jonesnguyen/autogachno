@@ -33,12 +33,14 @@ export const userStatusEnum = pgEnum('user_status', ['active', 'suspended', 'pen
 // User storage table (mandatory for Replit Auth)
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  email: varchar("email").unique(),
+  user: varchar("user").unique(), // Changed from email to user
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
+  password: varchar("password"), // Password thuần túy thay vì hash
   profileImageUrl: varchar("profile_image_url"),
   role: userRoleEnum("role").default('user').notNull(),
-  status: userStatusEnum("status").default('active').notNull(),
+  status: userStatusEnum("status").default('pending').notNull(), // Changed default from 'active' to 'pending'
+  expiresAt: timestamp("expires_at"), // Thời hạn sử dụng user
   lastLoginAt: timestamp("last_login_at"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -123,7 +125,7 @@ export const adminLogs = pgTable("admin_logs", {
 // User registration requests table (for manual approval)
 export const userRegistrations = pgTable("user_registrations", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  email: varchar("email").notNull().unique(),
+  user: varchar("user").notNull().unique(), // Changed from email to user
   firstName: varchar("first_name").notNull(),
   lastName: varchar("last_name").notNull(),
   phone: varchar("phone"),
@@ -181,6 +183,25 @@ export const insertUserRegistrationSchema = createInsertSchema(userRegistrations
   reviewedBy: true,
   reviewedAt: true,
   reviewNotes: true,
+});
+
+// New schema for user registration with password
+export const insertUserWithPasswordSchema = createInsertSchema(users).omit({
+  id: true,
+  profileImageUrl: true,
+  role: true,
+  status: true,
+  lastLoginAt: true,
+  createdAt: true,
+  updatedAt: true,
+}).extend({
+  user: z.string().min(1, "Tên đăng nhập không được để trống"), // Changed from email to user
+  password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
+  confirmPassword: z.string(),
+  expiresAt: z.string().optional().transform((val) => val ? new Date(val) : null), // Chuyển đổi string thành Date
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Mật khẩu và xác nhận mật khẩu phải giống nhau",
+  path: ["confirmPassword"],
 });
 
 export const insertAdminLogSchema = createInsertSchema(adminLogs).omit({

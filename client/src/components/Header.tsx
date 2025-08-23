@@ -13,10 +13,9 @@ import { Settings, LogOut } from "lucide-react";
 
 interface HeaderProps {
   title: string;
-  apiStatus: boolean;
 }
 
-export function Header({ title, apiStatus }: HeaderProps) {
+export function Header({ title }: HeaderProps) {
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin' || user?.role === 'manager';
 
@@ -26,10 +25,10 @@ export function Header({ title, apiStatus }: HeaderProps) {
         <div className="flex items-center space-x-4">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">{title}</h2>
           <div className="flex items-center space-x-2">
-            <Badge variant="outline" className={apiStatus ? 'border-green-500 text-green-700' : 'border-red-500 text-red-700'}>
+            {/* <Badge variant="outline" className={apiStatus ? 'border-green-500 text-green-700' : 'border-red-500 text-red-700'}>
               <div className={`w-2 h-2 rounded-full mr-2 ${apiStatus ? 'bg-green-500' : 'bg-red-500'}`}></div>
               {apiStatus ? 'API kết nối' : 'API lỗi'}
-            </Badge>
+            </Badge> */}
           </div>
         </div>
         
@@ -47,7 +46,7 @@ export function Header({ title, apiStatus }: HeaderProps) {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={user?.profileImageUrl} alt={user?.email} />
+                  <AvatarImage src={user?.profileImageUrl} alt={user?.user || 'User'} />
                   <AvatarFallback>
                     {user?.firstName?.[0]}{user?.lastName?.[0]}
                   </AvatarFallback>
@@ -61,7 +60,7 @@ export function Header({ title, apiStatus }: HeaderProps) {
                     {user?.firstName} {user?.lastName}
                   </p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    {user?.email}
+                    {user?.user || 'N/A'}
                   </p>
                   <p className="text-xs leading-none text-muted-foreground">
                     {user?.role}

@@ -25,9 +25,16 @@ export const SAMPLE_DATA = {
       "0985456789", "0986567890", "0984678901",
       "0983789012", "0982890123", "0981901234", "0980012345"
     ],
+    "sample_prepaid": [
+      "0987123456|10000", "0988234567|20000", "0989345678|50000",
+      "0985456789|100000", "0986567890|200000", "0984678901|300000"
+    ],
+    "sample_postpaid": [
+      "0983789012", "0982890123", "0981901234", "0980012345"
+    ],
     "default_pin": "123456",
-    "default_form": "Nạp trả trước",
-    "default_amount": "50.000đ"
+    "default_form": "prepaid",
+    "default_amount": "10000"
   },
   "nap_tien_viettel": {
     "description": "Nạp tiền mạng Viettel",
@@ -94,14 +101,21 @@ export function getMockServiceData(serviceType: string) {
       };
       
     case "nap_tien_da_mang":
+      // Trả về cả 2 loại dữ liệu: nạp trả trước và gạch nợ trả sau
+      const multiNetworkData = serviceData as any;
+      const prepaidSamples = getRandomSample(multiNetworkData.sample_prepaid, 2, 4);
+      const postpaidSamples = getRandomSample(multiNetworkData.sample_postpaid, 2, 4);
+      const allSamples = [...prepaidSamples, ...postpaidSamples];
+      
       return {
         status: "success",
         service: serviceData.description, 
         data: {
-          phone_numbers: getRandomSample(serviceData.sample_phones, 4, 8),
-          pin: serviceData.default_pin,
-          payment_type: serviceData.default_form,
-          amount: serviceData.default_amount
+          phone_numbers: allSamples.map((code: string) => code.includes('|') ? code.split('|')[0] : code),
+          phone_amount_pairs: allSamples,
+          pin: multiNetworkData.default_pin,
+          payment_type: multiNetworkData.default_form,
+          amount: multiNetworkData.default_amount
         }
       };
       

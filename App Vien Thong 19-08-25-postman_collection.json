@@ -1,0 +1,129 @@
+{
+	"info": {
+		"_postman_id": "6c39d112-7182-4385-aafe-00a1ae71b23e",
+		"name": "App Vien Thong Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32738142",
+		"_collection_link": "https://plancervn.postman.co/workspace/Public~eec8400f-e5d1-4bca-929b-86c986df5c87/collection/32738142-6c39d112-7182-4385-aafe-00a1ae71b23e?action=share&source=collection_link&creator=32738142"
+	},
+	"item": [
+		{
+			"name": "List bill not completed",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Token",
+						"value": "c0d2e27448f511b41dd1477781025053",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thuhohpk.com/api/list-bill-not-completed",
+					"protocol": "https",
+					"host": [
+						"thuhohpk",
+						"com"
+					],
+					"path": [
+						"api",
+						"list-bill-not-completed"
+					],
+					"query": [
+						{
+							"key": "service_type",
+							"value": "deposit",
+							"description": "// check_ftth - Tra cuu FTTH : chu cai dau la text - FTTH\n// env - Gạch điện EVN : user \n// deposit  Nạp tiền đa mạng: Ky tu dau la so (number)\n// deposit_viettel Nạp tiền mạng Viettel: Ky tu dau la so (number)\n// payment_tv Thanh toán TV - Internet: chu cai dau la text\n// check_debt Tra cứu nợ thuê bao trả sau :Ky tu dau la so (number)",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bill complete for tool",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Token",
+						"value": "c0d2e27448f511b41dd1477781025053",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"account\":\"0912345618\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thuhohpk.com/api/tool-bill-completed",
+					"protocol": "https",
+					"host": [
+						"thuhohpk",
+						"com"
+					],
+					"path": [
+						"api",
+						"tool-bill-completed"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "username",
+				"value": "Demodiemthu",
+				"type": "string"
+			},
+			{
+				"key": "password",
+				"value": "123456",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

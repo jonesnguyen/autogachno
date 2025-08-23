@@ -31,25 +31,30 @@ import {
   CheckCircle,
   XCircle,
   Search,
-  Settings
+  Settings,
+  Calendar,
+  Clock
 } from "lucide-react";
 
 interface User {
   id: string;
-  email: string;
+  user: string;
   firstName: string;
   lastName: string;
+  password?: string;
   role: string;
   status: string;
+  expiresAt?: string | null;
   lastLoginAt: string;
   createdAt: string;
 }
 
 interface Registration {
   id: string;
-  email: string;
+  user: string;
   firstName: string;
   lastName: string;
+  password?: string;
   phone?: string;
   organization?: string;
   requestReason?: string;
@@ -66,11 +71,21 @@ interface AdminStats {
   recentActivity: any[];
 }
 
+interface UsersResponse {
+  users: User[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
 export default function Admin() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [expirationDate, setExpirationDate] = useState("");
+  const [showExpirationDialog, setShowExpirationDialog] = useState(false);
 
   // Fetch admin stats
   const { data: stats } = useQuery<AdminStats>({
@@ -78,9 +93,12 @@ export default function Admin() {
   });
 
   // Fetch users
-  const { data: usersData, isLoading: usersLoading } = useQuery({
+  const { data: usersData, isLoading: usersLoading } = useQuery<UsersResponse>({
     queryKey: ["/api/admin/users", currentPage, searchTerm],
-    queryFn: () => apiRequest(`/api/admin/users?page=${currentPage}&search=${searchTerm}`),
+    queryFn: async () => {
+      const response = await apiRequest(`/api/admin/users?page=${currentPage}&search=${searchTerm}`);
+      return response.json();
+    },
   });
 
   // Fetch registrations
@@ -124,6 +142,66 @@ export default function Admin() {
     },
   });
 
+  // Update user expiration mutation
+  const updateExpirationMutation = useMutation({
+    mutationFn: async ({ id, expiresAt }: { id: string; expiresAt: string | null }) => {
+      console.log('🔄 Frontend: Starting expiration update...', { id, expiresAt });
+      
+      try {
+        const response = await apiRequest(`/api/admin/users/${id}/expiration`, "PATCH", { expiresAt });
+        console.log('📡 Frontend: API response received:', response);
+        
+        // Kiểm tra response status
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('❌ Frontend: Response not OK:', response.status, errorText);
+          throw new Error(`HTTP ${response.status}: ${errorText.substring(0, 100)}`);
+        }
+        
+        // Kiểm tra content-type
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          const responseText = await response.text();
+          console.error('❌ Frontend: Response is not JSON:', contentType, responseText.substring(0, 200));
+          throw new Error(`Expected JSON but got ${contentType}`);
+        }
+        
+        const responseData = await response.json();
+        console.log('📄 Frontend: Response data:', responseData);
+        
+        return responseData;
+      } catch (error) {
+        console.error('❌ Frontend: Request failed:', error);
+        throw error;
+      }
+    },
+    onSuccess: (data) => {
+      console.log('✅ Frontend: Update successful, invalidating queries...', data);
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/users"] });
+      toast({ title: "Đã cập nhật thời hạn sử dụng" });
+    },
+    onError: (error: any) => {
+      console.error('❌ Frontend: Update failed:', error);
+      
+      let errorMessage = 'Lỗi cập nhật';
+      if (error.message.includes('Expected JSON but got')) {
+        errorMessage = 'Server trả về dữ liệu không đúng định dạng. Vui lòng thử lại.';
+      } else if (error.message.includes('HTTP 500')) {
+        errorMessage = 'Lỗi server. Vui lòng kiểm tra console server.';
+      } else if (error.message.includes('HTTP 404')) {
+        errorMessage = 'API endpoint không tìm thấy. Vui lòng kiểm tra server.';
+      } else if (error.message.includes('HTTP 403')) {
+        errorMessage = 'Không có quyền truy cập. Vui lòng đăng nhập lại.';
+      }
+      
+      toast({
+        title: "Lỗi cập nhật",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    },
+  });
+
   // Review registration mutation
   const reviewRegistrationMutation = useMutation({
     mutationFn: async ({ id, approved, notes }: { id: string; approved: boolean; notes?: string }) => {
@@ -154,9 +232,44 @@ export default function Admin() {
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
       case 'active': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'suspended': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+      case 'suspended': return 'bg-red-100 text-red-800 dark:bg-green-900 dark:text-red-200';
       default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
     }
+  };
+
+  const openExpirationDialog = (user: User) => {
+    setEditingUser(user);
+    setExpirationDate(user.expiresAt ? user.expiresAt.split('T')[0] : '');
+    setShowExpirationDialog(true);
+  };
+
+  const closeExpirationDialog = () => {
+    setShowExpirationDialog(false);
+    setEditingUser(null);
+    setExpirationDate('');
+  };
+
+  const handleUpdateExpiration = () => {
+    if (!editingUser) return;
+    
+    const expiresAt = expirationDate ? new Date(expirationDate).toISOString() : null;
+    updateExpirationMutation.mutate({ 
+      id: editingUser.id, 
+      expiresAt 
+    });
+    closeExpirationDialog();
+  };
+
+  const formatExpirationDate = (expiresAt: string | null | undefined) => {
+    if (!expiresAt) return 'Không có thời hạn';
+    const date = new Date(expiresAt);
+    const now = new Date();
+    
+    if (date < now) {
+      return <span className="text-red-600 font-medium">Đã hết hạn ({date.toLocaleDateString('vi-VN')})</span>;
+    }
+    
+    return date.toLocaleDateString('vi-VN');
   };
 
   return (
@@ -228,12 +341,12 @@ export default function Admin() {
             <CardHeader>
               <CardTitle>Người dùng hệ thống</CardTitle>
               <CardDescription>
-                Quản lý tài khoản và phân quyền người dùng
+                Quản lý tài khoản, phân quyền và thời hạn sử dụng của người dùng
               </CardDescription>
               <div className="flex items-center space-x-2">
                 <Search className="h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Tìm kiếm theo email, tên..."
+                  placeholder="Tìm kiếm theo tên, username..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="max-w-sm"
@@ -247,31 +360,70 @@ export default function Admin() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Email</TableHead>
+                      <TableHead>STT</TableHead>
                       <TableHead>Tên</TableHead>
+                      <TableHead>Mật khẩu</TableHead>
                       <TableHead>Vai trò</TableHead>
                       <TableHead>Trạng thái</TableHead>
-                      <TableHead>Lần cuối đăng nhập</TableHead>
+                      <TableHead>Thời hạn sử dụng</TableHead>
                       <TableHead>Thao tác</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {usersData?.users?.map((user: User) => (
+                    {usersData?.users?.map((user: User, index: number) => (
                       <TableRow key={user.id}>
-                        <TableCell className="font-medium">{user.email}</TableCell>
-                        <TableCell>{user.firstName} {user.lastName}</TableCell>
+                        <TableCell className="font-medium">{index + 1}</TableCell>
+                        <TableCell>
+                          <div>
+                            <div className="font-medium">{user.firstName} {user.lastName}</div>
+                            <div className="text-sm text-gray-500">@{user.user}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-sm font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                              {user.password || '••••••'}
+                            </span>
+                            {/* <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                // Có thể thêm chức năng reset password ở đây
+                                toast({
+                                  title: "Chức năng đang phát triển",
+                                  description: "Reset mật khẩu sẽ được thêm sau",
+                                });
+                              }}
+                              className="h-6 px-2"
+                            >
+                              <Settings className="h-3 w-3" />
+                            </Button> */}
+                          </div>
+                        </TableCell>
                         <TableCell>
                           <Badge className={getRoleBadgeColor(user.role)}>
-                            {user.role}
+                            {user.role === 'admin' ? 'Quản trị viên' : 
+                             user.role === 'manager' ? 'Quản lý' : 'Người dùng'}
                           </Badge>
                         </TableCell>
                         <TableCell>
                           <Badge className={getStatusBadgeColor(user.status)}>
-                            {user.status}
+                            {user.status === 'active' ? 'Hoạt động' :
+                             user.status === 'suspended' ? 'Tạm khóa' : 'Chờ duyệt'}
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          {user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleDateString('vi-VN') : 'Chưa đăng nhập'}
+                          <div className="flex items-center space-x-2">
+                            <span>{formatExpirationDate(user.expiresAt)}</span>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => openExpirationDialog(user)}
+                              className="h-6 px-2"
+                            >
+                              <Settings className="h-3 w-3" />
+                            </Button>
+                          </div>
                         </TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
@@ -328,7 +480,7 @@ export default function Admin() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Email</TableHead>
+                      <TableHead>STT</TableHead>
                       <TableHead>Tên</TableHead>
                       <TableHead>Tổ chức</TableHead>
                       <TableHead>Lý do</TableHead>
@@ -337,10 +489,15 @@ export default function Admin() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {registrations?.filter(r => r.status === 'pending').map((registration) => (
+                    {registrations?.filter(r => r.status === 'pending').map((registration, index) => (
                       <TableRow key={registration.id}>
-                        <TableCell className="font-medium">{registration.email}</TableCell>
-                        <TableCell>{registration.firstName} {registration.lastName}</TableCell>
+                        <TableCell className="font-medium">{index + 1}</TableCell>
+                        <TableCell>
+                          <div>
+                            <div className="font-medium">{registration.firstName} {registration.lastName}</div>
+                            <div className="text-sm text-gray-500">@{registration.user}</div>
+                          </div>
+                        </TableCell>
                         <TableCell>{registration.organization || '-'}</TableCell>
                         <TableCell className="max-w-xs truncate">
                           {registration.requestReason || '-'}
@@ -400,6 +557,83 @@ export default function Admin() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Expiration Edit Dialog */}
+      {showExpirationDialog && editingUser && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">Chỉnh sửa thời hạn sử dụng</h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={closeExpirationDialog}
+                className="h-8 w-8 p-0"
+              >
+                ×
+              </Button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Người dùng
+                </label>
+                <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-md">
+                  <div className="font-medium">{editingUser.user}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    {editingUser.firstName} {editingUser.lastName}
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Thời hạn sử dụng
+                </label>
+                <div className="flex items-center space-x-2">
+                  <Input
+                    type="date"
+                    value={expirationDate}
+                    onChange={(e) => setExpirationDate(e.target.value)}
+                    min={new Date().toISOString().split('T')[0]}
+                    className="flex-1"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setExpirationDate('')}
+                    className="px-3"
+                  >
+                    <Clock className="h-4 w-4 mr-1" />
+                    Không hạn
+                  </Button>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  Để trống hoặc chọn "Không hạn" để user không bao giờ hết hạn
+                </p>
+              </div>
+              
+              <div className="flex space-x-2 pt-4">
+                <Button
+                  onClick={handleUpdateExpiration}
+                  disabled={updateExpirationMutation.isPending}
+                  className="flex-1"
+                >
+                  {updateExpirationMutation.isPending ? "Đang cập nhật..." : "Cập nhật"}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={closeExpirationDialog}
+                  className="flex-1"
+                >
+                  Hủy
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

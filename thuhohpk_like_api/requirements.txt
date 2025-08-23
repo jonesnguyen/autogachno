@@ -1,0 +1,7 @@
+
+fastapi>=0.112.2
+uvicorn[standard]>=0.30.5
+pydantic>=2.8.2
+python-dotenv>=1.0.1
+flask==2.3.3
+flask-cors==4.0.0

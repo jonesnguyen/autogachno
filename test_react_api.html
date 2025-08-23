@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test React API Call - Giống hệt Python</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        .debug { background-color: #fff3cd; border-color: #ffeaa7; }
+        .comparison { background-color: #e2e3e5; border-color: #d6d8db; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test React API Call - Giống hệt Python</h1>
+    
+    <div class="test-section comparison">
+        <h3>📊 So sánh với Python Script</h3>
+        <p><strong>Python (hoạt động):</strong></p>
+        <pre>
+import requests
+headers = {
+    'Authorization': 'Basic RGVtb2RpZW10aHU6MTIzNDU2',
+    'Content-Type': 'application/json',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+}
+response = requests.get(url, headers=headers)
+        </pre>
+        
+        <p><strong>React (cần test):</strong></p>
+        <pre>
+const headers = {
+    'Authorization': 'Basic RGVtb2RpZW10aHU6MTIzNDU2',
+    'Content-Type': 'application/json',
+    'User-Agent': 'Mozilla/5.0'
+};
+const response = await fetch(url, { headers });
+        </pre>
+    </div>
+    
+    <div class="test-section">
+        <h3>1️⃣ Test Basic Fetch (Giống Python)</h3>
+        <button onclick="testBasicFetch()">Test Basic Fetch</button>
+        <div id="basic-fetch-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>2️⃣ Test với Headers giống Python</h3>
+        <button onclick="testWithHeaders()">Test với Headers</button>
+        <div id="headers-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>3️⃣ Test với User-Agent giống Python</h3>
+        <button onclick="testWithUserAgent()">Test với User-Agent</button>
+        <div id="useragent-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>4️⃣ Test với Mode khác nhau</h3>
+        <button onclick="testWithMode()">Test với Mode</button>
+        <div id="mode-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>5️⃣ Test với Credentials</h3>
+        <button onclick="testWithCredentials()">Test với Credentials</button>
+        <div id="credentials-result"></div>
+    </div>
+
+    <div class="test-section debug">
+        <h3>🔍 Console Commands</h3>
+        <p>Mở Console (F12) và chạy các lệnh sau:</p>
+        <pre>
+// Test từ console
+testBasicFetch()
+testWithHeaders()
+testWithUserAgent()
+testWithMode()
+testWithCredentials()
+        </pre>
+    </div>
+
+    <script>
+        function showResult(elementId, content, type = 'success') {
+            const element = document.getElementById(elementId);
+            element.className = type;
+            element.innerHTML = `<pre>${content}</pre>`;
+        }
+
+        // Test 1: Basic Fetch (giống Python requests.get)
+        window.testBasicFetch = async function() {
+            console.log('🧪 Testing basic fetch (giống Python requests.get)...');
+            try {
+                const url = 'https://thuhohpk.com/api/list-bill-not-completed?service_type=check_ftth';
+                console.log('📡 URL:', url);
+                
+                const response = await fetch(url);
+                const result = `✅ Status: ${response.status}\nHeaders: ${JSON.stringify(Object.fromEntries(response.headers), null, 2)}`;
+                console.log(result);
+                return result;
+            } catch (error) {
+                const result = `❌ Error: ${error.message}\nType: ${error.name}`;
+                console.error(result);
+                return result;
+            }
+        };
+
+        // Test 2: Với Headers giống Python
+        window.testWithHeaders = async function() {
+            console.log('🧪 Testing với headers giống Python...');
+            try {
+                const url = 'https://thuhohpk.com/api/list-bill-not-completed?service_type=check_ftth';
+                const headers = {
+                    'Authorization': 'Basic RGVtb2RpZW10aHU6MTIzNDU2',
+                    'Content-Type': 'application/json'
+                };
+                
+                console.log('📡 URL:', url);
+                console.log('🔐 Headers:', headers);
+                
+                const response = await fetch(url, { headers });
+                const result = `✅ Status: ${response.status}\nHeaders: ${JSON.stringify(Object.fromEntries(response.headers), null, 2)}`;
+                console.log(result);
+                return result;
+            } catch (error) {
+                const result = `❌ Error: ${error.message}\nType: ${error.name}`;
+                console.error(result);
+                return result;
+            }
+        };
+
+        // Test 3: Với User-Agent giống Python
+        window.testWithUserAgent = async function() {
+            console.log('🧪 Testing với User-Agent giống Python...');
+            try {
+                const url = 'https://thuhohpk.com/api/list-bill-not-completed?service_type=check_ftth';
+                const headers = {
+                    'Authorization': 'Basic RGVtb2RpZW10aHU6MTIzNDU2',
+                    'Content-Type': 'application/json',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                };
+                
+                console.log('📡 URL:', url);
+                console.log('🔐 Headers:', headers);
+                
+                const response = await fetch(url, { headers });
+                const result = `✅ Status: ${response.status}\nHeaders: ${JSON.stringify(Object.fromEntries(response.headers), null, 2)}`;
+                console.log(result);
+                return result;
+            } catch (error) {
+                const result = `❌ Error: ${error.message}\nType: ${error.name}`;
+                console.error(result);
+                return result;
+            }
+        };
+
+        // Test 4: Với Mode khác nhau
+        window.testWithMode = async function() {
+            console.log('🧪 Testing với mode khác nhau...');
+            const url = 'https://thuhohpk.com/api/list-bill-not-completed?service_type=check_ftth';
+            const headers = {
+                'Authorization': 'Basic RGVtb2RpZW10aHU6MTIzNDU2',
+                'Content-Type': 'application/json',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            };
+            
+            const modes = ['cors', 'no-cors', 'same-origin'];
+            let results = [];
+            
+            for (const mode of modes) {
+                try {
+                    console.log(`🌐 Testing mode: ${mode}`);
+                    const response = await fetch(url, { headers, mode });
+                    results.push(`✅ Mode ${mode}: ${response.status}`);
+                } catch (error) {
+                    results.push(`❌ Mode ${mode}: ${error.message}`);
+                }
+            }
+            
+            const result = results.join('\n');
+            console.log(result);
+            return result;
+        };
+
+        // Test 5: Với Credentials
+        window.testWithCredentials = async function() {
+            console.log('🧪 Testing với credentials...');
+            try {
+                const url = 'https://thuhohpk.com/api/list-bill-not-completed?service_type=check_ftth';
+                const headers = {
+                    'Authorization': 'Basic RGVtb2RpZW10aHU6MTIzNDU2',
+                    'Content-Type': 'application/json',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                };
+                
+                console.log('📡 URL:', url);
+                console.log('🔐 Headers:', headers);
+                
+                const response = await fetch(url, { 
+                    headers, 
+                    mode: 'cors',
+                    credentials: 'omit'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const result = `✅ Status: ${response.status}\nData: ${JSON.stringify(data, null, 2)}`;
+                    console.log(result);
+                    return result;
+                } else {
+                    const errorText = await response.text();
+                    const result = `❌ HTTP Error: ${response.status} - ${errorText}`;
+                    console.error(result);
+                    return result;
+                }
+            } catch (error) {
+                const result = `❌ Error: ${error.message}\nType: ${error.name}`;
+                console.error(result);
+                return result;
+            }
+        };
+
+        // Button click handlers
+        async function testBasicFetch() {
+            const result = await window.testBasicFetch();
+            showResult('basic-fetch-result', result, result.includes('❌') ? 'error' : 'success');
+        }
+
+        async function testWithHeaders() {
+            const result = await window.testWithHeaders();
+            showResult('headers-result', result, result.includes('❌') ? 'error' : 'success');
+        }
+
+        async function testWithUserAgent() {
+            const result = await window.testWithUserAgent();
+            showResult('useragent-result', result, result.includes('❌') ? 'error' : 'success');
+        }
+
+        async function testWithMode() {
+            const result = await window.testWithMode();
+            showResult('mode-result', result, result.includes('❌') ? 'error' : 'success');
+        }
+
+        async function testWithCredentials() {
+            const result = await window.testWithCredentials();
+            showResult('credentials-result', result, result.includes('❌') ? 'error' : 'success');
+        }
+
+        console.log('🧪 React API test functions loaded. Use: testBasicFetch(), testWithHeaders(), testWithUserAgent(), testWithMode(), testWithCredentials()');
+    </script>
+</body>
+</html>

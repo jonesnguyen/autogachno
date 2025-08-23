@@ -1,48 +1,52 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
 import { ServiceContent } from "@/components/ServiceContent";
 import { StatsCards } from "@/components/StatsCards";
-import { RecentOrders } from "@/components/RecentOrders";
+
+
+type DashboardProps = { initialService?: string };
+
+const serviceIdToSlug: Record<string, string> = {
+  'tra_cuu_ftth': '/tra-cuu-ftth',
+  'gach_dien_evn': '/gach-dien-evn',
+  'nap_tien_da_mang': '/nap-tien-da-mang',
+  'nap_tien_viettel': '/nap-tien-viettel',
+  'thanh_toan_tv_internet': '/thanh-toan-tv-internet',
+  'tra_cuu_no_tra_sau': '/tra-cuu-no-tra-sau',
+};
 
 export default function Dashboard() {
   const { isAuthenticated, isLoading } = useAuth();
+  const [, navigate] = useLocation();
   const { toast } = useToast();
-  const [activeService, setActiveService] = useState("tra_cuu_ftth");
-  const [apiStatus, setApiStatus] = useState(true);
+  const [activeService, setActiveService] = useState('tra_cuu_ftth');
+
+  const handleServiceChange = (serviceId: string) => {
+    setActiveService(serviceId);
+    const slug = serviceIdToSlug[serviceId];
+    if (slug) navigate(slug);
+  };
 
   // Redirect if not authenticated
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       toast({
         title: "Unauthorized",
-        description: "You are logged out. Logging in again...",
+        description: "Bạn cần đăng nhập để tiếp tục",
         variant: "destructive",
       });
       setTimeout(() => {
-        window.location.href = "/api/login";
+        window.location.href = "/login";
       }, 500);
       return;
     }
   }, [isAuthenticated, isLoading, toast]);
 
-  // Check API status periodically
-  useEffect(() => {
-    const checkApiStatus = async () => {
-      try {
-        const response = await fetch('http://127.0.0.1:8080/api/health');
-        setApiStatus(response.ok);
-      } catch {
-        setApiStatus(false);
-      }
-    };
-
-    checkApiStatus();
-    const interval = setInterval(checkApiStatus, 30000);
-    return () => clearInterval(interval);
-  }, []);
+  // Removed API health check - not needed and causing connection errors
 
   const getServiceTitle = (serviceType: string) => {
     const titles: Record<string, string> = {
@@ -81,13 +85,12 @@ export default function Dashboard() {
     <div className="flex h-screen bg-gray-50">
       <Sidebar 
         activeService={activeService}
-        onServiceChange={setActiveService}
+        onServiceChange={handleServiceChange}
       />
       
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header 
           title={getServiceTitle(activeService)}
-          apiStatus={apiStatus}
         />
         
         <main className="flex-1 overflow-auto p-6">
@@ -96,7 +99,7 @@ export default function Dashboard() {
           ) : activeService === 'orders' ? (
             <div>
               <h3 className="text-lg font-semibold mb-4">Quản lý đơn hàng</h3>
-              <RecentOrders />
+              <p className="text-gray-600">Chức năng quản lý đơn hàng đang được phát triển...</p>
             </div>
           ) : activeService === 'reports' ? (
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -110,14 +113,11 @@ export default function Dashboard() {
             </div>
           ) : null}
           
-          {isService(activeService) && (
+          {/* {isService(activeService) && (
             <>
               <StatsCards />
-              <div className="mt-8">
-                <RecentOrders />
-              </div>
             </>
-          )}
+          )} */}
         </main>
       </div>
     </div>

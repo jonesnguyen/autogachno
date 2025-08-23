@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test XMLHttpRequest - Bypass HTTP/2</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test XMLHttpRequest - Bypass HTTP/2 Protocol Error</h1>
+    
+    <div class="test-section">
+        <h3>1️⃣ Test XMLHttpRequest với Basic Auth</h3>
+        <button onclick="testXMLHttpRequest()">Test XMLHttpRequest</button>
+        <div id="xhr-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>2️⃣ Test Fetch vs XMLHttpRequest</h3>
+        <button onclick="compareFetchVsXHR()">Compare Fetch vs XHR</button>
+        <div id="compare-result"></div>
+    </div>
+
+    <script>
+        function showResult(elementId, content, type = 'success') {
+            const element = document.getElementById(elementId);
+            element.className = type;
+            element.innerHTML = `<pre>${content}</pre>`;
+        }
+
+        // Test XMLHttpRequest
+        function testXMLHttpRequest() {
+            const username = 'Demodiemthu';
+            const password = '123456';
+            const credentials = btoa(`${username}:${password}`);
+            const url = 'https://thuhohpk.com/api/list-bill-not-completed?service_type=check_ftth';
+            
+            console.log('🧪 Testing XMLHttpRequest...');
+            console.log('📡 URL:', url);
+            console.log('🔐 Credentials:', credentials);
+            
+            const xhr = new XMLHttpRequest();
+            
+            xhr.open('GET', url, true);
+            xhr.setRequestHeader('Authorization', `Basic ${credentials}`);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
+            
+            xhr.onload = function() {
+                console.log('✅ XMLHttpRequest onload:', xhr.status, xhr.statusText);
+                console.log('📊 Response headers:', xhr.getAllResponseHeaders());
+                
+                if (xhr.status === 200) {
+                    try {
+                        const data = JSON.parse(xhr.responseText);
+                        const result = `✅ XMLHttpRequest Success!\nStatus: ${xhr.status}\nData: ${JSON.stringify(data, null, 2)}`;
+                        console.log(result);
+                        showResult('xhr-result', result, 'success');
+                    } catch (parseError) {
+                        const result = `❌ Parse Error: ${parseError.message}\nRaw: ${xhr.responseText}`;
+                        console.error(result);
+                        showResult('xhr-result', result, 'error');
+                    }
+                } else {
+                    const result = `❌ HTTP Error: ${xhr.status} ${xhr.statusText}\nResponse: ${xhr.responseText}`;
+                    console.error(result);
+                    showResult('xhr-result', result, 'error');
+                }
+            };
+            
+            xhr.onerror = function() {
+                const result = `❌ XMLHttpRequest Network Error`;
+                console.error(result);
+                showResult('xhr-result', result, 'error');
+            };
+            
+            xhr.ontimeout = function() {
+                const result = `❌ XMLHttpRequest Timeout`;
+                console.error(result);
+                showResult('xhr-result', result, 'error');
+            };
+            
+            xhr.timeout = 30000; // 30 seconds
+            
+            try {
+                xhr.send();
+                console.log('📤 XMLHttpRequest sent');
+            } catch (sendError) {
+                const result = `❌ Send Error: ${sendError.message}`;
+                console.error(result);
+                showResult('xhr-result', result, 'error');
+            }
+        }
+
+        // Compare Fetch vs XMLHttpRequest
+        async function compareFetchVsXHR() {
+            const username = 'Demodiemthu';
+            const password = '123456';
+            const credentials = btoa(`${username}:${password}`);
+            const url = 'https://thuhohpk.com/api/list-bill-not-completed?service_type=check_ftth';
+            
+            const headers = {
+                'Authorization': `Basic ${credentials}`,
+                'Content-Type': 'application/json',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            };
+            
+            let results = [];
+            
+            // Test Fetch
+            try {
+                console.log('🧪 Testing Fetch...');
+                const fetchResponse = await fetch(url, { headers, mode: 'cors' });
+                results.push(`✅ Fetch: ${fetchResponse.status} ${fetchResponse.statusText}`);
+                
+                if (fetchResponse.ok) {
+                    const data = await fetchResponse.json();
+                    results.push(`📄 Fetch Data: ${JSON.stringify(data)}`);
+                }
+            } catch (fetchError) {
+                results.push(`❌ Fetch Error: ${fetchError.message}`);
+            }
+            
+            // Test XMLHttpRequest
+            try {
+                console.log('🧪 Testing XMLHttpRequest...');
+                const xhrResult = await new Promise((resolve, reject) => {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', url, true);
+                    xhr.setRequestHeader('Authorization', `Basic ${credentials}`);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.setRequestHeader('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
+                    
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            try {
+                                const data = JSON.parse(xhr.responseText);
+                                resolve(`✅ XMLHttpRequest: ${xhr.status} ${xhr.statusText}\n📄 Data: ${JSON.stringify(data)}`);
+                            } catch (parseError) {
+                                reject(`❌ XMLHttpRequest Parse Error: ${parseError.message}`);
+                            }
+                        } else {
+                            reject(`❌ XMLHttpRequest HTTP Error: ${xhr.status} ${xhr.statusText}`);
+                        }
+                    };
+                    
+                    xhr.onerror = function() {
+                        reject('❌ XMLHttpRequest Network Error');
+                    };
+                    
+                    xhr.ontimeout = function() {
+                        reject('❌ XMLHttpRequest Timeout');
+                    };
+                    
+                    xhr.timeout = 30000;
+                    xhr.send();
+                });
+                
+                results.push(xhrResult);
+            } catch (xhrError) {
+                results.push(`❌ XMLHttpRequest Error: ${xhrError}`);
+            }
+            
+            const result = results.join('\n\n');
+            console.log(result);
+            showResult('compare-result', result, result.includes('❌') ? 'error' : 'success');
+        }
+
+        console.log('🧪 XMLHttpRequest test functions loaded. Use: testXMLHttpRequest(), compareFetchVsXHR()');
+    </script>
+</body>
+</html>
