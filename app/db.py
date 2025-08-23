@@ -12,7 +12,7 @@ sys.path.insert(0, parent_dir)
 
 from app.config import DB_DATABASE_URL
 
-def db_ensure_user(user_id: str, email: str) -> None:
+def db_ensure_user(user_id: str, user: str) -> None:
     try:
         with psycopg2.connect(DB_DATABASE_URL) as conn:
             with conn.cursor() as cur:
@@ -22,12 +22,12 @@ def db_ensure_user(user_id: str, email: str) -> None:
                     return
                 cur.execute(
                     """
-                    INSERT INTO users (id, email, first_name, last_name, role, status)
+                    INSERT INTO users (id, user, first_name, last_name, role, status)
                     VALUES (%s, %s, %s, %s, %s, %s)
                     """,
-                    (user_id, email, 'Admin', 'Local', 'admin', 'active')
+                    (user_id, user, 'Admin', 'Local', 'admin', 'active')
                 )
-                print(f"[DB] Tạo user mặc định {email} ({user_id})")
+                print(f"[DB] Tạo user mặc định {user} ({user_id})")
     except Exception as e:
         print(f"[DB] Lỗi đảm bảo user tồn tại: {e}")
 
@@ -47,6 +47,18 @@ def update_database_immediately(order_id: str, code: str, status: str, amount: A
                     'details': details or None,
                 }
                 result_json = pyjson.dumps(result_obj, ensure_ascii=False)
+
+                # Lấy service_type từ orders để kiểm tra có cần gọi API mark_bill_completed không
+                cur.execute(
+                    """
+                    SELECT service_type
+                    FROM orders
+                    WHERE id = %s
+                    """,
+                    (order_id,)
+                )
+                order_row = cur.fetchone()
+                service_type = order_row[0] if order_row else None
 
                 # 1) Update orders
                 cur.execute(
@@ -96,28 +108,39 @@ def update_database_immediately(order_id: str, code: str, status: str, amount: A
                 # Commit (with-conn sẽ commit nếu không có exception, nhưng gọi tường minh cho chắc)
                 conn.commit()
 
-                # 3) Nếu status=success, tự động gọi API mark_bill_completed
+                # 3) Chỉ gọi API mark_bill_completed cho các dịch vụ cụ thể khi status=success
                 if status == 'success':
-                    print(f"   🚀 Status=success, tự động gọi API mark_bill_completed cho {code}")
-                    try:
-                        # Import và gọi hàm mark_bill_completed
-                        from .test1 import mark_bill_completed
-                        
-                        # Gọi API với order_id (hàm sẽ tự lấy code từ database)
-                        result = mark_bill_completed(order_id)
-                        if result and result.get('success'):
-                            print(f"   ✅ API mark_bill_completed thành công cho {code}")
-                        else:
-                            print(f"   ⚠️ API mark_bill_completed thất bại cho {code}: {result.get('msg', 'Unknown error')}")
-                    except Exception as e:
-                        print(f"   ❌ Lỗi khi gọi API mark_bill_completed: {e}")
+                    # Danh sách các dịch vụ được phép gọi API mark_bill_completed
+                    allowed_services = [
+                        'gach_dien_evn',        # env
+                        'nap_tien_da_mang',     # deposit
+                        'nap_tien_viettel',     # deposit_viettel
+                        'thanh_toan_tv_internet' # payment_tv
+                    ]
+                    
+                    if service_type in allowed_services:
+                        print(f"   🚀 Status=success và service_type={service_type} được phép, tự động gọi API mark_bill_completed cho {code}")
+                        try:
+                            # Import và gọi hàm mark_bill_completed
+                            from .test1 import mark_bill_completed
+                            
+                            # Gọi API với order_id (hàm sẽ tự lấy code từ database)
+                            result = mark_bill_completed(order_id)
+                            if result and result.get('success'):
+                                print(f"   ✅ API mark_bill_completed thành công cho {code}")
+                            else:
+                                print(f"   ⚠️ API mark_bill_completed thất bại cho {code}: {result.get('msg', 'Unknown error')}")
+                        except Exception as e:
+                            print(f"   ❌ Lỗi khi gọi API mark_bill_completed: {e}")
+                    else:
+                        print(f"   ℹ️ Service_type={service_type} không trong danh sách được phép gọi API mark_bill_completed")
 
                 return bool(row_order or tran_rows)
 
     except Exception as e:
         print(f"   ❌ Lỗi cập nhật DB trực tiếp: {e}")
         return False
-
+    
 def db_find_order_id(service_type: str, code: str, user_id: Optional[str] = None) -> Optional[str]:
     try:
         with psycopg2.connect(DB_DATABASE_URL) as conn:
@@ -305,13 +328,13 @@ def db_fetch_service_data(service_type: str, payment_type: str = None) -> Option
 
 def db_get_account_credentials(order_id: str) -> Optional[tuple[str, str]]:
     """
-    Lấy thông tin đăng nhập (email, password) từ order_id.
+    Lấy thông tin đăng nhập (user, password) từ order_id.
     
     Args:
         order_id: ID của đơn hàng
         
     Returns:
-        Tuple (email, password) hoặc None nếu không tìm thấy
+        Tuple (user, password) hoặc None nếu không tìm thấy
     """
     try:
         with psycopg2.connect(os.getenv('DATABASE_URL', DB_DATABASE_URL)) as conn:
@@ -319,7 +342,7 @@ def db_get_account_credentials(order_id: str) -> Optional[tuple[str, str]]:
                 # Tìm user_id từ order_id
                 cur.execute(
                     """
-                    SELECT o.user_id, u.email, u.password
+                    SELECT o.user_id, u.user, u.password
                     FROM orders o
                     JOIN users u ON o.user_id = u.id
                     WHERE o.id = %s
@@ -332,18 +355,18 @@ def db_get_account_credentials(order_id: str) -> Optional[tuple[str, str]]:
                     print(f"   ⚠️ Không tìm thấy order với id: {order_id}")
                     return None
                 
-                user_id, email, password = row
+                user_id, user, password = row
                 
-                if not email:
-                    print(f"   ⚠️ User {user_id} không có email")
+                if not user:
+                    print(f"   ⚠️ User {user_id} không có user")
                     return None
                 
                 if not password:
                     print(f"   ⚠️ User {user_id} không có password")
                     return None
                 
-                print(f"   ✅ Đã lấy credentials cho order {order_id}: {email}")
-                return (email, password)
+                print(f"   ✅ Đã lấy credentials cho order {order_id}: {user}")
+                return (user, password)
                 
     except Exception as e:
         print(f"   ❌ Lỗi lấy credentials cho order {order_id}: {e}")

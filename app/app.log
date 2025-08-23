@@ -12152,3 +12152,55 @@ Stacktrace:
 
 2025-08-23 22:53:50,943 - INFO - 📈 Tiến độ: 1 mục đã xử lý
 2025-08-23 22:53:56,948 - WARNING - ⚠️ Timeout xử lý cho Tra cứu FTTH
+2025-08-23 23:00:47,107 - WARNING - Không thể tải icon: bitmap "viettelpay.ico" not defined
+2025-08-23 23:00:48,194 - INFO - 🔄 Khởi tạo Chrome driver lần đầu...
+2025-08-23 23:00:52,078 - INFO - ✅ Chrome driver đã được khởi tạo thành công
+2025-08-23 23:00:56,140 - INFO - Navigating to: https://kpp.bankplus.vn/pages/newInternetTelevisionViettel.jsf?serviceCode=000003&serviceType=INTERNET
+2025-08-23 23:01:09,110 - WARNING - Không thể điều hướng FTTH hoặc chọn radio: Message: 
+Stacktrace:
+	GetHandleVerifier [0x0x7ff69e1278d5+2802741]
+	GetHandleVerifier [0x0x7ff69de8eb70+79568]
+	(No symbol) [0x0x7ff69dc2c0fa]
+	(No symbol) [0x0x7ff69dc82a96]
+	(No symbol) [0x0x7ff69dc82d4c]
+	(No symbol) [0x0x7ff69dcd6017]
+	(No symbol) [0x0x7ff69dcaaccf]
+	(No symbol) [0x0x7ff69dcd2e24]
+	(No symbol) [0x0x7ff69dcaaa63]
+	(No symbol) [0x0x7ff69dc73c91]
+	(No symbol) [0x0x7ff69dc74a23]
+	GetHandleVerifier [0x0x7ff69e152ced+2979917]
+	GetHandleVerifier [0x0x7ff69e14d0f3+2956371]
+	GetHandleVerifier [0x0x7ff69e16acbd+3078173]
+	GetHandleVerifier [0x0x7ff69dea836e+184014]
+	GetHandleVerifier [0x0x7ff69deb024f+216495]
+	GetHandleVerifier [0x0x7ff69de970c4+113700]
+	GetHandleVerifier [0x0x7ff69de97279+114137]
+	GetHandleVerifier [0x0x7ff69de7df78+10968]
+	BaseThreadInitThunk [0x0x7ffd6653e8d7+23]
+	RtlUserThreadStart [0x0x7ffd67bfc34c+44]
+
+2025-08-23 23:01:09,110 - ERROR - Error processing PB16040034312: Message: 
+Stacktrace:
+	GetHandleVerifier [0x0x7ff69e1278d5+2802741]
+	GetHandleVerifier [0x0x7ff69de8eb70+79568]
+	(No symbol) [0x0x7ff69dc2c0fa]
+	(No symbol) [0x0x7ff69dc82a96]
+	(No symbol) [0x0x7ff69dc82d4c]
+	(No symbol) [0x0x7ff69dcd6017]
+	(No symbol) [0x0x7ff69dcaaccf]
+	(No symbol) [0x0x7ff69dcd2e24]
+	(No symbol) [0x0x7ff69dcaaa63]
+	(No symbol) [0x0x7ff69dc73c91]
+	(No symbol) [0x0x7ff69dc74a23]
+	GetHandleVerifier [0x0x7ff69e152ced+2979917]
+	GetHandleVerifier [0x0x7ff69e14d0f3+2956371]
+	GetHandleVerifier [0x0x7ff69e16acbd+3078173]
+	GetHandleVerifier [0x0x7ff69dea836e+184014]
+	GetHandleVerifier [0x0x7ff69deb024f+216495]
+	GetHandleVerifier [0x0x7ff69de970c4+113700]
+	GetHandleVerifier [0x0x7ff69de97279+114137]
+	GetHandleVerifier [0x0x7ff69de7df78+10968]
+	BaseThreadInitThunk [0x0x7ffd6653e8d7+23]
+	RtlUserThreadStart [0x0x7ffd67bfc34c+44]
+
