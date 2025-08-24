@@ -12204,3 +12204,7 @@ Stacktrace:
 	BaseThreadInitThunk [0x0x7ffd6653e8d7+23]
 	RtlUserThreadStart [0x0x7ffd67bfc34c+44]
 
+2025-08-24 15:52:48,226 - WARNING - Không thể tải icon: bitmap "viettelpay.ico" not defined
+2025-08-24 15:52:57,775 - INFO - 🔄 Khởi tạo Chrome driver lần đầu...
+2025-08-24 15:53:04,774 - INFO - ✅ Chrome driver đã được khởi tạo thành công
+2025-08-24 16:07:35,477 - INFO - Order ID từ DB (EVN): 7e842f1a-22e8-48c9-9abd-176d146466a8

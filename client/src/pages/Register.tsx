@@ -105,7 +105,7 @@ export default function Register() {
             <CardTitle className="text-2xl">Đăng ký tài khoản</CardTitle>
           </div>
           <CardDescription>
-            Điền thông tin để đăng ký sử dụng hệ thống ViettelPay. Tài khoản sẽ được xét duyệt bởi quản trị viên trước khi có thể sử dụng.
+            Điền thông tin để đăng ký sử dụng hệ thống Viettelpay pro để gạch nợ. Tài khoản sẽ được xét duyệt bởi quản trị viên trước khi có thể sử dụng.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -115,9 +115,8 @@ export default function Register() {
               <div className="text-sm text-blue-800">
                 <p className="font-medium">Quy trình đăng ký:</p>
                 <ol className="list-decimal list-inside mt-1 space-y-1">
-                  <li>Điền thông tin và gửi đăng ký</li>
+                  <li>Nhập user và mật khẩu giống với app in bill</li>
                   <li>Quản trị viên xem xét và phê duyệt</li>
-                  <li>Nhận email thông báo kết quả</li>
                   <li>Đăng nhập và sử dụng hệ thống</li>
                 </ol>
               </div>
@@ -170,7 +169,7 @@ export default function Register() {
               />
             </div>
 
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="organization">Tổ chức</Label>
               <Input
                 id="organization"
@@ -189,7 +188,7 @@ export default function Register() {
                 placeholder="Mô tả ngắn gọn lý do cần sử dụng hệ thống..."
                 rows={3}
               />
-            </div>
+            </div> */}
 
             <div className="space-y-2">
               <Label htmlFor="expiresAt">Thời hạn sử dụng (tùy chọn)</Label>
@@ -240,7 +239,7 @@ export default function Register() {
 
             <div className="text-center text-sm text-gray-600 dark:text-gray-400 space-y-2">
               <p>⚠️ Lưu ý: Tài khoản của bạn sẽ được xét duyệt trong vòng 24-48 giờ</p>
-              <p>Bạn sẽ nhận được email thông báo khi tài khoản được phê duyệt</p>
+              <p>Bạn sẽ nhận được user thông báo khi tài khoản được phê duyệt</p>
             </div>
 
             <Button
