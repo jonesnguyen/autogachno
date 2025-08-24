@@ -9,14 +9,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "wouter";
-import { Settings, LogOut } from "lucide-react";
+import { Settings, LogOut, User } from "lucide-react";
 
 interface HeaderProps {
   title: string;
+  user?: any;
 }
 
-export function Header({ title }: HeaderProps) {
-  const { user } = useAuth();
+export function Header({ title, user: propUser }: HeaderProps) {
+  const { user: authUser } = useAuth();
+  const user = propUser || authUser;
   const isAdmin = user?.role === 'admin' || user?.role === 'manager';
 
   return (
@@ -46,9 +48,9 @@ export function Header({ title }: HeaderProps) {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={user?.profileImageUrl} alt={user?.user || 'User'} />
+                  <AvatarImage src={user?.profileImageUrl || undefined} alt={user?.user || 'User'} />
                   <AvatarFallback>
-                    {user?.firstName?.[0]}{user?.lastName?.[0]}
+                    {user?.firstName?.[0] || ''}{user?.lastName?.[0] || ''}
                   </AvatarFallback>
                 </Avatar>
               </Button>
@@ -67,6 +69,13 @@ export function Header({ title }: HeaderProps) {
                   </p>
                 </div>
               </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/profile">
+                  <User className="mr-2 h-4 w-4" />
+                  Thông tin tài khoản
+                </Link>
+              </DropdownMenuItem>
+
               <DropdownMenuItem asChild>
                 <a href="/api/logout" className="w-full">
                   <LogOut className="mr-2 h-4 w-4" />

@@ -33,6 +33,7 @@ export interface IStorage {
   updateUserRole(id: string, role: string): Promise<User>;
   updateUserStatus(id: string, status: string): Promise<User>;
   updateUserExpiration(id: string, expiresAt: string | null): Promise<User>;
+  updateUser(id: string, updateData: Partial<UpsertUser>): Promise<User>;
   deleteUser(id: string): Promise<void>;
   updateLastLogin(id: string): Promise<void>;
   
@@ -275,6 +276,35 @@ export class DatabaseStorage implements IStorage {
       console.error('   Error stack:', error.stack);
       console.error('   Error name:', error.name);
       console.error('   Error message:', error.message);
+      throw error;
+    }
+  }
+
+  async updateUser(id: string, updateData: Partial<UpsertUser>): Promise<User> {
+    try {
+      console.log('🗄️ Storage: updateUser called');
+      console.log('   User ID:', id);
+      console.log('   Update data:', updateData);
+      
+      const [user] = await db
+        .update(users)
+        .set({
+          ...updateData,
+          updatedAt: new Date()
+        })
+        .where(eq(users.id, id))
+        .returning();
+      
+      if (!user) {
+        throw new Error('User not found');
+      }
+      
+      console.log('✅ Storage: updateUser successful');
+      console.log('   Updated user:', user);
+      
+      return user;
+    } catch (error) {
+      console.error('❌ Storage: Error in updateUser:', error);
       throw error;
     }
   }

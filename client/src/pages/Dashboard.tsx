@@ -8,6 +8,7 @@ import { ServiceContent } from "@/components/ServiceContent";
 import { StatsCards } from "@/components/StatsCards";
 
 
+
 type DashboardProps = { initialService?: string };
 
 const serviceIdToSlug: Record<string, string> = {
@@ -19,17 +20,20 @@ const serviceIdToSlug: Record<string, string> = {
   'tra_cuu_no_tra_sau': '/tra-cuu-no-tra-sau',
 };
 
-export default function Dashboard() {
-  const { isAuthenticated, isLoading } = useAuth();
+export default function Dashboard({ initialService }: DashboardProps = {}) {
+  const { isAuthenticated, isLoading, user } = useAuth();
   const [, navigate] = useLocation();
   const { toast } = useToast();
-  const [activeService, setActiveService] = useState('tra_cuu_ftth');
+  const [activeService, setActiveService] = useState(initialService || 'tra_cuu_ftth');
+
 
   const handleServiceChange = (serviceId: string) => {
     setActiveService(serviceId);
     const slug = serviceIdToSlug[serviceId];
     if (slug) navigate(slug);
   };
+
+
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -91,6 +95,7 @@ export default function Dashboard() {
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header 
           title={getServiceTitle(activeService)}
+          user={user}
         />
         
         <main className="flex-1 overflow-auto p-6">
@@ -120,6 +125,8 @@ export default function Dashboard() {
           )} */}
         </main>
       </div>
+
+
     </div>
   );
 }

@@ -60,6 +60,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update current user profile
+  app.patch('/api/auth/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { firstName, lastName, user: newUser, password, confirmPassword } = req.body;
+      
+      // Validate required fields
+      if (!firstName || !lastName || !newUser) {
+        return res.status(400).json({ message: "Tên, họ và tên đăng nhập là bắt buộc" });
+      }
+
+      // Check if new username is already taken by another user
+      const existingUser = await storage.getUserByUser(newUser);
+      if (existingUser && existingUser.id !== userId) {
+        return res.status(400).json({ message: "Tên đăng nhập đã được sử dụng bởi người khác" });
+      }
+
+      // Validate password if provided
+      if (password) {
+        if (password.length < 6) {
+          return res.status(400).json({ message: "Mật khẩu phải có ít nhất 6 ký tự" });
+        }
+        if (password !== confirmPassword) {
+          return res.status(400).json({ message: "Mật khẩu và xác nhận mật khẩu không khớp" });
+        }
+      }
+
+      // Prepare update data
+      const updateData: any = {
+        firstName,
+        lastName,
+        user: newUser,
+        updatedAt: new Date()
+      };
+
+      // Only update password if provided
+      if (password) {
+        updateData.password = password;
+      }
+
+      // Update user
+      const updatedUser = await storage.updateUser(userId, updateData);
+      
+      res.json({
+        message: "Cập nhật thông tin thành công",
+        user: updatedUser
+      });
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+      res.status(500).json({ message: "Failed to update user profile" });
+    }
+  });
+
 
 
   // Check user status by user (public route)
@@ -972,14 +1025,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
     } catch (error) {
       console.error("❌ Error updating user expiration:", error);
-      console.error("   Error stack:", error.stack);
-      console.error("   Error name:", error.name);
-      console.error("   Error message:", error.message);
+      if (error instanceof Error) {
+        console.error("   Error stack:", error.stack);
+        console.error("   Error name:", error.name);
+        console.error("   Error message:", error.message);
+      }
       
       res.status(500).json({ 
         message: "Failed to update user expiration", 
         error: error instanceof Error ? error.message : 'Unknown error',
-        errorType: error.constructor.name
+        errorType: error instanceof Error ? error.constructor.name : 'Unknown'
       });
     }
   });
@@ -1120,6 +1175,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       ]
     });
   });
+
+
 
   // Test database connection and raw SQL
   app.get('/api/test/db', async (req, res) => {
